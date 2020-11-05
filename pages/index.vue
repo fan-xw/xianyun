@@ -9,7 +9,7 @@
             :key="index">
                 <div class="banner-image" 
                 :style="`
-                background:url(${$axios.defaults.baseURL}${item.url}) center center no-repeat;
+                background:url(${item.url}) center center no-repeat;
                 background-size:contain contain;
                 `">
                 </div>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { banners } from '@/utils/indexApi'
 export default {
     data(){
         return {
@@ -29,14 +30,14 @@ export default {
     },
 
     // 页面创建时需要获取轮播图的数据 
-    created () {
-        this.$axios({
-            url: "/scenics/banners"
-        }).then(res => {
-            const {data} = res.data;
-            this.banners = data;
-        })
-    },
+   //  created () {
+   //      this.$axios({
+   //          url: "/scenics/banners"
+   //      }).then(res => {
+   //          const {data} = res.data;
+   //          this.banners = data;
+   //      })
+   //  },
    //  async created () {
    //    let res = await this.$axios({
    //          url: "/scenics/banners"
@@ -45,6 +46,19 @@ export default {
    //    const {data} = res.data;
    //    this.banners = data;
    //  },
+   async created () {
+      const res = await banners ();
+      // const { data } = res.data;
+
+      // this.banners = data.map(img =>{
+      //    img.url = res.config.baseURL + img.url
+      //    return img
+      // });
+      this.banners = res.data.data.map(img =>{
+         img.url = res.config.baseURL + img.url
+         return img
+      });
+   }
 }
 </script>
 
