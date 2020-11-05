@@ -1,12 +1,24 @@
 <template>
   <div>
+    <!-- 使用头部组件 -->
+    <PageHeader/>
     <!-- 内容占位组件 -->
     <nuxt />
+    <!-- 使用页脚组件 -->
+    <PageFooter/>
   </div>
 </template>
 
 <script>
+// 引入公共头部组件
+import PageHeader from '@/components/PageHeader'
+// 引入公共页脚组件
+import PageFooter from '@/components/PageFooter'
 export default {
+  // 注册组件
+  components:{
+    PageHeader,PageFooter
+  }
 
 }
 </script>
