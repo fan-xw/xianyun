@@ -132,12 +132,17 @@ export default {
 
         // 💐💐💐第三种方案:采用封装的axios
         async handleLoginSubmit () {
-            const isValid = await this.$refs.form.validate()
+            const isValid = await this.$refs.form.validate().catch((err) => {
+                
+            })
              if (isValid) {
                 
-                const res = await login(this.form)
+                const res = await login(this.form).catch((err) => {
+                     this.$message.warning('用户名或密码错误')
+                })
+                console.log(res);
 
-                if (res.data.token) {
+                if (res && res.status == 200) {
                     this.$message.success('登录成功')
                 }
              } 
