@@ -6,15 +6,15 @@
         ref="form"
         :rules="rules" 
         class="form">
-
-        <el-form-item class="form-item">
+        <!-- 3.Form-Item中的prop属性设置需要校验的字段名 -->
+        <el-form-item class="form-item" prop="username">
             <!-- 1.修改data的form数据，然后使用v-model绑定到对应的表单字段。 -->
             <el-input 
             placeholder="用户名/手机" v-model="form.username">
             </el-input>
         </el-form-item>
 
-        <el-form-item class="form-item">
+        <el-form-item class="form-item" prop="password">
             <el-input 
             placeholder="密码" 
             type="password"
@@ -47,13 +47,50 @@ export default {
             },
 
             // 表单规则
-            rules: {},
+            // 2.通过rules属性传入验证规则
+            rules: {
+                username: [
+                    { 
+                        required: true, 
+                        message: '请输入用户名', 
+                        trigger: 'blur' 
+                    },
+                ],
+                password: [
+                    { 
+                        required: true, 
+                        message: '请输入密码', 
+                        trigger: 'blur' 
+                    },
+                ],
+            },
         }
     },
 
     methods: {
+        // 💐4.进行登录验证
         handleLoginSubmit () {
-            console.log(this.form);
+            // 发送登录请求前，需要一次性校检整个表格
+            // 1.先拿到表格对象
+            // 2.使用Elemnet-ui的函数校检表格
+            // 3.合法输入则发送请求
+            // this.$refs.form.validate((isValid,obj) => {}),可以是回调，也可以作为 promise
+
+            /* validate:对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，
+               并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise,Function(callback: Function(boolean, object))*/
+            this.$refs.form.validate()
+            // .then 它的作用是为 Promise 实例添加状态改变时的回调函数
+            .then((isValid) => {
+                if (isValid) {
+                    console.log('应该发送请求');
+                    console.log(this.form);
+                }    
+            })
+            // Promise.prototype.catch方法是.then(null, rejection)的别名，用于指定发生错误时的回调函数。
+            .catch((err) => {
+                console.log('不可以发送请求');
+                console.log(err);
+            })
         }
     }
 }
