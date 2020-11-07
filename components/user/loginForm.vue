@@ -10,7 +10,7 @@
         <el-form-item class="form-item" prop="username">
             <!-- 1.修改data的form数据，然后使用v-model绑定到对应的表单字段。 -->
             <el-input 
-            placeholder="用户名/手机" v-model="form.username">
+            placeholder="用户名/手机" v-model="form.username" @focus="hideErrMsg('username')">
             </el-input>
         </el-form-item>
 
@@ -18,7 +18,8 @@
             <el-input 
             placeholder="密码" 
             type="password"
-            v-model="form.password">
+            v-model="form.password"
+            @focus="hideErrMsg('password')">
             </el-input>
         </el-form-item>
 
@@ -140,6 +141,18 @@ export default {
                     this.$message.success('登录成功')
                 }
              } 
+        },
+
+        // 🤳🤳🤳清理表单项错误信息
+        // 当输入框聚焦需要清理当前输入项的错误提示：优化体验
+        // 1.拿到当前 form 对象
+        // 2.调用里面的 clearValidate 函数
+        // 3.传入希望清理的 prop
+        hideErrMsg (propname) {
+        /*1.clearValidate:移除表单项的校验结果。
+          2.传入待移除的表单项的 prop 属性或者 prop 组成的数组，如不传则移除整个表单的校验结果
+          3.Function(props: array | string)*/
+            this.$refs.form.clearValidate(propname)
         }
     }
 }
