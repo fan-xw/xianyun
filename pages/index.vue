@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { banners } from '@/utils/indexApi'
+import { banners } from '@/apis/indexApi'
 export default {
     data(){
         return {

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { login } from './user.js'
+import { login } from '@/apis/user.js'
 export default {
     data () {
         return {
