@@ -21,11 +21,15 @@
             <el-row type="flex" align="middle">
 
                 <!-- 如果用户存在则展示用户信息，用户数据来自store -->
-                <el-dropdown v-if="false">
+
+                <!-- 🌾🌾🌾2.判断 token的存在则将用户数据显示出来 -->
+                <el-dropdown v-if="userInfo.token">
                     <el-row type="flex" align="middle" class="el-dropdown-link">
+
+                        <!-- 🌾🌾🌾3.在头部组件展示store中保存的用户数据。 -->
                         <nuxt-link to="#">
-                            <img src="http://157.122.54.189:9093/images/pic_sea.jpeg"/>
-                            用户名
+                            <img :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"/>
+                            {{userInfo.user.nickname}}
                         </nuxt-link>
                         <i class="el-icon-caret-bottom el-icon--right"></i>
                     </el-row>
@@ -43,7 +47,7 @@
                 <nuxt-link to="/user/login" class="account-link" v-else>
                     登录 / 注册 
                     <!-- $store.state全局的 +模块名+字段名-->
-                    {{$store.state.userstore.abc}}
+                    <!-- {{$store.state.userstore.userInfo.token}} -->
                 </nuxt-link>
             </el-row>
         </el-row>
@@ -53,14 +57,27 @@
 <script>
 export default {
     // 假如需求：我们等待1秒钟，将abc 改为 666
-    mounted () {
-        console.log(this.$store.state.userstore.abc);
-        setTimeout(() => {
-            // this.$store.state.userstore.abc = 666
-            // 必须以规定的方式改变数据，禁止随意的赋值
-            //  this.$store.commit(mutation 函数路径(模块名) )
-            this.$store.commit('userstore/setABC', 666);
-        },1000)
+    // mounted () {
+    //     console.log(this.$store.state.userstore.abc);
+    //     setTimeout(() => {
+    //         // this.$store.state.userstore.abc = 666
+    //         // 必须以规定的方式改变数据，禁止随意的赋值
+    //         //  this.$store.commit(mutation 函数路径(模块名) )
+    //         this.$store.commit('userstore/setABC', 666);
+    //     },1000)
+    // }
+    methods: {
+        handleLogout () {
+
+        }
+    },
+
+    // 计算属性
+    computed: {
+        userInfo () {
+            // 🌾🌾🌾1.获取数据
+            return this.$store.state.userstore.userInfo
+        }
     }
 }
 </script>
