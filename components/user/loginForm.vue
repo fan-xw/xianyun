@@ -42,8 +42,8 @@ export default {
         return {
             // 表单数据
             form: {
-                username:'',
-                password:''
+                username:'13800138000',
+                password:'123456'
             },
 
             // 表单规则
@@ -60,7 +60,12 @@ export default {
                     { 
                         required: true, 
                         message: '请输入密码', 
-                        trigger: 'blur' 
+                        trigger: 'blur',
+                    },
+                    {
+                        min: 6,
+                        message: "密码不能小于六位",
+                        trigger: "blur",
                     },
                 ],
             },
@@ -77,13 +82,23 @@ export default {
             // this.$refs.form.validate((isValid,obj) => {}),可以是回调，也可以作为 promise
 
             /* validate:对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，
-               并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise,Function(callback: Function(boolean, object))*/
+               并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise, Function(callback: Function(boolean, object))*/
             this.$refs.form.validate()
             // .then 它的作用是为 Promise 实例添加状态改变时的回调函数
             .then((isValid) => {
                 if (isValid) {
                     console.log('应该发送请求');
                     console.log(this.form);
+                    this.$axios({
+                        url:'/accounts/login',
+                        method:'post',
+                        data:this.form
+                    }).then(res => {
+                        console.log(res.data);
+                        if (res.data.token) {
+                            this.$message.success('登录成功')
+                        }
+                    })
                 }    
             })
             // Promise.prototype.catch方法是.then(null, rejection)的别名，用于指定发生错误时的回调函数。
