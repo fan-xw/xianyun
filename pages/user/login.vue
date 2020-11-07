@@ -19,22 +19,32 @@
                 </el-row>
 
                 <!-- 登录功能组件 -->
-                <!-- <LoginForm v-if="currentTab == 0"/> -->
+                <LoginForm v-if="currentTab == 0"/>
 
                 <!-- 注册功能组件 -->
-                <!-- <RegisterForm v-if="currentTab == 1"/> -->
+                <RegisterForm v-if="currentTab == 1"/>
             </div>
         </el-row>
     </div>
 </template>
 
 <script>
+// 1.引入登录组件
+import LoginForm from '@/components/user/loginForm.vue'
+// 2.引入注册组件
+import RegisterForm from '@/components/user/RegisterForm.vue'
 export default {
   data () {
     return {
       cateList:['登录','注册'],
       currentTab:0,
     }
+  },
+  
+  components: {
+    // 2.注册登录组件
+    LoginForm,
+    RegisterForm
   },
 
   methods: {
