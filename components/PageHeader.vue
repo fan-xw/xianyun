@@ -42,6 +42,8 @@
                 <!-- 不存在用户信息展示登录注册链接 -->
                 <nuxt-link to="/user/login" class="account-link" v-else>
                     登录 / 注册 
+                    <!-- $store.state全局的 +模块名+字段名-->
+                    {{$store.state.userstore.abc}}
                 </nuxt-link>
             </el-row>
         </el-row>
@@ -50,7 +52,16 @@
 
 <script>
 export default {
-
+    // 假如需求：我们等待1秒钟，将abc 改为 666
+    mounted () {
+        console.log(this.$store.state.userstore.abc);
+        setTimeout(() => {
+            // this.$store.state.userstore.abc = 666
+            // 必须以规定的方式改变数据，禁止随意的赋值
+            //  this.$store.commit(mutation 函数路径(模块名) )
+            this.$store.commit('userstore/setABC', 666);
+        },1000)
+    }
 }
 </script>
 
