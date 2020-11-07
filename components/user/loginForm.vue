@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { login } from './user.js'
 export default {
     data () {
         return {
@@ -73,39 +74,72 @@ export default {
     },
 
     methods: {
-        // 💐4.进行登录验证
-        handleLoginSubmit () {
-            // 发送登录请求前，需要一次性校检整个表格
-            // 1.先拿到表格对象
-            // 2.使用Elemnet-ui的函数校检表格
-            // 3.合法输入则发送请求
-            // this.$refs.form.validate((isValid,obj) => {}),可以是回调，也可以作为 promise
+        // 💐💐💐第一种方案：
 
-            /* validate:对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，
-               并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise, Function(callback: Function(boolean, object))*/
-            this.$refs.form.validate()
-            // .then 它的作用是为 Promise 实例添加状态改变时的回调函数
-            .then((isValid) => {
-                if (isValid) {
-                    console.log('应该发送请求');
-                    console.log(this.form);
-                    this.$axios({
-                        url:'/accounts/login',
-                        method:'post',
-                        data:this.form
-                    }).then(res => {
-                        console.log(res.data);
-                        if (res.data.token) {
-                            this.$message.success('登录成功')
-                        }
-                    })
-                }    
-            })
-            // Promise.prototype.catch方法是.then(null, rejection)的别名，用于指定发生错误时的回调函数。
-            .catch((err) => {
-                console.log('不可以发送请求');
-                console.log(err);
-            })
+        // 4.进行登录验证
+        // handleLoginSubmit () {
+        //     // 发送登录请求前，需要一次性校检整个表格
+        //     // 1.先拿到表格对象
+        //     // 2.使用Elemnet-ui的函数校检表格
+        //     // 3.合法输入则发送请求
+        //     // this.$refs.form.validate((isValid,obj) => {}),可以是回调，也可以作为 promise
+
+        //     /* validate:对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，
+        //        并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise, Function(callback: Function(boolean, object))*/
+        //     this.$refs.form.validate()
+        //     // .then 它的作用是为 Promise 实例添加状态改变时的回调函数
+        //     .then((isValid) => {
+        //         if (isValid) {
+        //             console.log('应该发送请求');
+        //             console.log(this.form);
+        //             this.$axios({
+        //                 url:'/accounts/login',
+        //                 method:'post',
+        //                 data:this.form
+        //             }).then(res => {
+        //                 console.log(res.data);
+        //                 if (res.data.token) {
+        //                     this.$message.success('登录成功')
+        //                 }
+        //             })
+        //         }    
+        //     })
+        //     // Promise.prototype.catch方法是.then(null, rejection)的别名，用于指定发生错误时的回调函数。
+        //     .catch((err) => {
+        //         console.log('不可以发送请求');
+        //         console.log(err);
+        //     })
+        // },
+
+        // 💐💐💐第二种方案： 
+
+        // async handleLoginSubmit () {
+        //     const isValid = await this.$refs.form.validate()
+        //      if (isValid) {
+                
+        //         const res = await this.$axios({
+        //             url:'/accounts/login',
+        //             method:'post',
+        //             data:this.form
+        //         })
+
+        //         if (res.data.token) {
+        //             this.$message.success('登录成功')
+        //         }
+        //      } 
+        // }
+
+        // 💐💐💐第三种方案:采用封装的axios
+        async handleLoginSubmit () {
+            const isValid = await this.$refs.form.validate()
+             if (isValid) {
+                
+                const res = await login(this.form)
+
+                if (res.data.token) {
+                    this.$message.success('登录成功')
+                }
+             } 
         }
     }
 }
