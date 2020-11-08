@@ -158,8 +158,16 @@ export default {
             console.log(res.data);
             if (res) {
               this.$store.commit('userstore/setUserInfo',res.data)
+
+              // 第一种操作可以是直接完成登录跳转到主页
+              // this.$message.success('注册成功')
+              // this.$router.push('/')
+
+              // 第二种操作可以是跳转登录表单进行登录
+              // 因为这个注册表单,跟登录表单同属于 login.vue 页面的子组件, 自己没法切换(相当于兄弟之间传值)需要先经过父组件
               this.$message.success('注册成功')
-              this.$router.push('/')
+              // 子组件发出事件
+              this.$emit('toLogin')
             }
           })
         }
