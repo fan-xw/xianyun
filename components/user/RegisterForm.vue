@@ -4,12 +4,12 @@
            :rules="rules" 
            class="form">
             <el-form-item class="form-item" prop="username">
-                <el-input placeholder="用户名手机" v-model="form.username">
+                <el-input placeholder="用户名手机" v-model="form.username" @focus="hideErrMsg('username')">
                 </el-input>
             </el-form-item>
 
             <el-form-item class="form-item" prop="captcha">
-                <el-input placeholder="验证码" v-model="form.captcha">
+                <el-input placeholder="验证码" v-model="form.captcha" @focus="hideErrMsg('captcha')">
                     <template slot="append">
                         <el-button @click="handleSendCaptcha">
                             发送验证码
@@ -19,19 +19,20 @@
             </el-form-item>
 
             <el-form-item class="form-item" prop="nickname">
-                <el-input placeholder="你的昵称" v-model="form.nickname">
+                <el-input placeholder="你的昵称" v-model="form.nickname" @focus="hideErrMsg('nickname')">
                 </el-input>
             </el-form-item>
 
             <el-form-item class="form-item" prop="password">
                 <el-input placeholder="密码" 
                           type="password"
-                          v-model="form.password">
+                          v-model="form.password"
+                          @focus="hideErrMsg('password')">
                 </el-input>
             </el-form-item>
 
             <el-form-item class="form-item" prop="checkPassword">
-                <el-input placeholder="确认密码" type="password" v-model="form.checkPassword">
+                <el-input placeholder="确认密码" type="password" v-model="form.checkPassword" @focus="hideErrMsg('checkPassword')">
                 </el-input>
             </el-form-item>
 
@@ -155,9 +156,22 @@ export default {
   
           register(data).then(res => {
             console.log(res.data);
+            if (res) {
+              this.$store.commit('userstore/setUserInfo',res.data)
+              this.$message.success('注册成功')
+              this.$router.push('/')
+            }
           })
         }
       })
+    },
+    
+    // 清理表单项错误信息：当输入框聚焦需要清理当前输入项的错误提示:优化体验
+    // 1.拿到当前 form 对象
+    // 2.调用里面的 clearValidate 函数
+    // 3.传入希望清理的 prop
+    hideErrMsg (propname) {
+      this.$refs.form.clearValidate(propname)
     }
   }
 }
