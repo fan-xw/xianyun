@@ -138,7 +138,7 @@ export default {
              if (isValid) {
                 
                 const res = await login(this.form).catch((err) => {
-                     this.$message.warning('用户名或密码错误')
+                     this.$message.error('用户名或密码错误')
                 })
                 console.log(res);
 

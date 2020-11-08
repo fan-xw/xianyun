@@ -67,8 +67,16 @@ export default {
     //     },1000)
     // }
     methods: {
+        // 点击退出功能，实现退出登录
         handleLogout () {
-
+            // const {commit} = this.$store;
+            // commit("userstore/cleanUserInfo");
+            
+            // this.$message({
+            //     message: "退出成功",
+            //     type: "success"
+            // })
+            this.$store.commit('userstore/setUserInfo',{})
         }
     },
 
