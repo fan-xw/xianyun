@@ -42,7 +42,8 @@
 </template>
 
 <script>
-// import dist from 'vuex-persistedstate';
+// 🌞🌞🌞1.引入验证码获取api
+import { getCaptcha } from '@/apis/user.js'
 export default {
   data () {
     // 由于校验函数只是在 data 使用,没必要写在methods方法里面
@@ -80,6 +81,11 @@ export default {
             required:true,
             message:'请输入密码',
             trigger:'blur'
+          },
+          {
+              min: 6,
+              message: "密码不能小于六位",
+              trigger: "blur",
           }
         ],  
         // 确认密码的规则验证
@@ -111,9 +117,21 @@ export default {
   },
 
   methods: {
-    // 发送验证码
+    // 🌞🌞🌞2.发送验证码
     handleSendCaptcha () {
-
+      // 使用正则规则:规定手机号第一位是1,剩下的九位数字在 3-9 中取
+      const regexp = /^1[3456789]\d{9}$/
+      // RegExp.prototype.test()方法为指定正则表达式和指定字符串执行一次匹配，返回true或false
+      if (!regexp.test(this.form.username)) {
+        return this.$message.error('请输入正确手机号')
+      }
+      // 🌞🌞🌞3.验证码 api 请求
+      getCaptcha(this.form.username).then(res=>{
+        console.log(res.data);
+        if (res.data.code) {
+          this.$message.success('成功获取验证码:' + res.data.code)
+        }
+      })  
     },
 
     // 实现注册事件
