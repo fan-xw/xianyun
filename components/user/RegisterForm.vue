@@ -30,8 +30,8 @@
                 </el-input>
             </el-form-item>
 
-            <el-form-item class="form-item">
-                <el-input placeholder="确认密码" type="password">
+            <el-form-item class="form-item" prop="checkPassword">
+                <el-input placeholder="确认密码" type="password" v-model="form.checkPassword">
                 </el-input>
             </el-form-item>
 
@@ -42,8 +42,21 @@
 </template>
 
 <script>
+// import dist from 'vuex-persistedstate';
 export default {
   data () {
+    // 由于校验函数只是在 data 使用,没必要写在methods方法里面
+    // 校检确认密码
+    const validateCheckPass = (rule,value,callback) => {
+      if (!value) {
+        callback(new Error('请再次输入密码'))
+      } else if (value != this.form.password) {
+        callback(new Error('两次输入的密码请保持一致'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       // 表单数据
       form: {
@@ -68,7 +81,17 @@ export default {
             message:'请输入密码',
             trigger:'blur'
           }
-        ],   
+        ],  
+        // 确认密码的规则验证
+        checkPassword:[
+          {
+            // 这里的校验并非默认自带的校验方式
+            // 而是需要自定义,所以 判断标准和提示语都要自己写
+            // 给一个函数作为 valdator 即可
+            validator:validateCheckPass,
+            trigger:'blur'
+          }
+        ],
         nickname: [
           {
             required:true,
