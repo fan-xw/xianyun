@@ -20,3 +20,11 @@ export const getCaptcha = (tel) => {
     })
 }	
 
+// 注册请求 api 
+export const register = (formData) => {
+    return axios({
+        method:'post',
+        url:'/accounts/register',
+        data:formData
+    }) 
+}

@@ -42,8 +42,8 @@
 </template>
 
 <script>
-// 🌞🌞🌞1.引入验证码获取api
-import { getCaptcha } from '@/apis/user.js'
+// 🌞🌞🌞1.引入验证码获取api   🍰🍰🍰1.引入注册的axios请求
+import { getCaptcha, register } from '@/apis/user.js'
 export default {
   data () {
     // 由于校验函数只是在 data 使用,没必要写在methods方法里面
@@ -134,9 +134,30 @@ export default {
       })  
     },
 
-    // 实现注册事件
+    // 🍰🍰🍰2.实现注册事件
     handleRegSubmit () {
-      console.log(this.form);
+
+      // 🍰🍰🍰3.全局校检表单是否填写完毕，完毕后再发送
+      this.$refs.form.validate().then(isValid => {
+        if (isValid) {
+
+          // 🍰🍰🍰4.拿取data数据
+          // const data = {
+          //   username:this.form.username,
+          //   nickname:this.form.nickname,
+          //   captcha:this.form.captcha,
+          //   password:this.form.password
+          // }
+
+          // 另外一种方案:
+          // 这里用 ... 剩余运算语法，拿出剩余的数据
+          const { checkPassword, ...data} = this.form
+  
+          register(data).then(res => {
+            console.log(res.data);
+          })
+        }
+      })
     }
   }
 }
