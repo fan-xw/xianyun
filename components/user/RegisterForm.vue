@@ -54,7 +54,9 @@
 export default {
   data () {
     return {
-      form:{},
+      // 表单数据
+      form: {
+      },
       rules:{}
     }
   },
@@ -73,6 +75,24 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
+    .form{
+        padding:25px;
+    }
 
+    .form-item{
+        margin-bottom:20px;
+    }
+
+    .form-text{
+        font-size:12px;
+        color:#409EFF;
+        text-align: right;
+        line-height: 1;
+    }
+
+    .submit{
+        width:100%;
+        margin-top:10px;
+    }
 </style>
