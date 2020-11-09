@@ -11,6 +11,15 @@
       placeholder="请输入内容"
       @select="handleSelect"
     ></el-autocomplete>
+
+    <!-- 使用format指定输入框的格式；使用value-format指定绑定值的格式:参考官网文档 -->
+    <el-date-picker
+      v-model="value1"
+      type="date"
+      placeholder="选择日期"
+      value-format='yyyy-MM-dd'>
+    </el-date-picker>
+    {{value1}}
   </div>
 </template>
 
@@ -21,6 +30,7 @@ export default {
     return {
        restaurants: [],
        value:'',
+       value1:''
     }
   },
   methods: {
