@@ -169,7 +169,7 @@ export default {
               // 子组件发出事件
               this.$emit('toLogin')
             }
-          })
+          }).catch(() => {})
         }
       })
     },
