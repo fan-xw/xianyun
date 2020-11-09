@@ -11,7 +11,8 @@
 
         <!-- banner广告 -->
         <div class="sale-banner">
-            <img src="http://157.122.54.189:9093/images/pic_sale.jpeg">
+          <!-- <img src="http://157.122.54.189:9093/images/pic_sale.jpeg"> -->
+          <img src="https://i.loli.net/2020/11/09/PLQFciSUNEtAxB7.jpg">
         </div>
     </el-row>
 
@@ -111,6 +112,14 @@ export default {
 .container{
   width:1000px;
   margin:0 auto;
+  .sale-banner {
+    width: 620px;
+    height: 350px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 .air-title{
