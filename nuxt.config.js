@@ -45,7 +45,7 @@ export default {
       // 如果只在浏览器加载的代码, 可以添加一个 属性 ssr: false  告诉他不能在服务器运行这代码
       ssr: false
     },
-    '@/plugins/axios.js'
+    '@/plugins/axios'
   ],
 
   /*
