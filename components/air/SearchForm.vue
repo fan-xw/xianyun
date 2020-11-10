@@ -9,6 +9,51 @@
                 <i :class="item.icon"></i>{{item.name}}
             </span>
         </el-row>
+
+        <el-form class="search-form-content" ref="form" label-width="80px">
+
+            <el-form-item label="出发城市">
+                <!-- fetch-suggestions 返回输入建议的方法 -->
+                <!-- select 点击选中建议项时触发 -->
+                <el-autocomplete
+                :fetch-suggestions="queryDepartSearch"
+                placeholder="请搜索出发城市"
+                @select="handleDepartSelect"
+                class="el-autocomplete">
+                </el-autocomplete>
+            </el-form-item>  
+
+            <el-form-item label="到达城市">
+                <el-autocomplete
+                :fetch-suggestions="queryDestSearch"
+                placeholder="请搜索到达城市"
+                @select="handleDestSelect"
+                class="el-autocomplete">
+                </el-autocomplete>
+            </el-form-item> 
+
+            <el-form-item label="出发时间">
+              <!-- change 用户确认选择日期时触发 -->
+                <el-date-picker type="date" 
+                placeholder="请选择日期" 
+                style="width: 100%;"
+                @change="handleDate">
+                </el-date-picker>
+            </el-form-item> 
+
+            <el-form-item label="">
+                <el-button style="width:100%;" 
+                type="primary" 
+                icon="el-icon-search"
+                @click="handleSubmit">
+                    搜索
+                </el-button>
+            </el-form-item>
+
+            <div class="reverse">
+                <span @click="handleReverse">换</span>
+            </div>
+        </el-form>  
   </div>
 </template>
 
@@ -28,6 +73,43 @@ export default {
         // 点击实现Tab栏的切换
         handleSearchTab (index) {
             this.currentTab = index
+        },
+
+        // 出发城市输入框获得焦点时触发
+        // value 是选中的值，cb是回调函数，接收要展示的列表
+        queryDepartSearch(value, callback) {
+          callback([{ value: 1 }, { value: 2 }, { value: 3 }]);
+        },
+    
+        // 目标城市输入框获得焦点时触发
+        // value 是选中的值，cb是回调函数，接收要展示的列表
+        queryDestSearch(value, callback) {
+          cb([{ value: 1 }, { value: 2 }, { value: 3 }]);
+        },
+
+        // 出发城市下拉选择时触发
+        handleDepartSelect(item) {
+            
+        },
+
+        // 目标城市下拉选择时触发
+        handleDestSelect(item) {
+            
+        },
+
+        // 确认选择日期时触发
+        handleDate(value){
+           
+        },
+
+        // 触发和目标城市切换时触发
+        handleReverse(){
+            
+        },
+
+        // 提交表单是触发
+        handleSubmit(){
+           
         }
     }
 }
