@@ -194,7 +194,13 @@ export default {
 
         // 提交表单是触发
         handleSubmit(){
-           console.log(this.form);
+          console.log(this.form);
+          // 编程式导航：带查询参数，变成 /register?plan=private
+          // router.push({ path: 'register', query: { plan: 'private' }})
+          this.$router.push({
+            path:'/air/flights',
+            query:this.form
+          })
         }
     }
 }
