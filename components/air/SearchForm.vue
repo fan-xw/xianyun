@@ -101,12 +101,19 @@ export default {
           const res = await airCity(name)
           console.log(res.data);
           if (res) {
-            const cities = res.data.data.map(city => {
+            // 这种链式调用的方式其实就是在 cities 里面过滤了数据，和下面的做法相同
+            let cities = res.data.data.filter(city => {
+              return city.sort
+            }).map(city => {
               return {
                  ...city,
                 value:city.name.replace('市','')
               }
             })
+            // 过滤掉不带有 sort 数据的城市
+            // cities = cities.filter(city => {
+            //   return city.sort
+            // })
             // 合并搜索城市后的优化, 如果搜索出来的城市长度 等于 0 显示没有城市
             return cities.length == 0 ? [{value: '搜索的城市不存在'}] : cities
           }
