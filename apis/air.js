@@ -10,6 +10,13 @@ export const airCity = (name) => {
     })
 }
 
+// 推荐机票api请求
+export const airsSale = () => {
+    return axios ({
+        url:'airs/sale',
+    })
+}
+
 // 机票列表api请求
 export const airsList = (params) => {
     return axios({
