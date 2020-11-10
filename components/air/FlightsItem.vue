@@ -22,7 +22,7 @@
                     </el-row>
                 </el-col>
                 <el-col :span="6" class="flight-info-right">
-                    ￥<span class="sell-price">{{data.base_price}}</span>起
+                    ￥<span class="sell-price">{{bestPrice}}</span>起
                 </el-col>
             </el-row>
         </div>
@@ -63,6 +63,22 @@ export default {
             type: Object,
             // 默认是空数组
             default: {}
+        }
+    },
+    
+    // 计算属性
+    computed: {
+        bestPrice () {
+           // 遍历当前航班的所有座位数据, 对比过后, 拿出最便宜的那张返回出来
+           // 1.先预设第一个座位信息的价格就是最低
+           let bestPrice = this.data.seat_infos[0].settle_price_child
+           // 2.遍历所有座位, 每个座位信息都拿出来对比, 如果有更低的就替换掉原来的数据
+           this.data.seat_infos.forEach(v => {
+               if (v.settle_price_child < bestPrice) {
+                   bestPrice = v.settle_price_child
+               }
+           });
+           return bestPrice
         }
     }
 }
