@@ -42,11 +42,14 @@
 
             <el-form-item label="出发时间">
               <!-- change 用户确认选择日期时触发 -->
+              <!-- picker-options:当前时间日期选择器特有的选项参考下表	object 
+                   disabledDate:设置禁用状态，参数为当前日期，要求返回 Boolean	Function-->
                 <el-date-picker type="date" 
                 placeholder="请选择日期" 
                 style="width: 100%;"
                 @change="handleDate"
-                v-model="form.departDate">
+                v-model="form.departDate"
+                :picker-options="{disabledDate}">
                 </el-date-picker>
             </el-form-item> 
 
@@ -166,6 +169,12 @@ export default {
         // 确认选择日期时触发
         handleDate(value){
           this.form.departDate = moment(value).format("YYYY-MM-DD");
+        },
+
+        // 设置日期的禁用状态
+        disabledDate (time) {
+            // 这里返回true,说明 disabled 不可选
+            return time.getTime() < Date.now()
         },
 
         // 触发和目标城市切换时触发
