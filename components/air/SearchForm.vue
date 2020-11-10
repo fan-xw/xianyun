@@ -107,7 +107,7 @@ export default {
             }).map(city => {
               return {
                  ...city,
-                value:city.name.replace('市','')
+                value:city.name.replace('市',''),
               }
             })
             // 过滤掉不带有 sort 数据的城市
