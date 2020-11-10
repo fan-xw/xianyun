@@ -134,6 +134,9 @@ export default {
           //   showList(cities)
           // }
           const cities = await this.getCitiesList(value)
+
+          // 搜索得出建议选项的时候，默认将列表的第一项code数据放入 form,默认给一个值，如果用户自己选了(触发 select 事件)，再去覆盖
+          this.form.departCode = cities[0].sort
           showList(cities)
         },
     
@@ -141,6 +144,7 @@ export default {
         // value 是选中的值，cb是回调函数，接收要展示的列表
         async queryDestSearch(value, showList) {
           const cities = await this.getCitiesList(value)
+          this.form.destCode = cities[0].sort
           showList(cities)
         },
 
