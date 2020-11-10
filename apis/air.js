@@ -10,4 +10,12 @@ export const airCity = (name) => {
     })
 }
 
+// 机票列表api请求
+export const airsList = (params) => {
+    return axios({
+        url:'/airs',
+        params
+    })
+}
+
 
