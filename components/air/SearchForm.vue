@@ -40,8 +40,7 @@
                 placeholder="请选择日期" 
                 style="width: 100%;"
                 @change="handleDate"
-                v-model="form.departDate"
-                value-format="yyyy-MM-dd">
+                v-model="form.departDate">
                 </el-date-picker>
             </el-form-item> 
 
@@ -64,6 +63,8 @@
 <script>
 // 🍝1.引入封装的机票城市请求api
 import { airCity } from '@/apis/air.js'
+// 引入 moment.js 处理时间的第三方包
+import moment from 'moment'
 export default {
     data () {
         return {
@@ -134,7 +135,7 @@ export default {
 
         // 确认选择日期时触发
         handleDate(value){
-           
+          this.form.departDate = moment(value).format("YYYY-MM-DD");
         },
 
         // 触发和目标城市切换时触发
