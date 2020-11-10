@@ -12,7 +12,7 @@
 
         <!-- banner广告 -->
         <div class="sale-banner">
-          <!-- <img src="http://157.122.54.189:9093/images/pic_sale.jpeg"> -->
+          <!-- <img src="https://b1-q.mafengwo.net/s15/M00/C4/76/CoUBGV4O9suAX0ViAAHIIQPFJ1s41.jpeg"> -->
           <img src="https://i.loli.net/2020/11/09/PLQFciSUNEtAxB7.jpg">
         </div>
     </el-row>
