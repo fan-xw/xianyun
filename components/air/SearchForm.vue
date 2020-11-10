@@ -61,6 +61,8 @@
 </template>
 
 <script>
+// 🍝1.引入封装的机票城市请求api
+import { airCity } from '@/apis/air.js'
 export default {
     data () {
         return {
@@ -86,32 +88,47 @@ export default {
             this.currentTab = index
         },
 
-        // 出发城市输入框获得焦点时触发
-        // value 是选中的值，cb是回调函数，接收要展示的列表
-        queryDepartSearch(value, callback) {
-          callback([
-            { value: '广州' }, 
-            { value: '深圳' }, 
-            { value: '上海' }]);
+        // 出发城市输入框获得焦点时触发, 获取远程数据显示搜索建议
+        // value 是选中的值，showList是回调函数，接收要展示的列表
+        async queryDepartSearch(value, showList) {
+          // 触发了这个获取建议的函数，然后发送请求：根据用户的输入值拿到建议数组，最后显示出来
+          const res = await airCity(value)
+          if (res) {
+            const cities = res.data.data.map(city => {
+              return {
+                ...city,
+                value: city.name.replace('市','')
+              }
+            })
+            showList(cities)
+          }
         },
     
         // 目标城市输入框获得焦点时触发
         // value 是选中的值，cb是回调函数，接收要展示的列表
-        queryDestSearch(value, callback) {
-          callback([
-            { value: '广州' }, 
-            { value: '深圳' }, 
-            { value: '上海' }]);
+        async queryDestSearch(value, showList) {
+          const res = await airCity(value)
+          if (res) {
+            const cities = res.data.data.map(city => {
+              return {
+                ...city,
+                value: city.name.replace('市','')
+              }
+            })
+            showList(cities)
+          }
         },
 
         // 出发城市下拉选择时触发
         handleDepartSelect(item) {
-            
+          // 把出发城市代码赋值给form里的departCode 
+          this.form.departCode = item.sort
         },
 
         // 目标城市下拉选择时触发
         handleDestSelect(item) {
-            
+          // 把到达城市代码赋值给form里的destCode 
+          this.form.destCode = item.sort
         },
 
         // 确认选择日期时触发
