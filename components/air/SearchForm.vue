@@ -167,7 +167,17 @@ export default {
 
         // 触发和目标城市切换时触发
         handleReverse(){
+            // 只需要将触发城市和触发城市代码与到达城市和到达城市代码进行互换即可
             
+            // 1.定义一个中间量
+            const oldDepartCode = this.form.departCode
+            const oldDepartCity = this.form.departCity
+            // 2.城市代码互换
+            this.form.departCode = this.form.destCode
+            this.form.destCode = oldDepartCode
+            // 3.城市名互换
+            this.form.departCity = this.form.destCity
+            this.form.destCity = oldDepartCity
         },
 
         // 提交表单是触发
