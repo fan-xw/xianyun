@@ -94,6 +94,9 @@ export default {
         // 点击实现Tab栏的切换
         handleSearchTab (index) {
             this.currentTab = index
+            if (index == 1) {
+              this.$message.warning('暂时只支持单程机票搜索')
+            }
         },
 
         // 👌👌封装:获取远程数据显示搜索建议
@@ -168,7 +171,7 @@ export default {
         // 触发和目标城市切换时触发
         handleReverse(){
             // 只需要将触发城市和触发城市代码与到达城市和到达城市代码进行互换即可
-            
+
             // 1.定义一个中间量
             const oldDepartCode = this.form.departCode
             const oldDepartCity = this.form.departCity
