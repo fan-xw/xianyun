@@ -15,7 +15,7 @@
                 
                 <!-- 航班信息 -->
                 <div class="list">
-                  <FlightsItem v-for="flight in flightsDate.flights" :key="flight.id"/>
+                  <FlightsItem v-for="flight in flightsDate.flights" :key="flight.id" :data="flight"/>
                 </div>
 
                 <!-- 分页组件 -->
