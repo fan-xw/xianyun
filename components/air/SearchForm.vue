@@ -40,7 +40,8 @@
                 placeholder="请选择日期" 
                 style="width: 100%;"
                 @change="handleDate"
-                v-model="form.departDate">
+                v-model="form.departDate"
+                value-format="yyyy-MM-dd">
                 </el-date-picker>
             </el-form-item> 
 
