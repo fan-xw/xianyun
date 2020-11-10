@@ -15,12 +15,16 @@
             <el-form-item label="出发城市">
                 <!-- fetch-suggestions 返回输入建议的方法 -->
                 <!-- select 点击选中建议项时触发 -->
+                <!-- trigger-on-focus:是否在输入框 focus 时显示建议列表 布尔值：默认为true 输入后再激活输入建议-->
+                <!-- highlight-first-item:是否默认突出显示远程搜索建议中的第一项 布尔值：默认为 false 自动高亮第一选项-->
                 <el-autocomplete
                 :fetch-suggestions="queryDepartSearch"
                 placeholder="请搜索出发城市"
                 @select="handleDepartSelect"
                 class="el-autocomplete"
-                v-model="form.departCity">
+                v-model="form.departCity"
+                :trigger-on-focus="false"
+                :highlight-first-item="true">
                 </el-autocomplete>
             </el-form-item>  
 
@@ -30,7 +34,9 @@
                 placeholder="请搜索到达城市"
                 @select="handleDestSelect"
                 class="el-autocomplete"
-                v-model="form.destCity">
+                v-model="form.destCity"
+                :trigger-on-focus="false"
+                :highlight-first-item="true">
                 </el-autocomplete>
             </el-form-item> 
 
