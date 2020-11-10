@@ -14,8 +14,8 @@
                 
                 
                 <!-- 航班信息 -->
-                <div>
-                    航班信息
+                <div class="list">
+                  <FlightsItem v-for="flight in flightsDate.flights" :key="flight.id"/>
                 </div>
 
                 <!-- 分页组件 -->
@@ -39,6 +39,8 @@
 import { airsList } from '@/apis/air.js'
 // 👌1.引入飞机列表页头部组件
 import FlightsListHead from '@/components/air/FlightsListHead'
+// 😋1.引入机票列表页组件
+import FlightsItem from '@/components/air/FlightsItem'
 export default {
   data() {
     return {
@@ -48,7 +50,9 @@ export default {
 
   components:{
     // 👌2.注册飞机列表页头部组件
-     FlightsListHead
+     FlightsListHead,
+    // 😋2.注册机票列表页组件
+    FlightsItem
   },
 
   async created() {
