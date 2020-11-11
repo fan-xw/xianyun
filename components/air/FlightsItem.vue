@@ -27,17 +27,23 @@
             </el-row>
         </div>
 
+    <el-collapse-transition>
         <div class="flight-recommend" v-if="isShow">
             <!-- 隐藏的座位信息列表 -->
             <el-row type="flex"  justify="space-between" align="middle">
                 <el-col :span="4">低价推荐</el-col>
                 <el-col :span="20">
-                    <el-row type="flex" justify="space-between" align="middle" class="flight-sell">
+                    <el-row type="flex" 
+                            justify="space-between" 
+                            align="middle" 
+                            class="flight-sell" 
+                            v-for="(seats,index) in data.seat_infos"
+                            :key="index">
                         <el-col :span="16" class="flight-sell-left">
-                            <span>经济舱</span> | 上海一诺千金航空服务有限公司
+                            <span>{{seats.group_name}}</span> | {{seats.supplierName}}
                         </el-col>
                         <el-col :span="5" class="price">
-                            ￥1345
+                            ￥{{seats.org_settle_price}}
                         </el-col>
                         <el-col :span="3" class="choose-button">
                             <el-button 
@@ -45,12 +51,13 @@
                             size="mini">
                             选定
                             </el-button>
-                            <p>剩余：83</p>
+                            <p v-if="seats.nums != 'A'">剩余：{{seats.nums}}</p>
                         </el-col>
                     </el-row>
                 </el-col>
             </el-row>
         </div>
+    </el-collapse-transition>    
     </div>
 </template>
 
