@@ -13,7 +13,7 @@
                             <span>{{data.org_airport_name}}{{data.org_airport_quay}}</span>
                         </el-col>
                         <el-col :span="8" class="flight-time">
-                            <span>2时20分(假的)</span>
+                            <span>{{ rankTime }}</span>
                         </el-col>
                         <el-col :span="8" class="flight-airport">
                             <strong>{{data.arr_time}}</strong>
@@ -66,7 +66,7 @@ export default {
         }
     },
     
-    // 计算属性
+    // 计算属性  需要渲染的数据
     computed: {
         bestPrice () {
            // 遍历当前航班的所有座位数据, 对比过后, 拿出最便宜的那张返回出来
@@ -79,6 +79,29 @@ export default {
                }
            });
            return bestPrice
+        },
+
+        // 计算相差时间:计算起飞时间到到达时间的时间间隔。
+        rankTime () {
+           // 1.切割时间字符串
+           const arrayDepTime = this.data.dep_time.split(':')   
+           const arrayArrTime = this.data.arr_time.split(':')
+           // ['20','30'] 
+
+           // 2.算出出发时间和到达时间的总分钟数
+           const depMin = Number(arrayDepTime[0]) * 60 + Number(arrayDepTime[1])
+           const arrMin = Number(arrayArrTime[0]) * 60 + Number(arrayArrTime[1])
+
+           // 3.到达时间减去出发时间
+           let duration = arrMin - depMin
+
+           // 4.如果时间跨过凌晨，相减数据会变成一个负数， 我们只需要 再加上一天的时间即可
+           if (duration < 0) {
+               duration += 24 * 60
+           }
+           
+           // 5. 返回数据 变回小时分钟格式
+           return Math.floor(duration / 60) + '时' + (duration % 60) + '分'    
         }
     }
 }
