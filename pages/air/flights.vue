@@ -17,8 +17,8 @@
                 <div class="list" v-if="dataList.length > 0">
                   <FlightsItem v-for="flight in dataList" :key="flight.id" :data="flight"/>
                 </div>
-                <div  plain v-else>
-                  <!-- 暂时没有数据 -->
+                <div v-else>
+                  暂时没有数据
                 </div>
 
                 <!-- 分页组件 -->
@@ -67,7 +67,7 @@ export default {
       // 每页数据
       pageSize:2,
       // 自己切割出来的应该显示的机票数据
-      dataList:[]
+      // dataList:[]
     }
   },
 
@@ -78,19 +78,30 @@ export default {
     FlightsItem
   },
 
+  // 计算属性
+  computed:{
+    dataList() {
+        /* 
+        🍕问题：每次翻页/修改页面长度时重新调用计算内容数组的代码没有必要
+        
+        1.因为这里面是页面进入时就执行, 不像之前可以在获取数据 .then 之后执行
+        2.加一个判断, 有数据,就切割, 没数据就返回默认空数组即可
+        */
+      if (!this.flightsDate.flights) {
+          return []
+      }
+
+      const end = this.pageIndex * this.pageSize;
+      const begin = end - this.pageSize;
+
+      return this.flightsDate.flights.slice(begin,end);
+    }
+  },
+
   async created() {
     const res = await airsList(this.$route.query)
     console.log(res.data);
     this.flightsDate = res.data
-    
-    // 空数据状态下的提示  
-    this.$notify({
-      title: '所选城市',
-      message: '暂时没有这两个城市之间的航班',
-      position: 'top-left',
-      type: 'warning',
-      duration:3000
-    });
     
 
     /*
@@ -115,28 +126,28 @@ export default {
     // this.dataList = this.flightsDate.flights.slice(begin,end);
     
     // 页面一进来就开始切割第一次数据并进行渲染  调用 
-    this.dataList = this.getDataList()
+    // this.dataList = this.getDataList()
   },
 
   methods:{
     // currentPage 改变时会触发
     currentChange (newIndex) {
        this.pageIndex = newIndex;
-       this.dataList = this.getDataList()
+      //  this.dataList = this.getDataList()
     },
 
     sizeChange (newSize) {
       this.pageSize = newSize
-      this.dataList = this.getDataList()
+      // this.dataList = this.getDataList()
     },
 
     // 封装
-    getDataList() {
-      const end = this.pageIndex * this.pageSize;
-      const begin = end - this.pageSize;
+    // getDataList() {
+    //   const end = this.pageIndex * this.pageSize;
+    //   const begin = end - this.pageSize;
 
-      return this.flightsDate.flights.slice(begin,end);
-    }
+    //   return this.flightsDate.flights.slice(begin,end);
+    // }
     
   }
 }
