@@ -5,9 +5,7 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-                <div>
-                    过滤条件
-                </div>
+                <FlightsFilters/>
                 
                 <!-- 航班头部布局 -->
                 <FlightsListHead />
@@ -56,8 +54,8 @@ import { airsList } from '@/apis/air.js'
 import FlightsListHead from '@/components/air/FlightsListHead'
 // 😋1.引入机票列表页组件
 import FlightsItem from '@/components/air/FlightsItem'
-// 引入Notification 通知
-import { Notification } from 'element-ui';
+// 😥1.引入条件过滤 筛选器
+import FlightsFilters from '@/components/air/FlightsFilters'
 export default {
   data() {
     return {
@@ -75,7 +73,9 @@ export default {
     // 👌2.注册飞机列表页头部组件
      FlightsListHead,
     // 😋2.注册机票列表页组件
-    FlightsItem
+    FlightsItem,
+    // 😥2.注册条件过滤 筛选器组件
+    FlightsFilters
   },
 
   // 计算属性
@@ -83,7 +83,7 @@ export default {
     dataList() {
         /* 
         🍕问题：每次翻页/修改页面长度时重新调用计算内容数组的代码没有必要
-        
+
         1.因为这里面是页面进入时就执行, 不像之前可以在获取数据 .then 之后执行
         2.加一个判断, 有数据,就切割, 没数据就返回默认空数组即可
         */
