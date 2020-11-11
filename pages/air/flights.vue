@@ -10,7 +10,8 @@
                 </div>
                   <el-pagination
                     layout="prev, pager, next"
-                    :total="50">
+                    :total="flightsDate.total"
+                    @current-change="currentChange">
                   </el-pagination>
                 
                 <!-- 航班头部布局 -->
@@ -50,10 +51,10 @@ export default {
     return {
       flightsDate:{},
       // 当前页码
-      pageIndex:2,
+      pageIndex:1,
       // 每页数据
-      pageSize:10,
-      // 自己算出来的应该显示的机票数据
+      pageSize:2,
+      // 自己切割出来的应该显示的机票数据
       dataList:[]
     }
   },
@@ -77,11 +78,38 @@ export default {
             end = 20 + 10 = 30
             .slice(begin,end)
     */ 
-    const begin = (this.pageIndex - 1) * this.pageSize
-    const end = begin + this.pageSize
-    this.dataList = this.flightsDate.flights.splice(begin,end);
-    console.log(this.dataList)
+    // const begin = (this.pageIndex - 1) * this.pageSize
+    // const end = begin + this.pageSize
+    // this.dataList = this.flightsDate.flights.slice(begin,end);
 
+    /*
+    🌱🌱🌱另外一种思考方式：当前翻到第几页，结束就应该是当前页码乘以长度
+       假如每页十条：第一页以10结束，第二页以20结束，第三页以30结束，
+       开始的参数 = 结束参数 - 一个长度
+    */
+    // const end = this.pageIndex * this.pageSize
+    // const begin = end - this.pageSize
+    // this.dataList = this.flightsDate.flights.slice(begin,end);
+    
+    // 页面一进来就开始切割第一次数据并进行渲染  调用 
+    this.dataList = this.getDataList()
+  },
+
+  methods:{
+    // currentPage 改变时会触发
+    currentChange (newIndex) {
+       this.pageIndex = newIndex;
+       this.dataList = this.getDataList()
+    },
+
+    // 封装
+    getDataList() {
+      const end = this.pageIndex * this.pageSize;
+      const begin = end - this.pageSize;
+
+      return this.flightsDate.flights.slice(begin,end);
+    }
+    
   }
 }
 </script>
