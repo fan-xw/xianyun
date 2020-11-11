@@ -14,8 +14,11 @@
                 
                 
                 <!-- 航班信息 -->
-                <div class="list">
+                <div class="list" v-if="dataList.length > 0">
                   <FlightsItem v-for="flight in dataList" :key="flight.id" :data="flight"/>
+                </div>
+                <div  plain v-else>
+                  <!-- 暂时没有数据 -->
                 </div>
 
                 <!-- 分页组件 -->
@@ -53,6 +56,8 @@ import { airsList } from '@/apis/air.js'
 import FlightsListHead from '@/components/air/FlightsListHead'
 // 😋1.引入机票列表页组件
 import FlightsItem from '@/components/air/FlightsItem'
+// 引入Notification 通知
+import { Notification } from 'element-ui';
 export default {
   data() {
     return {
@@ -77,6 +82,17 @@ export default {
     const res = await airsList(this.$route.query)
     console.log(res.data);
     this.flightsDate = res.data
+    
+    // 空数据状态下的提示  
+    this.$notify({
+      title: '所选城市',
+      message: '暂时没有这两个城市之间的航班',
+      position: 'top-left',
+      type: 'warning',
+      duration:3000
+    });
+    
+
     /*
     👍👍👍分页分析:机票数据存在 this.flightDate.flights里面。
             假如当前是第三页！每页10条，那么.splice()的时候就是(20,30) [可以取到左边的参数，但取不到右边的参数(不包括在内)]，
