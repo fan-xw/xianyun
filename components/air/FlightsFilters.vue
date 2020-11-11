@@ -66,6 +66,7 @@
 
 <script>
 export default {
+    props:['data'],
     data(){
         return {
             airport: "",        // 机场

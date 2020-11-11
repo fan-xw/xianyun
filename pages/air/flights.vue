@@ -5,7 +5,7 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-                <FlightsFilters/>
+                <FlightsFilters v-if="flightsDate.options" :data='flightsDate'/>
                 
                 <!-- 航班头部布局 -->
                 <FlightsListHead />
