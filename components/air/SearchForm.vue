@@ -174,7 +174,7 @@ export default {
         // 设置日期的禁用状态
         disabledDate (time) {
             // 这里返回true,说明 disabled 不可选
-            return time.getTime() < Date.now()
+            return time.getTime() < Date.now() - 24*60*60*1000
         },
 
         // 触发和目标城市切换时触发
