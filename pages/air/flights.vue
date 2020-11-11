@@ -60,6 +60,8 @@ export default {
   data() {
     return {
       flightsDate:{},
+      // 定义一个数组用于存放 筛选过后的数据
+      filteredList: [],
       // 当前页码
       pageIndex:1,
       // 每页数据
@@ -87,14 +89,14 @@ export default {
         1.因为这里面是页面进入时就执行, 不像之前可以在获取数据 .then 之后执行
         2.加一个判断, 有数据,就切割, 没数据就返回默认空数组即可
         */
-      if (!this.flightsDate.flights) {
+      if (!this.filteredList) {
           return []
       }
 
       const end = this.pageIndex * this.pageSize;
       const begin = end - this.pageSize;
 
-      return this.flightsDate.flights.slice(begin,end);
+      return this.filteredList.slice(begin,end);
     }
   },
 
@@ -103,6 +105,7 @@ export default {
     console.log(res.data);
     this.flightsDate = res.data
     
+    this.filteredList = [...this.flightsDate.flights]
 
     /*
     👍👍👍分页分析:机票数据存在 this.flightDate.flights里面。
