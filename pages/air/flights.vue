@@ -8,11 +8,6 @@
                 <div>
                     过滤条件
                 </div>
-                  <el-pagination
-                    layout="prev, pager, next"
-                    :total="flightsDate.total"
-                    @current-change="currentChange">
-                  </el-pagination>
                 
                 <!-- 航班头部布局 -->
                 <FlightsListHead />
@@ -24,9 +19,21 @@
                 </div>
 
                 <!-- 分页组件 -->
-                <div>
-                  分页组件
-                </div>
+                <!-- 
+                  🌾🌾🌾
+                  current-change: currentPage改变时会触发--当前页
+                  size-change: pageSize改变时会触发--每页条数
+                  page-size: 每页显示条目个数，支持 .sync 修饰符	number
+                  page-sizes: 每页显示个数选择器的选项设置	number[]		例子:[10, 20, 30, 40, 50, 100]
+                 -->
+                <el-pagination
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :page-size="pageSize"
+                  :page-sizes="[2,5,10,20,50,100]"
+                  :total="flightsDate.total"
+                  @current-change="currentChange"
+                  @size-change="sizeChange">
+                </el-pagination>
             </div>
 
             <!-- 侧边栏 -->
@@ -100,6 +107,11 @@ export default {
     currentChange (newIndex) {
        this.pageIndex = newIndex;
        this.dataList = this.getDataList()
+    },
+
+    sizeChange (newSize) {
+      this.pageSize = newSize
+      this.dataList = this.getDataList()
     },
 
     // 封装
