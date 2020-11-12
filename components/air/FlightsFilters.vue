@@ -181,7 +181,13 @@ export default {
         
         // 撤销条件时候触发
         handleFiltersCancel(){
-            
+            // 1.清空所有双向绑定的筛选选项
+	        this.airport = ''
+            this.flightTimes = ''
+            this.company = ''
+            this.airSize = ''
+            // 2.执行以下筛选器
+            this.runFilters()
         },
     }
 }
