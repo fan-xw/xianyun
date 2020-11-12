@@ -98,16 +98,29 @@ export default {
     methods: {
         // 选择机场时候触发
         handleAirport(value){
-            
+            console.log(value);
+            const newList = this.data.flights.filter(item => {
+                return item.org_airport_name == value
+            })
+            this.$emit('setFilteredList',newList)
         },
 
         // 选择出发时间时候触发
         handleFlightTimes(value){
-            
+            console.log(value);
+            // 这里会有一个小小的BUG 我们打印出的数字是字符串，所以我们需要把字符串数字转换成Number
+            const from = Number(value.split(',')[0])
+            const to = Number(value.split(',')[1])
+            const newList = this.data.flights.filter(item => {
+                const depTime = Number(item.dep_time.split(':')[0])
+                return depTime >= from && depTime < to
+            })
+            this.$emit('setFilteredList',newList)
         },
 
          // 选择航空公司时候触发
         handleCompany(value){
+            // 其实这里的 value 值是 value == this.company 
             console.log(value);
             // 1.先拿到页面进来传入的 原始数据(100条)，this.data.flights
             const newList = this.data.flights.filter(item => {
@@ -121,7 +134,10 @@ export default {
 
          // 选择机型时候触发
         handleAirSize(value){
-           
+           const newList = this.data.flights.filter(item => {
+               return item.plane_size == value
+           })
+           this.$emit('setFilteredList',newList)
         },
         
         // 撤销条件时候触发
