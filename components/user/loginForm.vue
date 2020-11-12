@@ -146,6 +146,8 @@ export default {
                     this.$message.success('登录成功');
                     // 🌾🌾🌾1.实现登录，并保存数据到store的state中 使用 commit 方法
                     this.$store.commit('userstore/setUserInfo',res.data)
+                    // 登录成功，跳转到首页
+                    this.$router.push({path:'/'})
                 }
              } 
         },
