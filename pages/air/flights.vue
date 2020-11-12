@@ -36,7 +36,7 @@
                   layout="total, sizes, prev, pager, next, jumper"
                   :page-size="pageSize"
                   :page-sizes="[2,5,10,20,50,100]"
-                  :total="flightsDate.total"
+                  :total="filteredList.length"
                   @current-change="currentChange"
                   @size-change="sizeChange">
                 </el-pagination>
