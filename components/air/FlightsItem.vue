@@ -1,6 +1,6 @@
 <template>
   <div class="flight-item">
-        <div  @click="isShow=!isShow">
+        <div>
             <!-- 显示的机票信息 -->
             <el-row type="flex" align="middle" class="flight-info">
                 <el-col :span="6">
@@ -63,11 +63,6 @@
 
 <script>
 export default {
-    data () {
-        return {
-           isShow:false      
-        }
-    },
     // props:['data'],
     props: {
         // 数据
@@ -75,7 +70,8 @@ export default {
             type: Object,
             // 默认是空数组
             default: {}
-        }
+        },
+        isShow:{}
     },
     
     // 计算属性  需要渲染的数据

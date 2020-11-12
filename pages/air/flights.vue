@@ -13,7 +13,12 @@
                 
                 <!-- 航班信息 -->
                 <div class="list" v-if="dataList.length > 0">
-                  <FlightsItem v-for="flight in dataList" :key="flight.id" :data="flight"/>
+                  <FlightsItem 
+                      v-for="(flight,index) in dataList" 
+                      :key="flight.id" 
+                      :data="flight"
+                      @click.native="showFlight(index)"
+                      :isShow="index == currentActive"/>
                 </div>
                 <div v-else>
                   暂时没有数据
@@ -68,6 +73,7 @@ export default {
       pageSize:2,
       // 自己切割出来的应该显示的机票数据
       // dataList:[]
+      currentActive:null
     }
   },
 
@@ -152,6 +158,13 @@ export default {
     //   return this.flightsDate.flights.slice(begin,end);
     // }
     
+    showFlight (index) {
+        if (this.currentActive == index) {
+          this.currentActive = null
+        } else {
+          this.currentActive = index
+        }
+    }
   }
 }
 </script>
