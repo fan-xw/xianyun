@@ -108,7 +108,15 @@ export default {
 
          // 选择航空公司时候触发
         handleCompany(value){
-            
+            console.log(value);
+            // 1.先拿到页面进来传入的 原始数据(100条)，this.data.flights
+            const newList = this.data.flights.filter(item => {
+                return item.airline_name == value
+            }) 
+
+            console.log(newList);
+            // 2.利用 子传父 把数据传递给 父组件 (父组件那边接受到筛选后的数据后进行分页)
+            this.$emit('setFilteredList',newList)
         },
 
          // 选择机型时候触发

@@ -5,7 +5,7 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-                <FlightsFilters v-if="flightsDate.options" :data='flightsDate'/>
+                <FlightsFilters v-if="flightsDate.options" :data='flightsDate' @setFilteredList='setFilteredList'/>
                 
                 <!-- 航班头部布局 -->
                 <FlightsListHead />
@@ -164,6 +164,10 @@ export default {
         } else {
           this.currentActive = index
         }
+    },
+
+    setFilteredList(newList) {
+      this.filteredList = newList
     }
   }
 }
