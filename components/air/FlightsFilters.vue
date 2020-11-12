@@ -10,7 +10,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select size="mini" v-model="airport" placeholder="起飞机场" @change="handleAirport">
+                <el-select size="mini" v-model="airport" placeholder="起飞机场" @change="runFilters">
                     <el-option
                     v-for="(airPort,index) in data.options.airport"
                     :key="index"
@@ -21,7 +21,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select size="mini" v-model="flightTimes"  placeholder="起飞时间" @change="handleFlightTimes">
+                <el-select size="mini" v-model="flightTimes"  placeholder="起飞时间" @change="runFilters">
                     <el-option
                     v-for="(time,index) in data.options.flightTimes"
                     :key="index"
@@ -32,7 +32,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select size="mini" v-model="company"  placeholder="航空公司" @change="handleCompany">
+                <el-select size="mini" v-model="company"  placeholder="航空公司" @change="runFilters">
                     <el-option
                     v-for="(company,index) in data.options.company"
                     :key="index"
@@ -43,7 +43,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
+                <el-select size="mini" v-model="airSize" placeholder="机型" @change="runFilters">
                     <el-option
                     v-for="(size,index) in sizeAirModel"
                     :key="index"
@@ -96,48 +96,87 @@ export default {
     },
 
     methods: {
+        /*😥😥😥
+        此时出现一个问题:就是我们的每一个筛选器的数据都是从总数据(100条)里面拿的,
+                          并且每次过滤都会使用原始数据，每一个过滤器都会覆盖上一个过滤器的结果
+        解决办法：不应该每个筛选器单独触发父组件的数据渲染，筛选器应该只管输入和输出数据，用一个通用函数包装起来，
+                 每个筛选器的变更，都应该重新触发一次所有过滤，然后再统一显示在父组件      
+                 1.封装一个函数，将原始数据依次通过所有过滤器，最后统一向父组件渲染数据
+                 2.每个过滤器必须在判断有选项的情况下再进行过滤，不然一个空字段，会造成所有数据都通不过变成空数组了
+                 3.过滤玩所有函数后，才触发一次父组件渲染            
+        */ 
+       runFilters () {
+           // 1. 先将原来的一百条数据放入一个数组备用
+           let flights = [...this.data.flights]
+           
+            // 选择机场   
+            if (this.airport) {
+                flights = this.handleAirport(flights)
+                console.log(flights);
+            }
+
+            // 选择出发时间
+            if (this.flightTimes) {
+                flights = this.handleFlightTimes(flights)
+                console.log(flights);
+            }
+
+            // 选择航空公司
+            if (this.company) {
+                flights = this.handleCompany(flights)
+                console.log(flights)
+            }
+
+            // 选择机型
+            if (this.airSize) {
+                flights = this.handleAirSize(flights)
+                console.log(flights)
+            }
+
+            this.$emit('setFilteredList',flights)
+       },
+
         // 选择机场时候触发
-        handleAirport(value){
-            console.log(value);
+        handleAirport(flights){
+            // 改造了这个函数，不再直接渲染数据，而是接受一个数组，过滤后返回新数组
             const newList = this.data.flights.filter(item => {
-                return item.org_airport_name == value
+                return item.org_airport_name == this.airport
             })
-            this.$emit('setFilteredList',newList)
+            // 不能直接渲染而是返回结果
+            return newList
         },
 
         // 选择出发时间时候触发
-        handleFlightTimes(value){
-            console.log(value);
+        handleFlightTimes(flights){
             // 这里会有一个小小的BUG 我们打印出的数字是字符串，所以我们需要把字符串数字转换成Number
-            const from = Number(value.split(',')[0])
-            const to = Number(value.split(',')[1])
-            const newList = this.data.flights.filter(item => {
+            const from = Number(this.flightTimes.split(',')[0])
+            const to = Number(this.flightTimes.split(',')[1])
+            const newList = flights.filter(item => {
                 const depTime = Number(item.dep_time.split(':')[0])
                 return depTime >= from && depTime < to
             })
-            this.$emit('setFilteredList',newList)
+            return newList
         },
 
          // 选择航空公司时候触发
-        handleCompany(value){
+        handleCompany(flights){
             // 其实这里的 value 值是 value == this.company 
-            console.log(value);
             // 1.先拿到页面进来传入的 原始数据(100条)，this.data.flights
-            const newList = this.data.flights.filter(item => {
-                return item.airline_name == value
+            const newList = flights.filter(item => {
+                return item.airline_name == this.company
             }) 
 
-            console.log(newList);
             // 2.利用 子传父 把数据传递给 父组件 (父组件那边接受到筛选后的数据后进行分页)
-            this.$emit('setFilteredList',newList)
+            // this.$emit('setFilteredList',newList)
+            return newList
         },
 
          // 选择机型时候触发
-        handleAirSize(value){
-           const newList = this.data.flights.filter(item => {
-               return item.plane_size == value
+        handleAirSize(flights){
+           const newList = flights.filter(item => {
+               return item.plane_size == this.airSize
            })
-           this.$emit('setFilteredList',newList)
+           return newList
         },
         
         // 撤销条件时候触发
