@@ -96,7 +96,36 @@ export default {
             invoice:false
         }
     },
+
+    /*
+    😋😋分析：计算总金额:需要使用兄弟组件传值的方式 (OrderForm.vue --> order.vue --> OrderAside.vue)
+           1.首先要监听表单 users 和 保险的变化，确保能够触发变动
+           2.封装一个函数:每次变动重新算出最新价 (机票价/保险价/机建税)
+           3.在监听器里面调用这个函数
+    */ 
+    watch:{
+        users() {
+            // 计算总价格
+            console.log('乘机人变化了');
+            this.calcTotalPrice()
+        },
+        insurances() {
+            // 计算总价格
+            console.log('保险变化了');
+            this.calcTotalPrice()
+        }
+    },
+
     methods: {
+        // 计算总价格
+        calcTotalPrice () {
+            let res = 0
+            // 1.机票价格
+            res += this.data.base_price * this.users.length
+            // 2.保险价格
+            console.log(res);
+        },
+
         // 添加乘机人
         handleAddUsers(){
             this.users.push({
