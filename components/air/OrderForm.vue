@@ -47,6 +47,8 @@
                     </el-checkbox> 
                 </div>
             </el-checkbox-group>
+            <h2>发票</h2>
+            <el-checkbox v-model="invoice">申请发票</el-checkbox>
         </div>
 
         <div class="air-column">
@@ -83,14 +85,15 @@ export default {
             // 乘机人应该是一个数组，里面的每个对象都是一个乘机人，如果想删除的话，只需要 push / splice
             users :[
                 {
-                    username:'',
-                    id:''
+                    username:'范小威',
+                    id:'412828199702063313'
                 },
             ],
             insurances:[],
-            contactName:'',
-            contactPhone:'',
-            captcha:''
+            contactName:'小威',
+            contactPhone:'18336200155',
+            captcha:'000000',
+            invoice:false
         }
     },
     methods: {
@@ -125,12 +128,36 @@ export default {
 
         // 提交订单
         handleSubmit(){
-            console.log('提交请求');
-            console.log(this.users);
-            console.log(this.insurance);
-            console.log(this.contactName);
-            console.log(this.contactPhone);
-            console.log(this.captcha);
+            // console.log('提交请求');
+            // console.log(this.users);
+            // console.log(this.insurance);
+            // console.log(this.contactName);
+            // console.log(this.contactPhone);
+            // console.log(this.captcha);
+
+            const data = {
+                users: this.users,
+                insurances: this.insurances,
+                contactName: this.contactName,
+                contactPhone: this.contactPhone,
+                invoice: this.invoice,
+                seat_xid: this.$route.query.seat_xid,
+                air: this.$route.query.id,
+                captcha: this.captcha
+            }
+
+            this.$axios({
+                method:'post',
+                url:'/airorders',
+                data,
+                // 这里要注意: Bearer 后面一定要有空格
+                headers:{
+                    Authorization:'Bearer ' + this.$store.state.userstore.userInfo.token
+                }
+            }).then(res => {
+                console.log(res.data);
+                this.$message.success(res.data.message)
+            })
         }
     }
 }
