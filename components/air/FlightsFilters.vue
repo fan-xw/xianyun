@@ -91,7 +91,35 @@ export default {
                     label:'小',
                     value:'S'
                 }
-            ]
+            ],
+
+            // 借鉴Element-ui表单的验证规则，  把所有的函数封装成一个 rules 对象
+            rules:{
+                airport: (flights) => {
+                    return flights.filter((item) => {
+                        return item.org_airport_name == this.airport;
+                    });
+                },
+                flightTimes: (flights) => {
+                    const from = Number(this.flightTimes.split(',')[0])
+                    const to = Number(this.flightTimes.split(',')[1])
+
+                    return flights.filter(item => {
+                        const depTime = Number(item.dep_time.split(':')[0])
+                        return depTime >= from && depTime < to
+                    })
+                },
+                company: (flights) => {
+                    return flights.filter(item => {
+                        return item.airline_name == this.company
+                    }) 
+                },
+                airSize: (flights) => {
+                    return flights.filter(item => {
+                        return item.plane_size == this.airSize
+                    })
+                }
+            }
         }
     },
 
@@ -108,76 +136,93 @@ export default {
        runFilters () {
            // 1. 先将原来的一百条数据放入一个数组备用
            let flights = [...this.data.flights]
+
+           // 😊2.遍历规则配置，配置中的每一个key都可以拿出来   
+           for (const key in this.rules) {
+            // console.log(key); key 代表每一个筛选框
+
+            // 😊3.拿到用户选择
+            // 这里直接用 this.key是不行的 .语法得到的是一个字符串，把key变成一个变量 [key]
+            const userOption = this[key]
+            // 😊4.拿到对应选择函数的处理函数
+            const filterFn = this.rules[key]
+
+            // 😊5.如果用户有选择，就执行这个函数，否则不执行
+            if (userOption) {
+                flights = filterFn(flights)
+            }
+
+           }
            
             // 选择机场   
-            if (this.airport) {
-                flights = this.handleAirport(flights)
-                console.log(flights);
-            }
+            // if (this.airport) {
+            //     flights = this.handleAirport(flights)
+            //     console.log(flights);
+            // }
 
-            // 选择出发时间
-            if (this.flightTimes) {
-                flights = this.handleFlightTimes(flights)
-                console.log(flights);
-            }
+            // // 选择出发时间
+            // if (this.flightTimes) {
+            //     flights = this.handleFlightTimes(flights)
+            //     console.log(flights);
+            // }
 
-            // 选择航空公司
-            if (this.company) {
-                flights = this.handleCompany(flights)
-                console.log(flights)
-            }
+            // // 选择航空公司
+            // if (this.company) {
+            //     flights = this.handleCompany(flights)
+            //     console.log(flights)
+            // }
 
-            // 选择机型
-            if (this.airSize) {
-                flights = this.handleAirSize(flights)
-                console.log(flights)
-            }
+            // // 选择机型
+            // if (this.airSize) {
+            //     flights = this.handleAirSize(flights)
+            //     console.log(flights)
+            // }
 
             this.$emit('setFilteredList',flights)
        },
 
-        // 选择机场时候触发
-        handleAirport(flights){
-            // 改造了这个函数，不再直接渲染数据，而是接受一个数组，过滤后返回新数组
-            const newList = this.data.flights.filter(item => {
-                return item.org_airport_name == this.airport
-            })
-            // 不能直接渲染而是返回结果
-            return newList
-        },
+        // // 选择机场时候触发
+        // handleAirport(flights){
+        //     // 改造了这个函数，不再直接渲染数据，而是接受一个数组，过滤后返回新数组
+        //     const newList = this.data.flights.filter(item => {
+        //         return item.org_airport_name == this.airport
+        //     })
+        //     // 不能直接渲染而是返回结果
+        //     return newList
+        // },
 
-        // 选择出发时间时候触发
-        handleFlightTimes(flights){
-            // 这里会有一个小小的BUG 我们打印出的数字是字符串，所以我们需要把字符串数字转换成Number
-            const from = Number(this.flightTimes.split(',')[0])
-            const to = Number(this.flightTimes.split(',')[1])
-            const newList = flights.filter(item => {
-                const depTime = Number(item.dep_time.split(':')[0])
-                return depTime >= from && depTime < to
-            })
-            return newList
-        },
+        // // 选择出发时间时候触发
+        // handleFlightTimes(flights){
+        //     // 这里会有一个小小的BUG 我们打印出的数字是字符串，所以我们需要把字符串数字转换成Number
+        //     const from = Number(this.flightTimes.split(',')[0])
+        //     const to = Number(this.flightTimes.split(',')[1])
+        //     const newList = flights.filter(item => {
+        //         const depTime = Number(item.dep_time.split(':')[0])
+        //         return depTime >= from && depTime < to
+        //     })
+        //     return newList
+        // },
 
-         // 选择航空公司时候触发
-        handleCompany(flights){
-            // 其实这里的 value 值是 value == this.company 
-            // 1.先拿到页面进来传入的 原始数据(100条)，this.data.flights
-            const newList = flights.filter(item => {
-                return item.airline_name == this.company
-            }) 
+        //  // 选择航空公司时候触发
+        // handleCompany(flights){
+        //     // 其实这里的 value 值是 value == this.company 
+        //     // 1.先拿到页面进来传入的 原始数据(100条)，this.data.flights
+        //     const newList = flights.filter(item => {
+        //         return item.airline_name == this.company
+        //     }) 
 
-            // 2.利用 子传父 把数据传递给 父组件 (父组件那边接受到筛选后的数据后进行分页)
-            // this.$emit('setFilteredList',newList)
-            return newList
-        },
+        //     // 2.利用 子传父 把数据传递给 父组件 (父组件那边接受到筛选后的数据后进行分页)
+        //     // this.$emit('setFilteredList',newList)
+        //     return newList
+        // },
 
-         // 选择机型时候触发
-        handleAirSize(flights){
-           const newList = flights.filter(item => {
-               return item.plane_size == this.airSize
-           })
-           return newList
-        },
+        //  // 选择机型时候触发
+        // handleAirSize(flights){
+        //    const newList = flights.filter(item => {
+        //        return item.plane_size == this.airSize
+        //    })
+        //    return newList
+        // },
         
         // 撤销条件时候触发
         handleFiltersCancel(){
