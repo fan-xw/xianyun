@@ -54,11 +54,11 @@
             <div class="contact">
                 <el-form label-width="60px">
                     <el-form-item label="姓名">
-                        <el-input placeholder="请输入姓名"></el-input>
+                        <el-input placeholder="请输入姓名" v-model="contactName"></el-input>
                     </el-form-item>
 
                     <el-form-item label="手机">
-                        <el-input placeholder="请输入手机号码">
+                        <el-input placeholder="请输入手机号码" v-model="contactPhone">
                             <template slot="append">
                             <el-button @click="handleSendCaptcha">发送验证码</el-button>
                             </template>
@@ -66,7 +66,7 @@
                     </el-form-item>
 
                     <el-form-item label="验证码">
-                        <el-input placeholder="请输入验证码"></el-input>
+                        <el-input placeholder="请输入验证码" v-model="captcha"></el-input>
                     </el-form-item>
                 </el-form>   
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -87,7 +87,10 @@ export default {
                     id:''
                 },
             ],
-            insurances:[]
+            insurances:[],
+            contactName:'',
+            contactPhone:'',
+            captcha:''
         }
     },
     methods: {
@@ -106,7 +109,18 @@ export default {
         
         // 发送手机验证码
         handleSendCaptcha(){
-            
+            this.$axios({
+                url: '/captchas',
+                method: 'post',
+                data: {
+                    tel: this.contactPhone
+                }
+            }).then(res=>{
+                console.log(res.data);
+                if (res.data.code) {
+                    this.$message.success('获取到验证码：'+res.data.code)
+                }
+            })
         },
 
         // 提交订单
@@ -114,6 +128,9 @@ export default {
             console.log('提交请求');
             console.log(this.users);
             console.log(this.insurance);
+            console.log(this.contactName);
+            console.log(this.contactPhone);
+            console.log(this.captcha);
         }
     }
 }
