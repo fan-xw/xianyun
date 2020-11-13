@@ -135,6 +135,9 @@ export default {
                 })
             })
             console.log(res);
+
+            // 1.子传父,给发组件发送数据
+            this.$emit('sendTotalPrice',res)
         },
 
         // 添加乘机人

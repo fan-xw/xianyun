@@ -2,10 +2,12 @@
       <div class="container">
         <el-row type="flex" justify="space-between">
             <!-- 订单表单 -->
-            <OrderForm v-if="flightData.insurances" :data="flightData"/>
+            <!-- 2.父组件定义一个事件进行接收 -->
+            <OrderForm v-if="flightData.insurances" :data="flightData" @sendTotalPrice='sendTotalPrice'/>
 
             <!-- 侧边栏 -->
-            <OrderAside v-if="flightData.insurances" :data='flightData'/>
+            <!-- 4.定义一个数据，传给子组件 OrderAside.vue -->
+            <OrderAside v-if="flightData.insurances" :data='flightData' :totalPrice='totalPrice'/>
         </el-row>
     </div>
 </template>
@@ -19,7 +21,8 @@ export default {
     },
     data() {
         return {
-            flightData: {}
+            flightData: {},
+            totalPrice:0
         }
     },
 
@@ -33,6 +36,14 @@ export default {
             console.log(res.data);
             this.flightData = res.data
         })
+    },
+
+    methods:{
+        // 3.后续操作
+        sendTotalPrice(newTotalPrice) {
+            this.totalPrice = newTotalPrice
+        }
+       
     }
 }
 </script>

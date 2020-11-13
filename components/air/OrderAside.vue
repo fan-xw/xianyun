@@ -41,7 +41,8 @@
         </el-row>
         <el-row type="flex" justify="space-between" align="middle" class="info-bar">
             <span>应付总额：</span>
-            <span class="price">￥ </span>
+            <!-- 6.动态渲染父组件传递过来的数据 -->
+            <span class="price">￥ {{totalPrice}}</span>
         </el-row>           
     </div>
 </template>
@@ -52,6 +53,10 @@ export default {
         data: {
             type: Object,
             default: {}
+        },
+        // 5.接受父组件传递过来的数据
+        totalPrice:{
+            type: Number
         }
     },
 
