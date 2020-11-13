@@ -3,10 +3,13 @@
         <div class="air-column">
             <h2>剩机人</h2>
             <el-form class="member-info">
-                <div class="member-info-item" >
+                <!-- 表单只有一个，这里的 div 可以跟随数组的长度进行遍历 -->
+                <div class="member-info-item"
+                     v-for="(user,index) in users"
+                     :key="index">
 
                     <el-form-item label="乘机人类型">
-                        <el-input placeholder="请输入乘机人姓名" class="input-with-select">
+                        <el-input placeholder="请输入乘机人姓名" class="input-with-select" v-model="user.username">
                             <el-select slot="prepend" value="1" placeholder="请选择">
                                 <el-option label="成人" value="1"></el-option>
                                 <el-option label="儿童" value="2"></el-option>
@@ -15,7 +18,7 @@
                     </el-form-item>
 
                     <el-form-item label="证件类型">
-                        <el-input placeholder="请输入证件号码"  class="input-with-select">
+                        <el-input placeholder="请输入证件号码"  class="input-with-select" v-model="user.id">
                             <el-select slot="prepend" value="1" placeholder="请选择">
                                 <el-option label="身份证" value="1" :checked="true"></el-option>
                                 <el-option label="护照" value="2"></el-option>
@@ -70,6 +73,17 @@
 
 <script>
 export default {
+    data () {
+        return {
+            // 乘机人应该是一个数组，里面的每个对象都是一个乘机人，如果想删除的话，只需要 push / splice
+            users :[
+                {
+                    username:'',
+                    id:''
+                },
+            ]
+        }
+    },
     methods: {
         // 添加乘机人
         handleAddUsers(){
@@ -88,7 +102,8 @@ export default {
 
         // 提交订单
         handleSubmit(){
-            
+            console.log('提交请求');
+            console.log(this.users);
         }
     }
 }
@@ -122,6 +137,7 @@ export default {
         margin-bottom:0;
     }
 
+    // 这里是每个乘机人的外容器 
     .member-info-item{
         border-bottom:1px #eee dashed;
         padding-bottom: 20px;
