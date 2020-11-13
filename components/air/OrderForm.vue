@@ -122,7 +122,18 @@ export default {
             let res = 0
             // 1.机票价格
             res += this.data.base_price * this.users.length
+
             // 2.保险价格
+            // 第一轮遍历:所有选中的id(当前北选中的保险 this.insurances),第二轮遍历:原来的保险总数据 this.data.insurances
+            this.insurances.forEach(selectedId => {
+                // 这轮遍历拿到的id需要到原来总的保险数据中查找出对应的价格
+                // 所有保险数据在 this.data.insurances,通过遍历可以拿到每个保险的对象
+                this.data.insurances.forEach(elementId => {
+                    if (elementId.id == selectedId) {
+                        res += elementId.price * this.users.length
+                    }
+                })
+            })
             console.log(res);
         },
 
