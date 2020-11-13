@@ -143,6 +143,7 @@ export default {
 
             // 😊3.拿到用户选择
             // 这里直接用 this.key是不行的 .语法得到的是一个字符串，把key变成一个变量 [key]
+            // 如果当前 key == this.airport, 那么 this[key] == this.airport
             const userOption = this[key]
             // 😊4.拿到对应选择函数的处理函数
             const filterFn = this.rules[key]
