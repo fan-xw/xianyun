@@ -195,6 +195,8 @@ export default {
         // 提交表单是触发
         handleSubmit(){
           console.log(this.form);
+          // 跳转页面之前，需要先进行数据的存储
+          this.$store.commit('historystore/addHistory',this.form)
           // 编程式导航：带查询参数，变成 /register?plan=private
           // router.push({ path: 'register', query: { plan: 'private' }})
           this.$router.push({
