@@ -48,7 +48,14 @@
                         <el-col :span="3" class="choose-button">
                             <el-button 
                             type="warning" 
-                            size="mini">
+                            size="mini"
+                            @click="$router.push({
+                                path:'/air/order',
+                                query:{
+                                    id:data.id,
+                                    seat_xid:seats.seat_xid
+                                }
+                            })">
                             选定
                             </el-button>
                             <p v-if="seats.nums != 'A'">剩余：{{seats.nums}}</p>
