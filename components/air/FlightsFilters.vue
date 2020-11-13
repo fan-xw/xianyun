@@ -95,28 +95,30 @@ export default {
 
             // 借鉴Element-ui表单的验证规则，  把所有的函数封装成一个 rules 对象
             rules:{
-                airport: (flights) => {
+                // 纯函数:函数的返回结果只依赖于它的参数。函数执行过程里面没有副作用。
+                // 相同的输入，每次都能得到相同的输出
+                airport: (flights,userOption) => {
                     return flights.filter((item) => {
-                        return item.org_airport_name == this.airport;
+                        return item.org_airport_name == userOption;
                     });
                 },
-                flightTimes: (flights) => {
-                    const from = Number(this.flightTimes.split(',')[0])
-                    const to = Number(this.flightTimes.split(',')[1])
+                flightTimes: (flights,userOption) => {
+                    const from = Number(userOption.split(',')[0])
+                    const to = Number(userOption.split(',')[1])
 
                     return flights.filter(item => {
                         const depTime = Number(item.dep_time.split(':')[0])
                         return depTime >= from && depTime < to
                     })
                 },
-                company: (flights) => {
+                company: (flights,userOption) => {
                     return flights.filter(item => {
-                        return item.airline_name == this.company
+                        return item.airline_name == userOption
                     }) 
                 },
-                airSize: (flights) => {
+                airSize: (flights,userOption) => {
                     return flights.filter(item => {
-                        return item.plane_size == this.airSize
+                        return item.plane_size == userOption
                     })
                 }
             }
@@ -150,7 +152,7 @@ export default {
 
             // 😊5.如果用户有选择，就执行这个函数，否则不执行
             if (userOption) {
-                flights = filterFn(flights)
+                flights = filterFn(flights,userOption)
             }
 
            }
