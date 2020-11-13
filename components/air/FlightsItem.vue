@@ -46,6 +46,7 @@
                             ￥{{seats.org_settle_price}}
                         </el-col>
                         <el-col :span="3" class="choose-button">
+                            <!-- 带两个参数：把 航班id 和 座位id 带过去-->
                             <el-button 
                             type="warning" 
                             size="mini"

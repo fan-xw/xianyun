@@ -4,9 +4,9 @@
         <el-row type="flex" class="filters-top" justify="space-between" align="middle" :gutter="5">
             <el-col :span="8">
                 单程： 
-                广州 - 上海 
+                {{data.info.departCity}} - {{data.info.destCity}} 
                 / 
-                2019-06-17
+                {{data.info.departDate}}
             </el-col>
 
             <el-col :span="4">
