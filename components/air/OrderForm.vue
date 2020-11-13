@@ -73,6 +73,9 @@
                 </el-form>   
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
             </div>
+            <div style="display: none;"></div>
+                {{totalPrice}}
+            </div>
         </div>
     </div>
 </template>
@@ -97,6 +100,38 @@ export default {
         }
     },
 
+    /*
+    计算属性:依旧是属性，输出一个被使用的属性，如果没有用，是永远不会被执行的(主要作用:被调用)
+            1.如果想要用计算属性，不需要渲染的计算属性替代watch监听器，可以走一个僻静
+            2.我们先将计算属性渲染出来
+            3.然后藏起来不让用户看见
+    */
+
+    computed: {
+       totalPrice () {
+           let res = 0
+            // 1.机票价格
+            res += this.data.base_price * this.users.length
+
+            // 2.保险价格
+            // 第一轮遍历:所有选中的id(当前北选中的保险 this.insurances),第二轮遍历:原来的保险总数据 this.data.insurances
+            this.insurances.forEach(selectedId => {
+                // 这轮遍历拿到的id需要到原来总的保险数据中查找出对应的价格
+                // 所有保险数据在 this.data.insurances,通过遍历可以拿到每个保险的对象
+                this.data.insurances.forEach(elementId => {
+                    if (elementId.id == selectedId) {
+                        res += elementId.price * this.users.length
+                    }
+                })
+            })
+            console.log(res);
+
+            // 1.子传父,给发组件发送数据
+            this.$emit('sendTotalPrice',res)
+            return res
+       }
+    },
+
     // watch 默认不变化不触发
     // 解决方案一: 手动在创建时触发一次
     // created() {
@@ -109,28 +144,28 @@ export default {
            2.封装一个函数:每次变动重新算出最新价 (机票价/保险价/机建税)
            3.在监听器里面调用这个函数
     */ 
-    watch:{
-        // users() {
-        //     // 计算总价格
-        //     console.log('乘机人变化了');
-        //     this.calcTotalPrice()
-        // },
+    // watch:{
+    //     // users() {
+    //     //     // 计算总价格
+    //     //     console.log('乘机人变化了');
+    //     //     this.calcTotalPrice()
+    //     // },
 
-        //方案二: 把 watch 改造成 页面一进来马上触发一次
-        users: {
-            handler () {
-                console.log('乘机人变化了');
-                this.calcTotalPrice()
-            },
-            immediate: true
-        }, 
+    //     //方案二: 把 watch 改造成 页面一进来马上触发一次
+    //     users: {
+    //         handler () {
+    //             console.log('乘机人变化了');
+    //             this.calcTotalPrice()
+    //         },
+    //         immediate: true
+    //     }, 
 
-        insurances() {
-            // 计算总价格
-            console.log('保险变化了');
-            this.calcTotalPrice()
-        }
-    },
+    //     insurances() {
+    //         // 计算总价格
+    //         console.log('保险变化了');
+    //         this.calcTotalPrice()
+    //     }
+    // },
 
     methods: {
         // 计算总价格
