@@ -16,3 +16,21 @@ console.log(obj2);
 // 如果我们希望拿到这个对象里面除了 gender 以外的所有数据
 const {gender, ...data} = obj
 console.log(data);
+
+console.log('------------------------------');
+
+var student = {
+    name:'tom',
+    age:24
+}
+
+var key = 'name'
+console.log(key); // name
+
+console.log(student.key); // undefined
+
+console.log(student.name); // tom
+console.log(student['name']); // tom
+console.log(student[key]); // tom
+
+// 结论：student.name == student['name'] == student[key]
