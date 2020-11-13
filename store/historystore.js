@@ -1,10 +1,11 @@
 export const state = () => ({
     // 创一个历史记录数组，里面每一个对象都是一个记录，每个记录有五个数据，拼接起来就可以实现一次搜索
     historyList:[
+        
         {
           departCity:'广州',
           departCode:'CAN',
-          destCity:'上海',
+          destCity:'深圳',
           destCode:'SHA',
           departDate:'2020-11-12'
         }
@@ -20,6 +21,5 @@ export const mutations = {
             state.historyList.pop()
         }
     },
-
 
 }
