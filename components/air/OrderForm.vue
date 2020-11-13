@@ -35,14 +35,18 @@
 
         <div class="air-column">
             <h2>保险</h2>
-            <div>
-                <div class="insurance-item">
+            <!-- v-model绑定Array类型的变量即可。el-checkbox 的 label属性是该 checkbox 对应的值， -->
+            <el-checkbox-group v-model="insurances">
+                <div class="insurance-item"
+                     v-for="item in data.insurances"
+                     :key="item.id">
                     <el-checkbox 
-                    label="航空意外险：￥30/份×1  最高赔付260万" 
+                    :label="item.id" 
                     border>
+                    {{item.type}}: ￥{{item.price}} / 份 X {{users.length}} 最高赔付 {{item.compensation}}
                     </el-checkbox> 
                 </div>
-            </div>
+            </el-checkbox-group>
         </div>
 
         <div class="air-column">
@@ -82,7 +86,8 @@ export default {
                     username:'',
                     id:''
                 },
-            ]
+            ],
+            insurances:[]
         }
     },
     methods: {
@@ -108,6 +113,7 @@ export default {
         handleSubmit(){
             console.log('提交请求');
             console.log(this.users);
+            console.log(this.insurance);
         }
     }
 }
