@@ -97,6 +97,12 @@ export default {
         }
     },
 
+    // watch 默认不变化不触发
+    // 解决方案一: 手动在创建时触发一次
+    // created() {
+    //     this.calcTotalPrice();
+    // },
+
     /*
     😋😋分析：计算总金额:需要使用兄弟组件传值的方式 (OrderForm.vue --> order.vue --> OrderAside.vue)
            1.首先要监听表单 users 和 保险的变化，确保能够触发变动
@@ -104,11 +110,21 @@ export default {
            3.在监听器里面调用这个函数
     */ 
     watch:{
-        users() {
-            // 计算总价格
-            console.log('乘机人变化了');
-            this.calcTotalPrice()
-        },
+        // users() {
+        //     // 计算总价格
+        //     console.log('乘机人变化了');
+        //     this.calcTotalPrice()
+        // },
+
+        //方案二: 把 watch 改造成 页面一进来马上触发一次
+        users: {
+            handler () {
+                console.log('乘机人变化了');
+                this.calcTotalPrice()
+            },
+            immediate: true
+        }, 
+
         insurances() {
             // 计算总价格
             console.log('保险变化了');
