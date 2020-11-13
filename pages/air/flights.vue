@@ -38,7 +38,8 @@
                   :page-sizes="[2,5,10,20,50,100]"
                   :total="filteredList.length"
                   @current-change="currentChange"
-                  @size-change="sizeChange">
+                  @size-change="sizeChange"
+                  :current-page="pageIndex">
                 </el-pagination>
             </div>
 
@@ -118,6 +119,7 @@ export default {
   */ 
   watch: {
     $route () {
+      this.pageIndex = 1
       this.loadPage()
     }
   },
