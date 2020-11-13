@@ -110,12 +110,20 @@ export default {
     }
   },
 
-  async created() {
-    const res = await airsList(this.$route.query)
-    console.log(res.data);
-    this.flightsDate = res.data
-    
-    this.filteredList = [...this.flightsDate.flights]
+  /*
+  分析：当我们点击历史记录，监控路由变化
+      1.但对于 /air/flights 页面来说，其实一直都没有跳转，所以一开始加载完毕的 created / mounted 函数不会再次执行
+      2.虽然页面没有跳转，但是路由发生了变化，query 专门用来储存 url 问号参数的属性发生了变化
+      3.监听路由变化，就知道用户点击了历史记录，然后重新获取数据即可
+  */ 
+  watch: {
+    $route () {
+      this.loadPage()
+    }
+  },
+
+  created() {
+    this.loadPage()
 
     /*
     👍👍👍分页分析:机票数据存在 this.flightDate.flights里面。
@@ -143,6 +151,15 @@ export default {
   },
 
   methods:{
+    // 封装数据加载
+    async loadPage () {
+      const res = await airsList(this.$route.query)
+      console.log(res.data);
+      this.flightsDate = res.data
+    
+      this.filteredList = [...this.flightsDate.flights]
+    },
+    
     // currentPage 改变时会触发
     currentChange (newIndex) {
        this.pageIndex = newIndex;
