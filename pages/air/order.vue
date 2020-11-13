@@ -2,7 +2,7 @@
       <div class="container">
         <el-row type="flex" justify="space-between">
             <!-- 订单表单 -->
-            <OrderForm/>
+            <OrderForm v-if="flightData.insurances" :data="flightData"/>
 
             <!-- 侧边栏 -->
             <div class="aside">
@@ -17,6 +17,23 @@ import OrderForm from '@/components/air/OrderForm'
 export default {
     components: {
         OrderForm
+    },
+    data() {
+        return {
+            flightData: {}
+        }
+    },
+
+    created () {
+        this.$axios({
+            url: '/airs/' + this.$route.query.id,
+            params: {
+                seat_xid: this.$route.query.seat_xid
+            }
+        }).then(res=>{
+            console.log(res.data);
+            this.flightData = res.data
+        })
     }
 }
 </script>

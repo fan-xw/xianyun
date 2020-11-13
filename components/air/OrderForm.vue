@@ -73,6 +73,7 @@
 
 <script>
 export default {
+    props:['data'],
     data () {
         return {
             // 乘机人应该是一个数组，里面的每个对象都是一个乘机人，如果想删除的话，只需要 push / splice
