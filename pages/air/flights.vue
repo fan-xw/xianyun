@@ -45,7 +45,7 @@
             <!-- 侧边栏 -->
             <div class="aside">
                 <!-- 侧边栏组件 -->
-                侧边栏
+                <FlightsAside/>
             </div>
 
 
@@ -61,6 +61,8 @@ import FlightsListHead from '@/components/air/FlightsListHead'
 import FlightsItem from '@/components/air/FlightsItem'
 // 😥1.引入条件过滤 筛选器
 import FlightsFilters from '@/components/air/FlightsFilters'
+// 😝1.引入侧边栏组件
+import FlightsAside from '@/components/air/FlightsAside'
 export default {
   data() {
     return {
@@ -83,7 +85,9 @@ export default {
     // 😋2.注册机票列表页组件
     FlightsItem,
     // 😥2.注册条件过滤 筛选器组件
-    FlightsFilters
+    FlightsFilters,
+    // 😝2.注册侧边栏组件
+    FlightsAside
   },
 
   // 计算属性
