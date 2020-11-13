@@ -5,18 +5,17 @@
             <OrderForm v-if="flightData.insurances" :data="flightData"/>
 
             <!-- 侧边栏 -->
-            <div class="aside">
-                侧边栏    
-            </div>
+            <OrderAside v-if="flightData.insurances" :data='flightData'/>
         </el-row>
     </div>
 </template>
 
 <script>
 import OrderForm from '@/components/air/OrderForm'
+import OrderAside from '@/components/air/OrderAside'
 export default {
     components: {
-        OrderForm
+        OrderForm,OrderAside
     },
     data() {
         return {
