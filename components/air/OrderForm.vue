@@ -54,12 +54,18 @@
         <div class="air-column">
             <h2>联系人</h2>
             <div class="contact">
-                <el-form label-width="60px">
-                    <el-form-item label="姓名">
+                <el-form label-width="80px"
+                         :model="{
+                             contactName,
+                             contactPhone,
+                             captcha
+                         }"
+                         :rules="contactRules">
+                    <el-form-item label="姓名" prop="contactName">
                         <el-input placeholder="请输入姓名" v-model="contactName"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="手机">
+                    <el-form-item label="手机" prop="contactPhone">
                         <el-input placeholder="请输入手机号码" v-model="contactPhone">
                             <template slot="append">
                             <el-button @click="handleSendCaptcha">发送验证码</el-button>
@@ -67,13 +73,13 @@
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item label="验证码">
+                    <el-form-item label="验证码" prop="captcha">
                         <el-input placeholder="请输入验证码" v-model="captcha"></el-input>
                     </el-form-item>
                 </el-form>   
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
             </div>
-            <div style="display: none;"></div>
+            <div style="display: none;">
                 {{totalPrice}}
             </div>
         </div>
@@ -96,7 +102,30 @@ export default {
             contactName:'小威',
             contactPhone:'18336200155',
             captcha:'000000',
-            invoice:false
+            invoice:false,
+            contactRules:{
+                contactName:[
+                    {
+                        required:true,
+                        message:'请输入联系人姓名',
+                        trigger:'blur'
+                    }
+                ],
+                contactPhone:[
+                    {
+                        required:true,
+                        message:'请输入手机号码',
+                        trigger:'blur'
+                    }
+                ],
+                captcha:[
+                    {
+                        required:true,
+                        message:'请输入验证码',
+                        trigger:'blur'
+                    }
+                ]
+            }
         }
     },
 
