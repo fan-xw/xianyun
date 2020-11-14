@@ -12,7 +12,8 @@
                 class="pay-qrcode">
                     <div class="qrcode">
                         <!-- 二维码 -->
-                        <canvas id="qrcode-stage"></canvas>
+                        <!-- 😱2.为二维码准备一个画布 -->
+                        <canvas ref="qrcodeCanvas"></canvas>
                         <p>请使用微信扫一扫</p>
                         <p>扫描二维码支付</p>
                     </div>
@@ -26,6 +27,8 @@
 </template>
 
 <script>
+// 😱1.引入二维码插件
+import QRcode from 'qrcode'
 export default {
     // 页面进入就开始发请求
     data () {
@@ -74,6 +77,17 @@ export default {
                     }).then(res => {
                         console.log(res.data);
                         this.payData = res.data
+
+                        // 😱3.获取dom, 生成二维码
+                        // 二维码库里传入两个参数
+                        // 1. canvas dom  2.字符串
+                        QRcode.toCanvas(this.$refs.qrcodeCanvas,this.payData.payInfo.code_url, {
+                            width: 256,
+                            color: {
+                                dark: '#0a0',
+                                light: '#bbb'
+                            }
+                        })
                     });
                 } 
             },
