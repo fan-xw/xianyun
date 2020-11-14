@@ -92,7 +92,10 @@
                         <el-input placeholder="请输入验证码" v-model="captcha" @focus="clearErrorMsg('captcha')"></el-input>
                     </el-form-item>
                 </el-form>   
-                <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
+                <el-button type="warning" 
+                           class="submit" 
+                           @click="handleSubmit"
+                           v-if="this.$store.state.userstore.userInfo.token">提交订单</el-button>
             </div>
             <div style="display: none;">
                 {{totalPrice}}
@@ -102,11 +105,13 @@
         <!-- 放入登录页(登录和注册)的表单 -->
         <div class="container">
             <!-- 主要内容 -->
+            <!-- 通过判断 token 的存在 判断显示按钮 还是显示登录框-->
             <el-row 
             type="flex" 
             justify="center" 
             align="middle" 
-            class="main">
+            class="main"
+            v-if="!this.$store.state.userstore.userInfo.token">
     
                 <div class="form-wrapper">
                     <!-- 表单头部tab -->
