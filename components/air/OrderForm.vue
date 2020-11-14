@@ -60,13 +60,14 @@
                              contactPhone,
                              captcha
                          }"
-                         :rules="contactRules">
+                         :rules="contactRules"
+                         ref="contactForm">
                     <el-form-item label="姓名" prop="contactName">
-                        <el-input placeholder="请输入姓名" v-model="contactName"></el-input>
+                        <el-input placeholder="请输入姓名" v-model="contactName" @focus="clearErrorMsg('contactName')"></el-input>
                     </el-form-item>
 
                     <el-form-item label="手机" prop="contactPhone">
-                        <el-input placeholder="请输入手机号码" v-model="contactPhone">
+                        <el-input placeholder="请输入手机号码" v-model="contactPhone" @focus="clearErrorMsg('contactPhone')">
                             <template slot="append">
                             <el-button @click="handleSendCaptcha">发送验证码</el-button>
                             </template>
@@ -74,7 +75,7 @@
                     </el-form-item>
 
                     <el-form-item label="验证码" prop="captcha">
-                        <el-input placeholder="请输入验证码" v-model="captcha"></el-input>
+                        <el-input placeholder="请输入验证码" v-model="captcha" @focus="clearErrorMsg('captcha')"></el-input>
                     </el-form-item>
                 </el-form>   
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -197,6 +198,13 @@ export default {
     // },
 
     methods: {
+        // 清除 失焦后 再进入表单时的校验
+        // clearValidate：移除表单项的校验结果。
+        // 传入待移除的表单项的 prop 属性或者 prop 组成的数组，如不传则移除整个表单的校验结果--Function(props: array | string) 
+        clearErrorMsg(propName) {
+            this.$refs.contactForm.clearValidate(propName)
+        },
+        
         // 计算总价格
         calcTotalPrice () {
             let res = 0
