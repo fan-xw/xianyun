@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main">
             <div class="pay-title">
-                支付总金额 <span class="pay-price">￥ 1000</span>
+                支付总金额 <span class="pay-price">￥ {{payData.price}}</span>
             </div>
             <div class="pay-main">
                 <h4>微信支付</h4>
@@ -27,7 +27,25 @@
 
 <script>
 export default {
-    
+    // 页面进入就开始发请求
+    data () {
+        return {
+            payData:{}
+        }
+    },
+
+    created () {
+        // 路由里 ? 用query传参  : 用params传参  axios是独立的， 而路由是vue 的一部分
+        this.$axios({
+            url:'/airorders/' + this.$route.query.id,
+            headers:{
+                Authorization: 'Bearer ' + this.$store.state.userstore.userInfo.token
+            } 
+        }).then(res => {
+            console.log(res.data);
+            this.payData = res.data
+        })
+    }
 }
 </script>
 
@@ -39,6 +57,10 @@ export default {
     .main{
         width:1000px;
         margin:0 auto;
+
+        .pay-left{
+            text-align: left;
+        }
 
         .pay-title{
             text-align: right;
