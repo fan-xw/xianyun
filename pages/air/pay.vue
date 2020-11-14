@@ -90,25 +90,31 @@ export default {
                         });
 
                         // 只要已生成二维码 我们就开始询问支付结果,首先我们不管轮询逻辑, 只发起一次请求
-                        this.$axios({
-                            method: "post",
-                            url:'/airorders/checkpay',
-                            data:{
-                                id: this.payData.id,
-                                nonce_str: this.payData.price,
-                                out_trade_no: this.payData.orderNo
-                            },
-                            headers:{
-                                Authorization: 'Bearer ' + this.$store.state.userstore.userInfo.token
-                            } 
-                        }).then(res => {
-                            console.log(res.data)
-                        })
+                        this.checkPay()
                     });
                 } 
             },
             immediate:true
         },
+    },
+
+    methods:{
+        checkPay () {
+            this.$axios({
+                method: "post",
+                url:'/airorders/checkpay',
+                data:{
+                    id: this.payData.id,
+                    nonce_str: this.payData.price,
+                    out_trade_no: this.payData.orderNo
+                },
+                headers:{
+                    Authorization: 'Bearer ' + this.$store.state.userstore.userInfo.token
+                } 
+            }).then(res => {
+                console.log(res.data)
+            })
+        }
     }
 }
 </script>
