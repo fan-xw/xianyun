@@ -153,12 +153,12 @@ export default {
             // 乘机人应该是一个数组，里面的每个对象都是一个乘机人，如果想删除的话，只需要 push / splice
             users :[
                 {
-                    username:'范小威',
+                    username:'',
                     id:'412828199702063313'
                 },
             ],
             insurances:[],
-            contactName:'小威',
+            contactName:'',
             contactPhone:'18336200155',
             captcha:'000000',
             invoice:false,
@@ -326,42 +326,70 @@ export default {
 
         // 提交订单
         handleSubmit(){
-            // console.log('提交请求');
-            // console.log(this.users);
-            // console.log(this.insurance);
-            // console.log(this.contactName);
-            // console.log(this.contactPhone);
-            // console.log(this.captcha);
+            // 提交订单之前进行总校验，1.乘机人表单，2.联系人表单
+            
+            // 1.首先乘机人表单校验成功
+            // this.$refs.contactUsersForm.validate().then(isValidUsers => {
+            //     if (isValidUsers) {
+            //         // 2.其次联系人表单校验成功
+            //         this.$refs.contactForm.validate().then(isValidContact => {
+            //             if (isValidContact) {
+            //                 // 3.到这里是两个表单都校验完的地方，现在才可以发送请求  
+            //             }
+            //         })
+            //     }
+            // })
 
-            const data = {
-                users: this.users,
-                insurances: this.insurances,
-                contactName: this.contactName,
-                contactPhone: this.contactPhone,
-                invoice: this.invoice,
-                seat_xid: this.$route.query.seat_xid,
-                air: this.$route.query.id,
-                captcha: this.captcha
-            }
+            /*
+            优化:但是上面的方法太繁琐，有一个 all的方法，可以传入一个由 promise 组成的数组，
+                 然后一起执行，等到数组里所有的都执行完之后，才会返回一个对应传入数组组成的结果数组 
+                 ES6语法：promise.all()
+            */
+           Promise.all([
+               this.$refs.contactUsersForm.validate(),
+               this.$refs.contactForm.validate()
+           ]).then((res) => {
+               // 因为 Promise.all 传入了两个元素组成的数组，所以 res也是一个数组对应上面 Promise 的结果
+               if (res[0] && res[1]) {
+                    // console.log('提交请求');
+                    // console.log(this.users);
+                    // console.log(this.insurance);
+                    // console.log(this.contactName);
+                    // console.log(this.contactPhone);
+                    // console.log(this.captcha);
 
-            this.$axios({
-                method:'post',
-                url:'/airorders',
-                data,
-                // 这里要注意: Bearer 后面一定要有空格
-                headers:{
-                    Authorization:'Bearer ' + this.$store.state.userstore.userInfo.token
-                }
-            }).then(res => {
-                console.log(res.data);
-                const {data, message} = res.data
+                    const data = {
+                        users: this.users,
+                        insurances: this.insurances,
+                        contactName: this.contactName,
+                        contactPhone: this.contactPhone,
+                        invoice: this.invoice,
+                        seat_xid: this.$route.query.seat_xid,
+                        air: this.$route.query.id,
+                        captcha: this.captcha
+                    }
 
-                if (message == '订单提交成功') {
-                    // this.$message.success('订单提交成功')
-                    this.$message.success(res.data.message)
-                    this.$router.push('/air/pay?id='+ data.id)
-                }
-            })
+                    this.$axios({
+                        method:'post',
+                        url:'/airorders',
+                        data,
+                        // 这里要注意: Bearer 后面一定要有空格
+                        headers:{
+                            Authorization:'Bearer ' + this.$store.state.userstore.userInfo.token
+                        }
+                    }).then(res => {
+                        console.log(res.data);
+                        const {data, message} = res.data
+
+                        if (message == '订单提交成功') {
+                            // this.$message.success('订单提交成功')
+                            this.$message.success(res.data.message)
+                            this.$router.push('/air/pay?id='+ data.id)
+                        }
+                    })
+               }
+           })
+            
         }
     }
 }
