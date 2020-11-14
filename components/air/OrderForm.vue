@@ -2,7 +2,7 @@
    <div class="main">
         <div class="air-column">
             <h2>剩机人</h2>
-            <el-form class="member-info" :model="{ users }">
+            <el-form class="member-info" :model="{ users }" ref="contactUsersForm">
                 <!-- 表单只有一个，这里的 div 可以跟随数组的长度进行遍历 -->
                 <div class="member-info-item"
                      v-for="(user,index) in users"
@@ -16,7 +16,7 @@
                                                         }
                                                     ]"
                                                     :prop="`users[${index}].username`">
-                        <el-input placeholder="请输入乘机人姓名" class="input-with-select" v-model="user.username">
+                        <el-input placeholder="请输入乘机人姓名" class="input-with-select" v-model="user.username" @focus="clearErrUers(`users[${index}].username`)">
                             <el-select slot="prepend" value="1" placeholder="请选择">
                                 <el-option label="成人" value="1"></el-option>
                                 <el-option label="儿童" value="2"></el-option>
@@ -32,7 +32,7 @@
                                                         }
                                                    ]"
                                                    :prop="`users[${index}].id`">
-                        <el-input placeholder="请输入证件号码"  class="input-with-select" v-model="user.id">
+                        <el-input placeholder="请输入证件号码"  class="input-with-select" v-model="user.id" @focus="clearErrUers(`users[${index}].id`)">
                             <el-select slot="prepend" value="1" placeholder="请选择">
                                 <el-option label="身份证" value="1" :checked="true"></el-option>
                                 <el-option label="护照" value="2"></el-option>
@@ -212,6 +212,10 @@ export default {
     // },
 
     methods: {
+        // 移除乘机人表单项 的校验结果
+        clearErrUers (users) {
+            this.$refs.contactUsersForm.clearValidate(users)
+        },
         // 清除 失焦后 再进入表单时的校验
         // clearValidate：移除表单项的校验结果。
         // 传入待移除的表单项的 prop 属性或者 prop 组成的数组，如不传则移除整个表单的校验结果--Function(props: array | string) 
