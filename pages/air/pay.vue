@@ -33,7 +33,9 @@ export default {
     // 页面进入就开始发请求
     data () {
         return {
-            payData:{}
+            payData:{},
+            // 1.定义数据，用于暂存
+            timer:null
         }
     },
     
@@ -116,7 +118,8 @@ export default {
                 console.log(res.data)
                 // 开始 轮询 支付结果，直到弹出成功提示
                 if (res.data.trade_state !== "SUCCESS") {
-                    setTimeout(() => {
+                    // 2.每次轮询都要把值 赋值给 timer
+                    this.timer = setTimeout(() => {
                         // 递归:自己调用自己
                         this.checkPay()
                     }, 3000);
@@ -125,6 +128,14 @@ export default {
                 }
             })
         }
+    },
+
+    // 和 created / mounted 一样都是一个生命周期，destroyed在销毁组件的时候触发
+    // 可以把不能带到别的页面的东西，在这里一并销毁，页面跳出，需要清理定时器，以避免轮询无法停止
+    destroyed () {
+        console.log('跳出页面，清理定时器')
+        // 3.清理， 这里不能用 clearInterval,因为clearInterval是不间断的，不会停下来，而clearTimeout 只会执行一次
+        clearTimeout(this.timer)
     }
 }
 </script>
