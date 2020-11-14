@@ -2,13 +2,20 @@
    <div class="main">
         <div class="air-column">
             <h2>剩机人</h2>
-            <el-form class="member-info">
+            <el-form class="member-info" :model="{ users }">
                 <!-- 表单只有一个，这里的 div 可以跟随数组的长度进行遍历 -->
                 <div class="member-info-item"
                      v-for="(user,index) in users"
                      :key="index">
 
-                    <el-form-item label="乘机人类型">
+                    <el-form-item label="乘机人类型" :rules="[
+                                                        {
+                                                             required:true,
+                                                             message:'请填写乘机人姓名',
+                                                             trigger:'blur'
+                                                        }
+                                                    ]"
+                                                    :prop="`users[${index}].username`">
                         <el-input placeholder="请输入乘机人姓名" class="input-with-select" v-model="user.username">
                             <el-select slot="prepend" value="1" placeholder="请选择">
                                 <el-option label="成人" value="1"></el-option>
@@ -17,7 +24,14 @@
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item label="证件类型">
+                    <el-form-item label="证件类型" :rules="[
+                                                        {
+                                                           required:true,
+                                                           message:'请填写乘机人证件号码',
+                                                           trigger:'blur'
+                                                        }
+                                                   ]"
+                                                   :prop="`users[${index}].id`">
                         <el-input placeholder="请输入证件号码"  class="input-with-select" v-model="user.id">
                             <el-select slot="prepend" value="1" placeholder="请选择">
                                 <el-option label="身份证" value="1" :checked="true"></el-option>
@@ -319,7 +333,7 @@ export default {
         background-color: #fff;
     }
     .member-info /deep/ .el-form-item{
-        margin-bottom:0;
+        margin-bottom:10px;
     }
 
     // 这里是每个乘机人的外容器 
