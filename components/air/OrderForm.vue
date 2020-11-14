@@ -354,7 +354,13 @@ export default {
                 }
             }).then(res => {
                 console.log(res.data);
-                this.$message.success(res.data.message)
+                const {data, message} = res.data
+
+                if (message == '订单提交成功') {
+                    // this.$message.success('订单提交成功')
+                    this.$message.success(res.data.message)
+                    this.$router.push('/air/pay?id='+ data.id)
+                }
             })
         }
     }
