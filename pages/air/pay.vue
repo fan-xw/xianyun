@@ -100,6 +100,7 @@ export default {
 
     methods:{
         checkPay () {
+            console.log('调用 checkpay 检查支付状态');
             this.$axios({
                 method: "post",
                 url:'/airorders/checkpay',
@@ -113,6 +114,15 @@ export default {
                 } 
             }).then(res => {
                 console.log(res.data)
+                // 开始 轮询 支付结果，直到弹出成功提示
+                if (res.data.trade_state !== "SUCCESS") {
+                    setTimeout(() => {
+                        // 递归:自己调用自己
+                        this.checkPay()
+                    }, 3000);
+                } else {
+                    this.$message.success('已完成支付')
+                }
             })
         }
     }
