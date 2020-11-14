@@ -98,14 +98,53 @@
                 {{totalPrice}}
             </div>
         </div>
+
+        <!-- 放入登录页(登录和注册)的表单 -->
+        <div class="container">
+            <!-- 主要内容 -->
+            <el-row 
+            type="flex" 
+            justify="center" 
+            align="middle" 
+            class="main">
+    
+                <div class="form-wrapper">
+                    <!-- 表单头部tab -->
+                    <el-row type="flex" justify="center" class="tabs">
+                        <span :class="{active: currentTab === index}" 
+                        v-for="(item, index) in ['登录','注册']"
+                        :key="index" 
+                        @click="handleChangeTab(index)">
+                            {{item}}
+                        </span>
+                    </el-row>
+    
+                    <!-- 登录功能组件 -->
+                    <LoginForm v-if="currentTab == 0"/>
+    
+                    <!-- 注册功能组件 -->
+                    <RegisterForm v-if="currentTab == 1" @toLogin="currentTab = 0"/>
+                </div>
+            </el-row>
+        </div>
     </div>
 </template>
 
 <script>
+// 1.引入登录组件
+import LoginForm from '@/components/user/loginForm.vue'
+// 2.引入注册组件
+import RegisterForm from '@/components/user/RegisterForm.vue'
 export default {
     props:['data'],
+    components: {
+      // 2.注册登录组件
+      LoginForm,
+      RegisterForm
+    },
     data () {
         return {
+            currentTab:0,
             // 乘机人应该是一个数组，里面的每个对象都是一个乘机人，如果想删除的话，只需要 push / splice
             users :[
                 {
@@ -212,6 +251,11 @@ export default {
     // },
 
     methods: {
+        // 切换tab栏时触发
+        handleChangeTab(index) {
+          // 点击tab栏进行切换
+           this.currentTab = index;
+        },
         // 移除乘机人表单项 的校验结果
         clearErrUers (users) {
             this.$refs.contactUsersForm.clearValidate(users)
@@ -394,5 +438,41 @@ export default {
         display: block;
         width:250px;
         height:50px;
+    }
+
+    .main{
+        height: 100%;
+        margin:0 auto;
+        position: relative;
+        
+        .form-wrapper{
+            width:400px;
+            margin:0 auto;
+            background:#fff;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            overflow:hidden;
+            
+            .tabs{
+                span{
+                    display: block;
+                    width:50%;
+                    height: 50px;
+                    box-sizing: border-box;
+                    border-top:2px #eee solid;
+                    background:#eee;
+                    line-height: 48px;
+                    text-align: center;
+                    cursor: pointer;
+                    color:#666;
+
+                    &.active{
+                        color:orange;
+                        border-top-color: orange;
+                        background:#fff;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
     }
 </style>
