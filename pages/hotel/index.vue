@@ -11,7 +11,29 @@ export default {
 
       // 1.创建一个回调函数，高德地图加载完毕后会加载
       window.onLoad  = function(){
-          var map = new AMap.Map('container');
+          var map = new AMap.Map('container',{
+            zoom:18,   // 级别
+            center:[113.32459,23.10668],  // 中心点
+            viewMode:'3D'  // 使用3D视图
+          });
+
+          //实时路况图层
+          var trafficLayer = new AMap.TileLayer.Traffic({
+              zIndex: 10
+          });
+          map.add(trafficLayer);//添加图层到地图
+
+          // 位置点标记
+          var marker = new AMap.Marker({
+              position:[113.32459,23.10668],//位置
+              // offset: new AMap.Pixel(-100,-100),
+              // 如果是替换图标使用 icon 属性
+              icon: '//vdata.amap.com/icons/b18/1/2.png',
+              // 如果希望自定义内容, 可以使用 content 属性
+              // 如果用了 content 那么 icon 图标失效
+              // content: '<h2>广州塔</h2>'
+          })
+          map.add(marker);//添加到地图
       }
 
       // 2.api 地址
