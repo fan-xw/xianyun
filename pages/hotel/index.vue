@@ -34,6 +34,12 @@ export default {
               // content: '<h2>广州塔</h2>'
           })
           map.add(marker);//添加到地图
+
+          // 添加缩放工具体哦啊插件
+          AMap.plugin('AMap.ToolBar',function(){
+             var toolbar = new AMap.ToolBar();
+             map.addControl(toolbar)
+          })
       }
 
       // 2.api 地址
