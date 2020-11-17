@@ -1,15 +1,25 @@
 <template>
   <div class="searchForm">
+    <div class="hotel">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
+            <el-breadcrumb-item>酒店预订</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+
     <el-row>
       <el-col :span="5">
         <el-autocomplete
+          v-model="city"
           :fetch-suggestions="loadCityList"
           placeholder="切换城市"
-          @select="handleSelect"></el-autocomplete>
+          @select="handleSelect">
+        </el-autocomplete>
       </el-col>
 
       <el-col :span="8">
         <el-date-picker
+          v-model="value1"
           type="daterange"
           range-separator="-"
           unlink-panels
@@ -20,28 +30,42 @@
       </el-col>
 
       <el-col :span="5">
-        <el-popover placement="bottom-start" width="300">
+        <el-popover placement="bottom-start" width="300" v-model="visible">
+          <el-input
+            placeholder="人数未定"
+            suffix-icon="el-icon-user"
+            slot="reference"
+            v-model="person">
+          </el-input>
+
+          <!-- 筛选人数 -->
           <div class="man">
             <span class="every">每间</span>
             <el-select
+              v-model="adult"
               slot="prepend"
               placeholder="2 成人"
               size="mini"
               class="selectbox">
               <el-option
-                label="`成人`"
-                value="">
+                v-for="(item,index) in personList"
+                :key="index"
+                :label="`${item} 成人`"
+                :value="item">
               </el-option>
             </el-select>
 
             <el-select
+              v-model="children"
               slot="prepend"
               placeholder="0 儿童"
               size="mini"
               class="selectbox">
               <el-option
-                label="`儿童 `"
-                value="">
+                v-for="(item,index) in personList"
+                :key="index"
+                :label="`${item} 儿童`"
+                :value="item">
               </el-option>
             </el-select>
 
@@ -51,11 +75,7 @@
             </div>
           </div>
           
-          <el-input
-            placeholder="人数未定"
-            suffix-icon="el-icon-user"
-            slot="reference">
-          </el-input>
+
         </el-popover>
       </el-col>
       <el-button type="primary" @click="sendInfo">查看价格</el-button>
@@ -126,7 +146,13 @@ export default {
     props:['value'],
     data () {
         return {
-            pickerOptions:[]
+          city:'广州市',
+          value1: '',
+          person:'',
+          personList:[0,1,2,3,4,5,6],
+          adult:'2成人',
+          children:' 0 儿童',
+          pickerOptions:[]
         }
     },
     methods:{
@@ -150,6 +176,12 @@ export default {
 
 <style lang="less" scoped>
 .searchForm {
+  .hotel {
+    padding: 20px 0;
+    font-size: 16px;
+    color: #000;
+  }
+
   /deep/.el-input__inner {
     width: 100%;
   }
