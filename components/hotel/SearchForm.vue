@@ -86,12 +86,21 @@
         <el-row type="flex">
           <span class="title">区域:</span>
           <div class="box-r-f1">
-            <el-col>
-              <span class="place">
+            <el-col :class='{area:!isShowPlace}'>
+              <span class="place" 
+                    v-for="(item,index) in scenics"
+                    :key="index">
+                    {{item.name}}
               </span>
             </el-col>
             <div @click="showPlace">
-              <span></span>
+              <!-- 动态赋值可以通过v-bind:属性值 来实现属性值的动态绑定,绑定内联样式 -->
+              <span class="ifontcont" 
+                    :class="{
+                        'el-icon-arrow-down':!isShowPlace,
+                        'el-icon-arrow-up':isShowPlace
+                    }">
+              </span>
               等29个区域
             </div>
           </div>
@@ -160,8 +169,9 @@ export default {
                 {x:113.324357,y:23.1163},
                 {x:113.298378,y:23.122283}],
           pickerOptions:[],
-          // 定义一个风景区的空数组
-          scenics:[]
+          // 定义一个风景区的空数组,展示在酒店的搜索的区域位置
+          scenics:[],
+          isShowPlace:false,
         }
     },
 
@@ -224,8 +234,10 @@ export default {
         // 点击查看价格
         sendInfo () {},
 
-        // 区域下拉
-        showPlace () {},
+        // 风景区下拉
+        showPlace () {
+            this.isShowPlace=!this.isShowPlace
+        },
 
         isload () {}
     }
@@ -248,7 +260,7 @@ export default {
     overflow: hidden;
   }
   .title {
-    width: 100px;
+    width: 70px;
   }
   .place {
     padding-right: 10px;
@@ -265,6 +277,8 @@ export default {
   .iconhuangguan {
     color: #ff9900;
   }
+
+  // 地图样式
   #container {
     width: 100%;
     height: 300px;
@@ -301,5 +315,12 @@ export default {
     padding: 15px;
     text-align: right;
   }
+}
+
+.el-icon-arrow-down {
+  color: #ff9900;
+}
+.el-icon-arrow-up {
+  color: #ff9900;
 }
 </style>
