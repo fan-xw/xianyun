@@ -30,7 +30,7 @@
       </el-col>
 
       <el-col :span="5">
-        <el-popover placement="bottom-start" width="300" v-model="visible">
+        <el-popover placement="bottom-start" width="300">
           <el-input
             placeholder="人数未定"
             suffix-icon="el-icon-user"
@@ -134,7 +134,7 @@
         </el-row>
       </el-col>
       <el-col :span="10">
-        <div id="container" v-loading="isload">
+        <div id="container">
         </div>
       </el-col>
     </el-row>
@@ -152,10 +152,68 @@ export default {
           personList:[0,1,2,3,4,5,6],
           adult:'2成人',
           children:' 0 儿童',
-          pickerOptions:[]
+          // 地图点坐标
+          positionList:[
+                {x:113.331085,y:23.112187 },
+                {x:113.33352,y:23.113201},
+                {x:113.328992,y:23.117464},
+                {x:113.324357,y:23.1163},
+                {x:113.298378,y:23.122283}],
+          pickerOptions:[],
+          // 定义一个风景区的空数组
+          scenics:[]
         }
     },
+
+    // mounted钩子函数-- 实现页面一进来就加载地图
+    mounted () {
+      const positionList = this.positionList
+
+      window.onLoad  = function(){
+            var map = new AMap.Map('container',{
+              zoom:12,
+              center:[positionList[0].x,positionList[0].y]
+            });
+
+            const markerList= positionList.map((item)=>{
+                return   new AMap.Marker({
+                    position: new AMap.LngLat(item.x,item.y),   
+                    title: '广州塔'
+                })
+            })
+            //添加到地图
+            map.add(markerList);
+      }
+      var url = 'https://webapi.amap.com/maps?v=1.4.15&key=您申请的key值&callback=onLoad';
+      var jsapi = document.createElement('script');
+      jsapi.charset = 'utf-8';
+      jsapi.src = url;
+      document.head.appendChild(jsapi);
+    }, 
+
+    /*
+    created ：处于loading结束后，还做一些初始化，实现函数自执行
+    (data数据已经初始化，但是DOM结构渲染完成，组件没有加载)
+    */
+    created () {
+      this.sendCities()
+    },
+
+
     methods:{
+      sendCities () {
+         this.$axios({
+           url:'/cities',
+           params:{
+             name:this.city
+           }
+         }).then(res => {
+           console.log(res);
+           this.scenics = res.data.data[0].scenics
+           console.log(this.scenics);
+         })
+      },
+
         // 切换城市
         handleSelect () {},
         loadCityList () {},
