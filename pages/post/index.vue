@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px">Aside 123124</el-aside>
       <el-main>Main</el-main>
     </el-container>
   </div>
