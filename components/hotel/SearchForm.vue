@@ -134,7 +134,7 @@
         </el-row>
       </el-col>
       <el-col :span="10">
-        <div id="container" v-loading="isload">
+        <div id="container">
         </div>
       </el-col>
     </el-row>
@@ -152,9 +152,44 @@ export default {
           personList:[0,1,2,3,4,5,6],
           adult:'2成人',
           children:' 0 儿童',
+          // 地图点坐标
+          positionList:[
+                {x:113.331085,y:23.112187 },
+                {x:113.33352,y:23.113201},
+                {x:113.328992,y:23.117464},
+                {x:113.324357,y:23.1163},
+                {x:113.298378,y:23.122283}],
           pickerOptions:[]
         }
     },
+
+    // mounted钩子函数-- 实现页面一进来就加载地图
+    mounted () {
+      const positionList = this.positionList
+
+      window.onLoad  = function(){
+            var map = new AMap.Map('container',{
+              zoom:12,
+              center:[positionList[0].x,positionList[0].y]
+            });
+
+            const markerList= positionList.map((item)=>{
+                return   new AMap.Marker({
+                    position: new AMap.LngLat(item.x,item.y),   
+                    title: '广州塔'
+                })
+            })
+            //添加到地图
+            map.add(markerList);
+      }
+      var url = 'https://webapi.amap.com/maps?v=1.4.15&key=您申请的key值&callback=onLoad';
+      var jsapi = document.createElement('script');
+      jsapi.charset = 'utf-8';
+      jsapi.src = url;
+      document.head.appendChild(jsapi);
+    }, 
+
+
     methods:{
         // 切换城市
         handleSelect () {},
