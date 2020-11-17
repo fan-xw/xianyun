@@ -1,6 +1,5 @@
 <template>
   <div class="recommended">
-    推荐攻略
     <!-- 多张图片显示 -->
     <div class="post-item">
       <!-- 标题 -->
