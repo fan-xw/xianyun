@@ -7,7 +7,7 @@
           <SideNacigation /></div
       ></el-col>
       <el-col :span="16">
-        <div class="grid-content bg-purple-light"></div>
+        <div class="grid-content bg-purple-light">右边</div>
       </el-col>
     </el-row>
   </div>
