@@ -30,7 +30,7 @@
       </el-col>
 
       <el-col :span="5">
-        <el-popover placement="bottom-start" width="300" v-model="visible">
+        <el-popover placement="bottom-start" width="300">
           <el-input
             placeholder="人数未定"
             suffix-icon="el-icon-user"
@@ -159,7 +159,9 @@ export default {
                 {x:113.328992,y:23.117464},
                 {x:113.324357,y:23.1163},
                 {x:113.298378,y:23.122283}],
-          pickerOptions:[]
+          pickerOptions:[],
+          // 定义一个风景区的空数组
+          scenics:[]
         }
     },
 
@@ -189,8 +191,29 @@ export default {
       document.head.appendChild(jsapi);
     }, 
 
+    /*
+    created ：处于loading结束后，还做一些初始化，实现函数自执行
+    (data数据已经初始化，但是DOM结构渲染完成，组件没有加载)
+    */
+    created () {
+      this.sendCities()
+    },
+
 
     methods:{
+      sendCities () {
+         this.$axios({
+           url:'/cities',
+           params:{
+             name:this.city
+           }
+         }).then(res => {
+           console.log(res);
+           this.scenics = res.data.data[0].scenics
+           console.log(this.scenics);
+         })
+      },
+
         // 切换城市
         handleSelect () {},
         loadCityList () {},
