@@ -1,5 +1,5 @@
 {
-  "name": "xianyunProject",
+  "name": "xianyunlvyou",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
     "less": "^3.12.2",
     "less-loader": "^7.0.2",
     "moment": "^2.29.1",
-    "nuxt": "^2.14.6",
+    "nuxt": "^2.14.7",
     "qrcode": "^1.4.4",
     "vue2-editor": "^2.10.2",
     "vuex-persistedstate": "^4.0.0-beta.1"
