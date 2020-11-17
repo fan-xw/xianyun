@@ -105,40 +105,43 @@
             </div>
           </div>
         </el-row>
+        
         <el-row type="flex">
           <span class="title">均价
-            <span
-              class="el-icon-question"
-              title="等级均价由平日计算得出,节假日价格会有所上浮"></span>:
+            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="top-start">
+                  <span class="el-icon-question"></span>:
+            </el-tooltip>
           </span>
-          <div
-            class="box-r-f1"
-            title="等级评定是针对房价，设施和服务等各方面水平的综合评估。">
-            <el-col :span="6">
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span>¥332</span>
-            </el-col>
-            <el-col
-              :span="7"
-              title="等级评定是针对房价，设施和服务等各方面水平的综合评估。">
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span>¥521</span>
-            </el-col>
-            <el-col
-              :span="8"
-              title="等级评定是针对房价，设施和服务等各方面水平的综合评估。">
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span class="iconfont iconhuangguan"></span>
-              <span>¥768</span>
-            </el-col>
+          <div class="box-r-f1">
+            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="bottom">
+              <el-col :span="6">
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span>¥332</span>
+              </el-col>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="bottom">
+              <el-col :span="7">
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span>¥521</span>
+              </el-col>
+            </el-tooltip>
+
+            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="bottom">
+              <el-col :span="8">
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span class="iconfont iconhuangguan"></span>
+                <span>¥768</span>
+              </el-col>
+            </el-tooltip>
           </div>
         </el-row>
       </el-col>
