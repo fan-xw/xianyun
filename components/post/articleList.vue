@@ -118,7 +118,7 @@ export default {};
 <style lang='less' scoped>
 // 多张图片样式
 .post-item {
-  width: 700px;
+  width: 666px;
   padding: 20px 0;
   border-bottom: 1px solid #eee;
   .post-title {
@@ -183,7 +183,7 @@ export default {};
 }
 // 一张图片样式
 .post-item2 {
-  width: 700px;
+  width: 666px;
   padding: 20px 0;
   border-bottom: 1px solid #eee;
   display: flex;
