@@ -52,20 +52,71 @@
 
     <!-- 评论模块 -->
     <comment />
+    <!-- 评论递归模块 -->
+    <recursion
+      v-for="(comment, index) in commentList"
+      :key="index"
+      :commentData="comment"
+    />
+    <!-- 分页组件 -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400"
+    >
+    </el-pagination>
     <!-- 相关攻略模块 -->
   </div>
 </template>
 
 <script>
 import comment from "@/components/post/comment.vue";
+import recursion from "@/components/post/recursion.vue";
 export default {
   data() {
     return {
       particulars: "",
+      commentList: [
+        {
+          content: "楼主说的有道理",
+        },
+        {
+          content: "挽尊",
+        },
+        {
+          content: "从前有座山",
+        },
+        {
+          content: "+10086",
+        },
+        {
+          content: "山上有座庙",
+          parent: {
+            content: "从前有座山",
+          },
+        },
+        {
+          content: "葬爱家族万岁",
+        },
+        {
+          content: "庙里有个和尚在讲故事",
+          parent: {
+            content: "山上有座庙",
+            parent: {
+              content: "从前有座山",
+            },
+          },
+        },
+      ],
     };
   },
   components: {
     comment,
+    recursion,
   },
   mounted() {
     //获取到文章详情
@@ -79,6 +130,12 @@ export default {
     });
   },
   methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
     handelShare() {
       this.$message.closeAll();
       this.$message.warning("暂时不支持分享,请见谅");
