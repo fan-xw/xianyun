@@ -1,25 +1,40 @@
 <template>
   <div class="post">
-    {{content}}
-    <client-only placeholder="Loading...">
-      <!-- vue-editor 组件只会在客户端被渲染 -->
-      <vue-editor v-model="content" :editorToolbar="customToolbar"></vue-editor>
-    </client-only>
-    
+    <el-container>
+      <el-aside width="200px">Aside 123124</el-aside>
+      <el-main>Main</el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
 export default {
-     data() {
-       return {
-         content:'',
-         customToolbar: [["bold", "italic", "underline"], [{ list: "ordered" },{ list: "bullet" }],["image", "code-block"]]
-       }
-     },
+  data() {
+    return {
+
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
+.post {
+  min-width: 1000px;
+  width: 1000px;
+  margin: 0 auto;
+  height: 100%;
+  .el-aside {
+    background-color: #d3dce6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
 
+  .el-main {
+    background-color: #e9eef3;
+    color: #333;
+    text-align: center;
+    line-height: 160px;
+  }
+}
 </style>
