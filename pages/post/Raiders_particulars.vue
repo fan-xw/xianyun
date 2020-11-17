@@ -51,18 +51,23 @@
     </el-tooltip>
 
     <!-- 评论模块 -->
+    <comment />
     <!-- 相关攻略模块 -->
   </div>
 </template>
 
 <script>
+import comment from "@/components/post/comment.vue";
 export default {
   data() {
     return {
       particulars: "",
     };
   },
-  modules() {
+  components: {
+    comment,
+  },
+  mounted() {
     //获取到文章详情
     this.$axios({
       url: "/posts",
