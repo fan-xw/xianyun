@@ -1,12 +1,14 @@
 <template>
   <div class="particulars">
     <div class="container">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/post/' }"
-          >旅游攻略</el-breadcrumb-item
-        >
-        <el-breadcrumb-item>攻略详情</el-breadcrumb-item>
-      </el-breadcrumb>
+      <div class="crumbs">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/post/' }"
+            >旅游攻略</el-breadcrumb-item
+          >
+          <el-breadcrumb-item>攻略详情</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
       <!-- 攻略详情标题 -->
       <h1>远东行：用好奇心打量这座城 —— 最值得收藏的海参崴出行攻略</h1>
       <hr />
@@ -45,22 +47,24 @@
         直飞塞班的航班一般和酒店一起打包成机票+酒店套餐，价格要比单定机票、酒店要更加便捷实惠，往往3千多就能把机票和酒店一键搞定。
       </p>
       <!-- 评论和分享点击图标 -->
-      <el-tooltip
-        class="item"
-        effect="dark"
-        content="评论"
-        placement="top-start"
-      >
-        <i class="el-icon-edit"></i>
-      </el-tooltip>
-      <el-tooltip
-        class="item"
-        effect="dark"
-        content="分享"
-        placement="top-start"
-      >
-        <i class="el-icon-edit-outline" @click="handelShare"></i>
-      </el-tooltip>
+      <div class="icon">
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="评论"
+          placement="top-start"
+        >
+          <i class="el-icon-edit"></i>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="分享"
+          placement="top-start"
+        >
+          <i class="el-icon-edit-outline" @click="handelShare"></i>
+        </el-tooltip>
+      </div>
 
       <!-- 评论模块 -->
       <comment />
@@ -169,7 +173,17 @@ export default {
 .container {
   position: relative;
   width: 700px;
-
+  .crumbs {
+    margin-top: 20px;
+  }
+  .icon {
+    text-align: center;
+    padding: 10px;
+  }
+  h1 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
   i {
     font-size: 50px;
   }
