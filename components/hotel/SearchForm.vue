@@ -284,7 +284,10 @@ export default {
         },
 
         // 确定按钮
-        sure () {},
+        sure() {
+          this.visible = !this.visible;
+          this.person = `${this.adult}成人 ${this.children}儿童`;
+        },
 
         // 风景区下拉
         showPlace () {
