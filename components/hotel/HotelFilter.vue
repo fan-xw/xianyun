@@ -10,8 +10,7 @@
                 </span>
                 <el-slider
                   v-model="value"
-                  :format-tooltip="formatTooltip"
-                  @change="valuechange">
+                  :format-tooltip="formatTooltip">
                 </el-slider>
           </div>
       </el-col>
@@ -61,6 +60,11 @@ export default {
             {name:'酒店设施',list:[],state:'不限'},
             {name:'酒店品牌',list:[],state:'不限'},
           ],
+          form:{
+              price_it:4000,
+              hotellevel_in:[1,2,3],
+              hoteltype_in:[1,2,3]
+          }
       }
   },
  
@@ -83,7 +87,31 @@ export default {
       },
       valuechange () {},
 
-      handleCommand () {}
+      // command:点击菜单项触发的事件回调	dropdown-item 的指令
+      handleCommand (command) {
+         const { index,num } = command
+         this.hotelItem[index].list[num].isshow = !this.hotelItem[index].list[num].isshow
+         this.hotelItem = [...this.hotelItem]
+         this.countitem(index)
+        //  this.$emit('filter',this.form)
+      },
+
+      countitem(index){
+          const list=this.hotelItem[index].list.filter((value)=>{
+              return value.isshow == true
+          })
+        
+          if(list.length==0){
+              this.hotelItem[index].state='不限'
+          }
+          else if(list.length==1){
+              this.hotelItem[index].state = list[0].name
+          }
+          else{
+              this.hotelItem[index].state = `已选${list.length}项`
+          } 
+      }
+      
   }
 }
 </script>
@@ -162,7 +190,7 @@ export default {
     }
     
     .el-dropdown-menu{
-      height: 250PX;
+      height: 300PX;
       overflow: scroll;  
     }
 </style>

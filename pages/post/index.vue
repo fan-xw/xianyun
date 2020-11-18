@@ -22,35 +22,44 @@
             <h2 class="strategy_left">推荐攻略</h2>
 
             <el-row>
-              <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                @click="$router.replace({ path: '/post/create' })"
+                >写游记</el-button
+              >
             </el-row>
           </div>
         </div>
+      </el-col>
+    </el-row>
+    <el-row type="flex" class="row-bg">
+      <el-col :span="6">
+        <div class="grid-content bg-purple"></div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+<<<<<<< HEAD
 import SideNacigation from '@/components/post/SideNacigation.vue'
 import SearchFrame from '@/components/post/SearchFrame.vue'
 // import RaidersParticulars from '@/components/post/RaidersParticulars.vue'
+=======
+import SideNacigation from "@/components/post/SideNacigation.vue";
+import SearchFrame from "@/components/post/SearchFrame.vue";
+
+>>>>>>> 47f91bfb9ba8487825ed524ce091f6a9acb844ac
 export default {
   components: {
-    SideNacigation, SearchFrame,
+    SideNacigation,
+    SearchFrame,
   },
   data() {
-    return {
-
-
-
-    }
+    return {};
   },
-  methods: {
-
-  }
-
-}
+};
 </script>
 
 <style lang="less" scoped>
