@@ -170,7 +170,10 @@ export default {
                 {x:113.328992,y:23.117464},
                 {x:113.324357,y:23.1163},
                 {x:113.298378,y:23.122283}],
-          pickerOptions:[],
+          // 绑定时间 
+          pickerOptions: {
+            disabledDate: this.disabledDate,
+          },
           // 定义一个风景区的空数组,展示在酒店的搜索的区域位置
           scenics:[],
           isShowPlace:false,
@@ -224,6 +227,11 @@ export default {
     },
 
     methods:{
+      // 禁止选择今天以前的时间
+      disabledDate(time) {
+        return time.getTime() < Date.now() - 8.64e7;
+      },
+
       // 查找城市
       sendInfo () {
          this.$axios({
