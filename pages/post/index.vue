@@ -28,9 +28,9 @@
                 @click="$router.replace({ path: '/post/create' })"
                 >写游记</el-button
               >
-              <postList />
             </el-row>
           </div>
+          <postList />
         </div>
       </el-col>
     </el-row>
