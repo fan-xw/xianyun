@@ -17,7 +17,7 @@
       ></el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple-light">
-          <!-- <SearchFrame /> -->
+          <SearchFrame />
           <div class="strategy">
             <h2 class="strategy_left">推荐攻略</h2>
 
@@ -34,7 +34,7 @@
 <script>
 import SideNacigation from '@/components/post/SideNacigation.vue'
 import SearchFrame from '@/components/post/SearchFrame.vue'
-import RaidersParticulars from '@/components/post/RaidersParticulars.vue'
+// import RaidersParticulars from '@/components/post/RaidersParticulars.vue'
 export default {
   components: {
     SideNacigation, SearchFrame,
