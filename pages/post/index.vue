@@ -3,11 +3,29 @@
     <el-row>
       <el-col :span="8">
         <div class="grid-content bg-purple">
-          左边
-          <SideNacigation /></div
+          <SideNacigation />
+          <div class="city">
+            <h4>推荐城市</h4>
+            <hr />
+            <a href="post#">
+              <img
+                src="http://157.122.54.189:9093/images/pic_sea.jpeg"
+                alt=""
+              />
+            </a>
+          </div></div
       ></el-col>
       <el-col :span="16">
-        <div class="grid-content bg-purple-light">右边</div>
+        <div class="grid-content bg-purple-light">
+          <!-- <SearchFrame /> -->
+          <div class="strategy">
+            <h2 class="strategy_left">推荐攻略</h2>
+
+            <el-row>
+              <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+            </el-row>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -15,9 +33,11 @@
 
 <script>
 import SideNacigation from '@/components/post/SideNacigation.vue'
+import SearchFrame from '@/components/post/SearchFrame.vue'
+import RaidersParticulars from '@/components/post/RaidersParticulars.vue'
 export default {
   components: {
-    SideNacigation
+    SideNacigation, SearchFrame,
   },
   data() {
     return {
@@ -39,5 +59,31 @@ export default {
   width: 1000px;
   margin: 0 auto;
   height: 100%;
+  padding-top: 20px;
+  .city {
+    width: 250px;
+    margin-top: 20px;
+    border-bottom: 1px solid #ccc;
+    hr {
+      margin: 10px 0;
+    }
+    img {
+      width: 100%;
+    }
+  }
+
+  .strategy {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eeee;
+    height: 50px;
+    .strategy_left {
+      color: #ffa500;
+      height: 55px;
+      line-height: 50px;
+      border-bottom: 2px solid #ffa500;
+    }
+  }
 }
 </style>

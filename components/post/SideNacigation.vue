@@ -1,24 +1,67 @@
 <template>
   <div class="recommend">
-    <div class="hot">
-      <div><span>热门城市</span><i class="el-icon-arrow-right"></i></div>
-      <div><span>推荐城市</span><i class="el-icon-arrow-right"></i></div>
-      <div><span>奔向海岛</span><i class="el-icon-arrow-right"></i></div>
-      <div><span>主题推荐</span><i class="el-icon-arrow-right"></i></div>
+    <div
+      class="hot"
+      v-for="(item, index) in cities"
+      :key="index"
+      @mouseover="add(index)"
+      @mouseleave="current = 10"
+    >
+      <span>
+        {{ item.type }}
+        <i class="el-icon-arrow-right right"></i>
+      </span>
     </div>
-
-    <div class="active">
-      <section></section>
-      <section></section>
-      <section></section>
-      <section></section>
-      <section></section>
+    <div
+      class="active"
+      v-if="current === index ? true : false"
+      v-for="(item, index) in children"
+      :key="index"
+    >
+      <a href="#">
+        <i>{{ index + 1 }}</i>
+      </a>
+      <strong>{{ item.city }}</strong>
+      <span>{{ item.desc }}</span>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
+
+  created() {
+    this.$axios({
+      url: "/posts/cities"
+    }).then(res => {
+      console.log(res);
+      this.cities = res.data.data
+      console.log(this.cities)
+      this.children = this.cities[0].children
+      console.log(this.children)
+
+    });
+
+  },
+  data() {
+    return {
+      current: "",
+
+      cities: {},
+
+    }
+  },
+  methods: {
+
+    add(index) {
+      console.log(index);
+      this.current = index
+      // this.first.push(this.cities[0].children)
+
+    }
+  }
+
 
 }
 </script>
@@ -26,16 +69,41 @@ export default {
 <style lang="less" scoped>
 .recommend {
   .hot {
-    width: 200px;
-    height: 300px;
-    border: 1px solid #999;
+    border: 1px solid #ccc;
+    height: 50px;
+    width: 250px;
 
-    div {
-      display: flex;
-      justify-content: space-between;
+    span {
       font-size: 15px;
       line-height: 50px;
       text-align: center;
+      display: flex;
+
+      justify-content: space-around;
+
+      i {
+        font-size: 15px;
+        line-height: 50px;
+        text-align: center;
+      }
+    }
+  }
+  .active {
+    // display: none;
+    width: 350px;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 0;
+    left: 250px;
+    display: flex;
+    justify-content: space-around;
+    div {
+      border-bottom: 1px solid #ccc;
+    }
+    i {
+      color: orange;
     }
   }
 }
