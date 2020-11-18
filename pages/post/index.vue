@@ -1,19 +1,35 @@
 <template>
   <div class="post">
-    <el-container>
-      <el-aside width="200px">Aside 123124</el-aside>
-      <el-main>Main</el-main>
-    </el-container>
+    <el-row>
+      <el-col :span="8">
+        <div class="grid-content bg-purple">
+          左边
+          <SideNacigation /></div
+      ></el-col>
+      <el-col :span="16">
+        <div class="grid-content bg-purple-light">右边</div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+import SideNacigation from '@/components/post/SideNacigation.vue'
 export default {
+  components: {
+    SideNacigation
+  },
   data() {
     return {
 
+
+
     }
+  },
+  methods: {
+
   }
+
 }
 </script>
 
@@ -23,18 +39,5 @@ export default {
   width: 1000px;
   margin: 0 auto;
   height: 100%;
-  .el-aside {
-    background-color: #d3dce6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
-
-  .el-main {
-    background-color: #e9eef3;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  }
 }
 </style>
