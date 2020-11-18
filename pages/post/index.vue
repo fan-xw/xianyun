@@ -17,17 +17,24 @@
       ></el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple-light">
-          <!-- <SearchFrame /> -->
+          <SearchFrame />
           <div class="strategy">
             <h2 class="strategy_left">推荐攻略</h2>
 
             <el-row>
-              <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                @click="$router.replace({ path: '/post/create' })"
+                >写游记</el-button
+              >
+              <postList />
             </el-row>
           </div>
         </div>
       </el-col>
     </el-row>
+
     <el-row type="flex" class="row-bg">
       <el-col :span="6">
         <div class="grid-content bg-purple"></div>
@@ -39,16 +46,27 @@
 <script>
 import SideNacigation from "@/components/post/SideNacigation.vue";
 import SearchFrame from "@/components/post/SearchFrame.vue";
-import RaidersParticulars from "@/components/post/RaidersParticulars.vue";
+import postList from "@/components/post/postList.vue";
 export default {
   components: {
     SideNacigation,
     SearchFrame,
+    postList,
   },
   data() {
-    return {};
+    return {
+      postData: [],
+    };
   },
-  methods: {},
+  mounted() {
+    //文章详情
+    this.$axios({
+      url: "/posts",
+    }).then((res) => {
+      console.log(res.data.data);
+      this.postData = res.data.data;
+    });
+  },
 };
 </script>
 
