@@ -16,80 +16,29 @@
           </div>
       </el-col>
 
-      <el-col :span="4">
-          <div class="bolck1">
-              <span>住宿等级</span>
-              <el-row class="dropDown">
-              <el-dropdown class="el-grade">
-                <span class="el-dropdown-link">不限</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1星</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2星</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3星</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4星</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5星</el-dropdown-item>
-                </el-dropdown-menu>
+      <el-col :span="4" 
+              v-for="(item,index) in hotelItem"
+              :key="index">
+              <span class="demonstration1">{{item.name}}</span>
+              <el-dropdown placement='bottom-start' @command="handleCommand" >
+                    <span class="el-dropdown-link">
+                      <span class='text'>{{hotelItem[index].state}}</span><i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+            
+                  <el-dropdown-menu slot="dropdown" size='medium'>
+                    <el-dropdown-item 
+                    v-for='(value,num) in item.list'
+                    :command='{index,num}'
+                    :key='num'> 
+                        <span :class="{
+                                  'el-icon-circle-plus-outline':!value.isshow,
+                                  'el-icon-circle-check':value.isshow
+                              }">
+                        </span>  
+                        <span class='item'>{{value.name}}</span>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
               </el-dropdown>
-              </el-row>
-          </div>
-      </el-col>
-
-      <el-col :span="4">
-          <div class="bolck1">
-              <span>住宿类型</span>
-              <el-row class="dropDown">
-              <el-dropdown class="el-grade">
-                <span class="el-dropdown-link">不限</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;经济型</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;舒适型</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;高档型</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;豪华型</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;度假村</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;公寓式酒店</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              </el-row>
-          </div>
-      </el-col>
-
-      <el-col :span="4">
-          <div class="bolck1">
-              <span>酒店设施</span>
-              <el-row class="dropDown">
-              <el-dropdown class="el-grade">
-                <span class="el-dropdown-link">不限</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;wifi</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;热水壶</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;吹风机</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;外币兑换服务</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;洗衣服服务</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;电梯</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              </el-row>
-          </div>
-      </el-col>
-
-      <el-col :span="4">
-          <div class="bolck1">
-              <span>酒店品牌</span>
-              <el-row class="dropDown">
-              <el-dropdown class="el-grade">
-                <span class="el-dropdown-link">不限</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;7天连锁</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;格林豪泰</el-dropdown-item>
-                  <el-dropdown-item icon="el-icon-circle-check">&nbsp;&nbsp;&nbsp;&nbsp;锦江之星</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-              </el-row>
-          </div>
       </el-col>
 
       <el-col :span="4">
@@ -105,13 +54,36 @@ t
 export default {
   data () {
       return {
-          value:0
+          value:0,
+          hotelItem:[
+            {name:'住宿等级',list:[],state:'不限'},
+            {name:'住宿类型',list:[],state:'不限'},
+            {name:'酒店设施',list:[],state:'不限'},
+            {name:'酒店品牌',list:[],state:'不限'},
+          ],
       }
+  },
+ 
+  created () {
+    this.$axios({
+      url:'/hotels/options',
+    }).then(res => {
+      console.log(res);
+      this.hotelItem[2].list  =res.data.data.assets
+      this.hotelItem[3].list  =res.data.data.brands
+      this.hotelItem[0].list  =res.data.data.levels
+      this.hotelItem[1].list =res.data.data.types
+    })
   },
 
   methods:{
-      formatTooltip () {},
-      valuechange () {}
+      // Slider-滑块
+      formatTooltip (value) {
+        return value * 40
+      },
+      valuechange () {},
+
+      handleCommand () {}
   }
 }
 </script>
@@ -150,24 +122,30 @@ export default {
                   }
                 }
 
-                .bolck1 {
-                    .dropDown{
-                        margin-top: 10px;
-                        .el-grade {
-                            display: flex;
-                            width: 100%;
-    
-                            .el-dropdown-link {
-                                flex: 1;
-                                cursor: pointer;
-                                color: #409EFF;
-                            }
+                .demonstration1{
+                    display: block;
+                    font-size: 14px;
+                    padding-bottom: 10px;
+                    color: #666666;
+                }
 
-                            .el-icon--right {
-                                align-self: center;
-                            }
-                        }
-                    }    
+                .el-dropdown{
+                       width: 130px;
+
+                   .el-dropdown-link {
+                        display: flex;
+                        width: 100%;
+                        cursor: pointer;
+                        font-size: 13px;
+
+                       .el-icon--right{
+                           width: 10px;
+                       }
+                       
+                       .text{
+                           flex:1
+                       }
+                  }
                 }
                 
                 .btn {
@@ -176,9 +154,15 @@ export default {
                 }
             }
 
-            
         }
+    }
 
-
+    .el-dropdown-menu__item{
+        width: 150px;
+    }
+    
+    .el-dropdown-menu{
+      height: 250PX;
+      overflow: scroll;  
     }
 </style>
