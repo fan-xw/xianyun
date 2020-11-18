@@ -21,6 +21,7 @@
       </div>
     </el-upload>
     <el-button type="primary">提交</el-button>
+    <div></div>
   </div>
 </template>
 
