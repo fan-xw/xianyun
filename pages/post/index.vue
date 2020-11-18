@@ -22,7 +22,12 @@
             <h2 class="strategy_left">推荐攻略</h2>
 
             <el-row>
-              <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                @click="$router.replace({ path: '/post/create' })"
+                >写游记</el-button
+              >
             </el-row>
           </div>
         </div>
@@ -39,7 +44,7 @@
 <script>
 import SideNacigation from "@/components/post/SideNacigation.vue";
 import SearchFrame from "@/components/post/SearchFrame.vue";
-import RaidersParticulars from "@/components/post/RaidersParticulars.vue";
+
 export default {
   components: {
     SideNacigation,
@@ -48,7 +53,6 @@ export default {
   data() {
     return {};
   },
-  methods: {},
 };
 </script>
 
