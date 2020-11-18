@@ -1,109 +1,128 @@
-<template>
-  <div class="recommend">
+ <template>
+  <div class="recommend" @mouseleave="hideCity">
     <div
       class="hot"
-      v-for="(item, index) in cities"
+      v-for="(item, index) in data"
       :key="index"
-      @mouseover="add(index)"
-      @mouseleave="current = 10"
+      @mouseover="handerDesc(index)"
     >
-      <span>
-        {{ item.type }}
-        <i class="el-icon-arrow-right right"></i>
-      </span>
+      <div>{{ item.type }}</div>
+      <span class="el-icon-arrow-right"></span>
     </div>
-    <div
-      class="active"
-      v-if="current === index ? true : false"
-      v-for="(item, index) in children"
-      :key="index"
-    >
-      <a href="#">
-        <i>{{ index + 1 }}</i>
-      </a>
-      <strong>{{ item.city }}</strong>
-      <span>{{ item.desc }}</span>
+    <!--列表展示城市内容 -->
+    <div class="active" v-if="isShow">
+      <div class="active-list" v-for="(item, i) in listChildren" :key="i">
+        <span class="num">{{ i + 1 }}</span>
+        <span class="citys">{{ item.city }}</span>
+        <span class="title">{{ item.desc }}</span>
+      </div>
     </div>
   </div>
 </template>
 
+
 <script>
 
-export default {
 
+export default {
   created() {
     this.$axios({
       url: "/posts/cities"
     }).then(res => {
-      console.log(res);
-      this.cities = res.data.data
-      console.log(this.cities)
-      this.children = this.cities[0].children
-      console.log(this.children)
-
+      const { data } = res.data
+      this.data = data
     });
+
 
   },
   data() {
     return {
-      current: "",
-
-      cities: {},
-
+      isShow: false,//二级菜单的显示与隐藏
+      data: [], //推荐数据
+      listChildren: [],//子数据
     }
   },
   methods: {
-
-    add(index) {
-      console.log(index);
-      this.current = index
-      // this.first.push(this.cities[0].children)
-
-    }
+    //鼠标移入
+    handerDesc(index) {
+      this.isShow = true;
+      this.listChildren = this.data[index].children
+    },
+    // 鼠标移出
+    hideCity() {
+      this.isShow = false;
+      this.showIndex = -1;
+    },
   }
-
-
 }
 </script>
 
+
 <style lang="less" scoped>
 .recommend {
+  width: 250px;
+  border-bottom: 1px solid #dddddd;
+  .hot:hover {
+    color: #ffa500;
+    cursor: pointer;
+    border-right-color: #fff;
+  }
   .hot {
-    border: 1px solid #ccc;
-    height: 50px;
-    width: 250px;
-
+    padding: 8px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #dddddd;
+    border-bottom: none;
+    div {
+      font-size: 14px;
+      // color: #333;
+      padding: 0 20px;
+    }
     span {
-      font-size: 15px;
-      line-height: 50px;
-      text-align: center;
+      width: 30px;
       display: flex;
-
-      justify-content: space-around;
-
-      i {
-        font-size: 15px;
-        line-height: 50px;
-        text-align: center;
-      }
+      justify-content: flex-end;
+      font-size: 24px;
+      color: #999;
     }
   }
   .active {
-    // display: none;
-    width: 350px;
-    height: 50px;
-    line-height: 50px;
-    border: 1px solid #ccc;
     position: absolute;
+    border: 1px solid #dddddd;
+    border-left: none;
+    width: 350px;
+    right: 399px;
+    background: #ffffff;
+    z-index: 10;
     top: 0;
-    left: 250px;
-    display: flex;
-    justify-content: space-around;
-    div {
-      border-bottom: 1px solid #ccc;
-    }
-    i {
-      color: orange;
+    .active-list {
+      cursor: pointer;
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: space-around;
+      padding: 4.5px 3px;
+      font-size: 14px;
+
+      .num {
+        color: #ffa500;
+        font-size: 24px;
+        padding: 0 15px;
+      }
+      .citys {
+        color: #ffa500;
+
+        padding: 0 15px;
+      }
+      .title {
+        color: #999999;
+        flex: 1;
+        text-align: left;
+      }
+      &:last-child {
+        border-left: 1px solid #ddd;
+      }
     }
   }
 }
