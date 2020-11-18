@@ -3,14 +3,14 @@
     <div class="hotel">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
-            <el-breadcrumb-item>酒店预订</el-breadcrumb-item>
+            <el-breadcrumb-item>{{form.cityName}}酒店预订</el-breadcrumb-item>
         </el-breadcrumb>
     </div>
 
     <el-row>
       <el-col :span="5">
         <el-autocomplete
-          v-model="city"
+          v-model="form.cityName"
           :fetch-suggestions="loadCityList"
           placeholder="切换城市"
           @select="handleSelect">
@@ -30,7 +30,7 @@
       </el-col>
 
       <el-col :span="5">
-        <el-popover placement="bottom-start" width="300">
+        <el-popover placement="bottom-start" width="300" v-model="visible">
           <el-input
             placeholder="人数未定"
             suffix-icon="el-icon-user"
@@ -101,7 +101,7 @@
                         'el-icon-arrow-up':isShowPlace
                     }">
               </span>
-              等29个区域
+              等{{scenics.length}}个区域
             </div>
           </div>
         </el-row>
@@ -155,10 +155,9 @@
 
 <script>
 export default {
-    props:['value'],
     data () {
         return {
-          city:'广州市',
+          name:'广州市',
           value1: '',
           person:'',
           personList:[0,1,2,3,4,5,6],
@@ -171,10 +170,17 @@ export default {
                 {x:113.328992,y:23.117464},
                 {x:113.324357,y:23.1163},
                 {x:113.298378,y:23.122283}],
-          pickerOptions:[],
+          // 绑定时间 
+          pickerOptions: {
+            disabledDate: this.disabledDate,
+          },
           // 定义一个风景区的空数组,展示在酒店的搜索的区域位置
           scenics:[],
           isShowPlace:false,
+          form:{
+            cityName:''
+          },
+          visible:false
         }
     },
 
@@ -209,33 +215,79 @@ export default {
     (data数据已经初始化，但是DOM结构渲染完成，组件没有加载)
     */
     created () {
-      this.sendCities()
+      this.sendInfo()
     },
 
+    // 监听路由变化
+    watch:{
+      $route() {
+        this.city = this.$route.query.cityName
+        this.sendInfo(this.city)
+      }
+    },
 
     methods:{
-      sendCities () {
+      // 禁止选择今天以前的时间
+      disabledDate(time) {
+        return time.getTime() < Date.now() - 8.64e7;
+      },
+
+      // 查找城市
+      sendInfo () {
          this.$axios({
            url:'/cities',
            params:{
-             name:this.city
+             name:this.form.cityName
            }
          }).then(res => {
            console.log(res);
            this.scenics = res.data.data[0].scenics
-           console.log(this.scenics);
          })
       },
 
         // 切换城市
-        handleSelect () {},
-        loadCityList () {},
+        handleSelect (item) {
+           this.city = item.name
+          //  切换城市，重新加载路由
+           this.$router.push({path:`/hotel?cityName=${this.city}`})
+        },
+
+        // 获取远程城市数据
+        loadCityList (res,showList) {
+          if (!res) {
+            showList ([
+              {
+                value:'请输入城市名字'
+              }
+            ]);
+            return
+          };
+          // 发送请求，获取远程数据
+          this.$axios({
+            url:'airs/city',
+            params:{
+              name:this.form.cityName
+            }
+          }).then(res => {
+            if (res) {
+              let cityList = res.data.data.filter((v) => {
+                return v.sort;
+              }).map((v) => {
+                return {
+                  ...v,
+                  value:v.name
+                }
+              });
+              showList(cityList)
+            }
+          })
+        },
 
         // 确定按钮
-        sure () {},
-
-        // 点击查看价格
-        sendInfo () {},
+        sure() {
+          this.visible = !this.visible;
+          this.person = `${this.adult}成人 ${this.children}儿童`;
+        },
 
         // 风景区下拉
         showPlace () {
