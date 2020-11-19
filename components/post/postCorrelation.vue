@@ -1,33 +1,22 @@
 <template>
   <div class="post_strategy">
     <div class="strategy_title">相关攻略</div>
-    <div class="postList same_strategy">
-      <!-- 没有封面图片的 -->
-      <div class="strategy_post">
-        <div class="post_content">
-          <div class="post_title">标题</div>
-          <div class="date">
-            <span>2020-11-19 12:20 </span>
-            <span>阅读</span>
-            <span>1</span>
-          </div>
-        </div>
-      </div>
-      <!-- 有封面图片的 -->
+    <div
+      class="postList same_strategy"
+      v-for="(item, index) in correlation"
+      :key="index"
+    >
       <div class="strategy_post1">
         <div class="post1_content">
           <div class="post_img">
-            <img
-              src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-              alt=""
-            />
+            <img :src="item.images[0]" alt="" v-if="item.images != ''" />
           </div>
           <div class="content">
-            <div class="post_title">标题</div>
+            <div class="post_title">{{ item.title }}</div>
             <div class="date">
-              <span>2020-11-19 12:20 </span>
+              <span>{{ item.created_at | formatDate }} </span>
               <span>阅读</span>
-              <span>1</span>
+              <span>{{ item.watch }}</span>
             </div>
           </div>
         </div>
@@ -38,12 +27,28 @@
 
 
 <script>
+import { formatDate } from "@/utils/date.js";
 export default {
+  data() {
+    return {
+      correlation: [],
+    };
+  },
+
+  filters: {
+    formatDate(time) {
+      //   time = time * 1000;
+      let date = new Date(time);
+
+      return formatDate(date, "yyyy-MM-dd hh:mm");
+    },
+  },
   mounted() {
     this.$axios({
-      url: "/posts",
+      url: "/posts/recommend",
     }).then((res) => {
       console.log(res);
+      this.correlation = res.data.data;
     });
   },
 };
