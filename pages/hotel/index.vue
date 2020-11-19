@@ -13,25 +13,8 @@
           <HotelFilter @sendHotels="sendHotels"/>
       
           <!-- 酒店列表组件 -->
-          <HotelList :hotels="hotels"
-                     />
+          <HotelList :hotels="hotels" />
 
-          <h4 class='disappointed' 
-              v-if='hotels.length==0'
-              >
-              暂无符合条件的酒店
-          </h4>
-      
-          <!-- 分页组件 -->
-            <div class="pagechange">
-              <el-pagination
-                 layout="prev, pager, next"
-                 :total="total"
-                 :current-page="pageIndex"
-                 :page-size="pageSize"
-                 @current-change="currentChange">
-              </el-pagination>
-            </div>
         </section>
     <!-- </div> -->
 </template>
@@ -51,9 +34,6 @@ export default {
    data(){
         return{
             hotels:[],
-            pageSize:8,
-            pageIndex:1,
-            total:0,
             locationList:[],
             isload:true,
         }

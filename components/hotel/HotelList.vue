@@ -32,6 +32,22 @@
         
     </el-col>
 </el-row>
+          <h4 class='disappointed' 
+              v-if='hotels.length===0'>
+              暂无符合条件的酒店
+          </h4>
+      
+          <!-- 分页组件 -->
+          <!-- current-page	当前页数，支持 .sync 修饰符	number
+               page-size 每页显示条目个数，支持 .sync 修饰符
+               current-change currentPage 改变时会触发	当前页 -->
+            <div class="pagechange">
+            <el-pagination 
+                layout="prev, pager, next" 
+                :total="50" 
+                :current-page.sync="currentPage">
+            </el-pagination>
+            </div>
 </div>
 </template>
 <script>
@@ -39,7 +55,8 @@ export default {
     props:['hotels'],
     data(){
         return{
-            value:0
+            value:0,
+            currentPage:1,
         }
     },
     
@@ -47,7 +64,8 @@ export default {
     methods:{
         push(url){
             window.open(url)
-        }
+        },
+
     }
     
         
@@ -123,8 +141,16 @@ export default {
         .el-rate{
             display: inline-block;
         }
-        
+     }
 
+     /deep/.disappointed {
+         font-size: 18px;
+         text-align: center;
      }
      
+     /deep/.pagechange {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 0 40px;
+     }
 </style>
