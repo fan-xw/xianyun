@@ -30,7 +30,7 @@
                     :command='{index,num}'
                     :key='num'> 
                         <span :class="{
-                                  'el-icon-circle-plus-outline':!value.isshow,
+                                  'iconfont iconcircle':!value.isshow,
                                   'el-icon-circle-check':value.isshow
                               }">
                         </span>  
@@ -64,7 +64,8 @@ export default {
               price_it:4000,
               hotellevel_in:[1,2,3],
               hoteltype_in:[1,2,3]
-          }
+          },
+          hotelList:[],
       }
   },
  
@@ -77,6 +78,22 @@ export default {
       this.hotelItem[3].list  =res.data.data.brands
       this.hotelItem[0].list  =res.data.data.levels
       this.hotelItem[1].list =res.data.data.types
+    });
+
+  },
+
+  mounted() {
+    this.$axios({
+      url:'/hotels',
+      params:{
+        city:'197',
+        _limit:'10',
+        _start:'0'
+      }
+    }).then(res => {
+      console.log(res)
+      this.hotelList = res.data.data
+      this.$emit('sendHotels',this.hotelList)
     })
   },
 
