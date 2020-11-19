@@ -42,15 +42,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import SideNacigation from '@/components/post/SideNacigation.vue'
 import SearchFrame from '@/components/post/SearchFrame.vue'
 // import RaidersParticulars from '@/components/post/RaidersParticulars.vue'
-=======
-import SideNacigation from "@/components/post/SideNacigation.vue";
-import SearchFrame from "@/components/post/SearchFrame.vue";
-
->>>>>>> 47f91bfb9ba8487825ed524ce091f6a9acb844ac
 export default {
   components: {
     SideNacigation,
