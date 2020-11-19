@@ -53,7 +53,7 @@ t
 export default {
   data () {
       return {
-          value:0,
+          value:4000,
           hotelItem:[
             {name:'住宿等级',list:[],state:'不限'},
             {name:'住宿类型',list:[],state:'不限'},
@@ -82,22 +82,29 @@ export default {
 
   },
 
+  // 监听数据变化
+
   mounted() {
-    this.$axios({
-      url:'/hotels',
-      params:{
-        city:'197',
-        _limit:'10',
-        _start:'0'
-      }
-    }).then(res => {
-      console.log(res)
-      this.hotelList = res.data.data
-      this.$emit('sendHotels',this.hotelList)
-    })
+     this.loadPage()
   },
 
   methods:{
+      // 数据加载
+      loadPage () {
+          this.$axios({
+            url:'/hotels',
+            params:{
+              city:'197',
+              _limit:'10',
+              _start:'0'
+            }
+          }).then(res => {
+            console.log(res)
+            this.hotelList = res.data.data
+            this.$emit('sendHotels',this.hotelList)
+          })
+      },
+
       // Slider-滑块
       formatTooltip (value) {
         return value * 40

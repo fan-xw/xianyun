@@ -144,6 +144,18 @@
             </el-tooltip>
           </div>
         </el-row>
+          <!-- 攻略部分 -->
+          <div class="strategy">
+            <el-row>
+              <el-col :span="4" class="gonglvu">攻略：</el-col>
+              <el-col
+                :span="20"
+                class="sketch">
+                人生就像一场旅行，不必在乎目的地，在乎的是沿途的风景以及看风景的心情，让心灵去旅行! 这里有热情似火的温泉，还有冷酷无情的天然滑雪场，
+                让你体验冷热交替的极致享受！还想什么，赶紧拿起手机，叫上亲朋好友订购吧！
+              </el-col>
+            </el-row>
+          </div>
       </el-col>
       <el-col :span="10">
         <div id="container">
@@ -377,5 +389,14 @@ export default {
 }
 .el-icon-arrow-up {
   color: #ff9900;
+}
+
+.strategy {
+  margin-top: 20px;
+  padding-bottom: 5px;
+
+  .gonglvu {
+    margin-right: -30px;
+  }
 }
 </style>
