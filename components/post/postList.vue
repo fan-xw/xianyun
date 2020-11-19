@@ -44,7 +44,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  mounted() {
+    this.$axios({
+      url: "/posts/recommend",
+    }).then((res) => {
+      console.log(res.data);
+    });
+  },
+};
 </script>
 
 <style lang="less" scoped>

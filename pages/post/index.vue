@@ -20,7 +20,6 @@
           <SearchFrame />
           <div class="strategy">
             <h2 class="strategy_left">推荐攻略</h2>
-
             <el-row>
               <el-button
                 type="primary"
@@ -30,7 +29,7 @@
               >
             </el-row>
           </div>
-          <postList />
+          <PostList />
         </div>
       </el-col>
     </el-row>
@@ -46,12 +45,12 @@
 <script>
 import SideNacigation from "@/components/post/SideNacigation.vue";
 import SearchFrame from "@/components/post/SearchFrame.vue";
-import postList from "@/components/post/postList.vue";
+import PostList from "@/components/post/postList.vue";
 export default {
   components: {
     SideNacigation,
     SearchFrame,
-    postList,
+    PostList,
   },
   data() {
     return {
