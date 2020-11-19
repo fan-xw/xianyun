@@ -51,7 +51,7 @@ export default {
     // 鼠标移出
     hideCity() {
       this.isShow = false;
-      this.showIndex = -1;
+
     },
   }
 }

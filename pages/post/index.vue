@@ -30,9 +30,11 @@
               >
             </el-row>
           </div>
+          <postList />
         </div>
       </el-col>
     </el-row>
+
     <el-row type="flex" class="row-bg">
       <el-col :span="6">
         <div class="grid-content bg-purple"></div>
@@ -42,16 +44,23 @@
 </template>
 
 <script>
-import SideNacigation from '@/components/post/SideNacigation.vue'
-import SearchFrame from '@/components/post/SearchFrame.vue'
-// import RaidersParticulars from '@/components/post/RaidersParticulars.vue'
+import SideNacigation from "@/components/post/SideNacigation.vue";
+import SearchFrame from "@/components/post/SearchFrame.vue";
+import postList from "@/components/post/postList.vue";
 export default {
   components: {
     SideNacigation,
     SearchFrame,
+    postList,
   },
   data() {
-    return {};
+    return {
+      postData: [],
+    };
+  },
+  mounted() {
+
+
   },
 };
 </script>
