@@ -60,8 +60,6 @@ export default {
         this.hotels = hotels
       },
 
-      // 分页
-      currentChange () {},
 
 
     }
