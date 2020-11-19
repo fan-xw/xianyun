@@ -1,17 +1,39 @@
 <template>
-  <section class="container">
+    <!-- <div class='container'
+              v-loading.fullscreen.lock="fullscreenLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0.8)">  -->
+        <section class="container">
+      
+          <!-- 酒店筛选组件 -->
+          <SearchForm/>
+      
+          <!-- 筛选酒店组件 -->
+          <HotelFilter @sendHotels="sendHotels"/>
+      
+          <!-- 酒店列表组件 -->
+          <HotelList :hotels="hotels"
+                     />
 
-    <!-- 酒店筛选组件 -->
-    <SearchForm/>
-
-    <!-- 筛选酒店组件 -->
-    <HotelFilter/>
-
-    <!-- 酒店列表组件 -->
-    <HotelList/>
-
-    <!-- 分页组件 -->
-  </section>
+          <h4 class='disappointed' 
+              v-if='hotels.length==0'
+              >
+              暂无符合条件的酒店
+          </h4>
+      
+          <!-- 分页组件 -->
+            <div class="pagechange">
+              <el-pagination
+                 layout="prev, pager, next"
+                 :total="total"
+                 :current-page="pageIndex"
+                 :page-size="pageSize"
+                 @current-change="currentChange">
+              </el-pagination>
+            </div>
+        </section>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -24,13 +46,63 @@ import HotelList from '@/components/hotel/HotelList'
 export default {
   components:{
     SearchForm,HotelFilter,HotelList
-  }
-};
+  },
+
+   data(){
+        return{
+            hotels:[],
+            pageSize:8,
+            pageIndex:1,
+            total:0,
+            locationList:[],
+            isload:true,
+        }
+    },
+    created(){
+        // this.openFullScreen1()
+        setTimeout(() => {
+          this.open1()
+        }, 2000);
+    },
+    
+    methods:{
+      // 页面一进来，就开始定位,提示
+      open1() {
+        this.$notify({
+          title: '城市',
+          message: '定位当前城市:广州市',
+          type: 'success',
+          position:'top-left'
+        });
+      },
+
+      sendHotels (hotels) {
+        this.hotels = hotels
+      },
+
+      // 分页
+      currentChange () {},
+
+
+    }
+}
+
 </script>
 
 <style lang="less" scoped>
 .container {
   width: 1000px;
   margin: 0 auto;
+    .pagechange{
+    padding-top: 20px;
+    display: flex;
+    justify-content: right;
+    }
+
+    .disappointed{
+        text-align: center;
+        padding-top: 20px;
+        margin-top: 10px;
+    }
 }
 </style>
