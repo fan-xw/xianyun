@@ -154,7 +154,6 @@
 
 <script>
 export default {
-<<<<<<< HEAD
   created() {
     //文章列表渲染
     this.$axios({
@@ -185,16 +184,6 @@ export default {
     }
   }
 }
-=======
-  mounted() {
-    this.$axios({
-      url: "/posts/recommend",
-    }).then((res) => {
-      console.log(res.data);
-    });
-  },
-};
->>>>>>> 64e716d8d3b566aef69a1363597796bce3de2574
 </script>
 
 
