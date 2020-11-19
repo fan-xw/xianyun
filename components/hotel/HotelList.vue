@@ -1,31 +1,33 @@
 <template>
 <div>
-<el-row class='infobox'>
-    <el-col :span=9>
-        <img :src="hotelItem.photos" alt="">
+<el-row class='infobox' v-for="(item,index) in hotels"
+                        :key="index">
+    <el-col :span=9 @click.native='$router.push(`/hotel/details?id=${id}`)'>
+        <img :src="item.photos" alt="">
     </el-col>
-    <el-col :span=10 class='text'>
-
-       <h2 class='title'>{{hotelItem.name}}</h2>
-       
-       <p class='pinyin'>{{hotelItem.alias}}  {{hotelItem.hoteltype.name}}</p>
+    <el-col :span=10 class='text' @click.native='$router.push(`/hotel/details?id=${id}`)'>
+       <h2 class='title'>{{item.name}}</h2>
+       <p class='pinyin'>{{item.alias}}</p>
         <div class="textbox">
-        <span class='el-icon-star-on'></span>
-        <span class='el-icon-star-on'></span>
-        <span class='el-icon-star-on'></span>
-        <span class='el-icon-star-on'></span>
-        <span class='el-icon-star-off'></span>
-        <span class='score'>{{hotelItem.stars}}分</span>
-        <span class='data'> <span>{{hotelItem.all_remarks}}</span> 条评价</span>
+        <el-rate
+            v-model="item.stars"
+            disabled
+            show-score
+            text-color="#ff9900"
+            score-template="{value}分">
+        </el-rate>
+       <span class='data'> <span>{{item.bad_remarks}}</span> 条评价</span>
         <span class='data'> <span>50</span> 篇游记</span>
+        
         </div>
-        <p class='place'> <span class='el-icon-location'></span> 位于: {{hotelItem.address}}</p>
+        <p class='place'> <span class='el-icon-location'></span> 位于: {{item.address}}</p>
     </el-col>
     <el-col :span=5 class='info-right'>
         <el-row 
+        v-for="(item,index) in item.products"
+        :key="index"
         class='preferential'
-        v-for='(item,index) in hotelItem.products'
-        :key='index'
+        @click.native="push('https://hotels.ctrip.com/hotels/694679.html?hotel=694679&tab=1')"
         ><span class="hotelname">{{item.name}}</span> <span class='right'> <span class="color">￥{{item.price}}</span>起<span class='el-icon-arrow-right'></span> </span></el-row>
         
     </el-col>
@@ -34,14 +36,20 @@
 </template>
 <script>
 export default {
+    props:['hotels'],
     data(){
         return{
-               
+            value:0
         }
     },
     
-    // 父传子
-    props:['hotelItem'],    
+    
+    methods:{
+        push(url){
+            window.open(url)
+        }
+    }
+    
         
 }
 </script>
@@ -50,12 +58,17 @@ export default {
          height: 264px;
          padding:25px 0px;
          border-bottom: 1px solid #eeeeee;
-         img{
-         height: 210px;
-         width: 320px;
-     }
+            img{
+                cursor: pointer;
+                height: 210px;
+                width: 320px;
+            }
         .title{
             font-weight: normal;
+                &:hover {
+                    cursor: pointer;
+                    color: #409eff;
+                }
         }
         .pinyin{
             font-size: 16px;
@@ -87,10 +100,14 @@ export default {
         .info-right{
             margin-top: 25px;
         .preferential{
+            cursor: pointer;
             display:flex;
             height: 48px;
             padding:12px 4px ;
             border-bottom: 1px solid #ebeef5;
+                &:hover {
+                    background-image: linear-gradient(180deg, #fff, #f5f7fa);
+                }
         }
         .hotelname{
             flex:1
@@ -102,6 +119,9 @@ export default {
             color:#ff9900
         }
 
+        }
+        .el-rate{
+            display: inline-block;
         }
         
 
