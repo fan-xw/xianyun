@@ -2,10 +2,10 @@
 <div>
 <el-row class='infobox' v-for="(item,index) in hotels"
                         :key="index">
-    <el-col :span=8 @click.native='$router.push(`/hotel/details?id=${id}`)'>
+    <el-col :span=8 @click.native='$router.push(`/hotel/details?id=${item.id}`)'>
         <img :src="item.photos" alt="">
     </el-col>
-    <el-col :span=11 class='text' @click.native='$router.push(`/hotel/details?id=${id}`)'>
+    <el-col :span=11 class='text' @click.native='$router.push(`/hotel/details?id=${item.id}`)'>
        <h2 class='title'>{{item.name}}</h2>
         <div class="pinyin">
             <span>{{item.alias}}</span>
@@ -74,11 +74,27 @@ export default {
     
     
     methods:{
+        // 点击酒店详情跳转至 携程网
         push(url){
             window.open(url)
         },
+        
+ 
+    },
 
-    }
+    watch:{
+        // 每次路由更新需要默认回到第一页
+        '$route'() {
+            this.currentPage = 1
+        },
+       // 当页码变化时传递给父组件更新数据
+        currentPage(val) {
+            console.log(val);
+            // 分页时将页码传递给父组件
+            this.$emit('sendPage',(val-1) * 5)
+        }
+
+    },
     
         
 }
