@@ -2,12 +2,18 @@
 <div>
 <el-row class='infobox' v-for="(item,index) in hotels"
                         :key="index">
-    <el-col :span=9 @click.native='$router.push(`/hotel/details?id=${id}`)'>
+    <el-col :span=8 @click.native='$router.push(`/hotel/details?id=${id}`)'>
         <img :src="item.photos" alt="">
     </el-col>
-    <el-col :span=10 class='text' @click.native='$router.push(`/hotel/details?id=${id}`)'>
+    <el-col :span=11 class='text' @click.native='$router.push(`/hotel/details?id=${id}`)'>
        <h2 class='title'>{{item.name}}</h2>
-       <p class='pinyin'>{{item.alias}}</p>
+        <div class="pinyin">
+            <span>{{item.alias}}</span>
+            <i class="iconfont iconhuangguan"></i>
+            <i class="iconfont iconhuangguan"></i>
+            <i class="iconfont iconhuangguan"></i>
+            <span>{{item.hoteltype.name}}</span>
+        </div>
         <div class="textbox">
         <el-rate
             v-model="item.stars"
@@ -17,10 +23,16 @@
             score-template="{value}分">
         </el-rate>
        <span class='data'> <span>{{item.bad_remarks}}</span> 条评价</span>
-        <span class='data'> <span>50</span> 篇游记</span>
+        <span class='data'> <span>{{item.good_remarks}}</span> 篇游记</span>
         
         </div>
         <p class='place'> <span class='el-icon-location'></span> 位于: {{item.address}}</p>
+        <p class="place"><i class="el-icon-phone"></i> 联系电话：{{item.phone}}</p>
+        <p style="margin-top:10px;">
+              <el-tag type="warning" v-for="(item2,index2) in item.hotelassets" :key="index2">
+                <span style="font-size:14px;margin:5px;">{{item2.name}}</span>
+              </el-tag>
+        </p>
     </el-col>
     <el-col :span=5 class='info-right'>
         <el-row 
@@ -89,8 +101,14 @@ export default {
                 }
         }
         .pinyin{
-            font-size: 16px;
-            color:#999999
+            display: flex;
+            font-size: 15px;
+            color:#999999;
+            span {
+                &:first-child{
+                    margin-right: 5px;
+                }
+            }
         }
         .textbox{
             padding:12px 0px;
@@ -113,7 +131,8 @@ export default {
            color: #ffc552
         }
         .place{
-            color:#666666
+            color:#666666;
+            line-height: 30px;
         }
         .info-right{
             margin-top: 25px;
@@ -152,5 +171,9 @@ export default {
         display: flex;
         justify-content: flex-end;
         padding: 20px 0 40px;
+     }
+
+     .iconhuangguan {
+         color: #ff9900;
      }
 </style>
