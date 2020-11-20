@@ -69,6 +69,9 @@ export default {
             totalPage: 0, // 记录总页数
             pageIndex: 1, // 当前页面
             pageSize: 10, // 当前页显示的总数据
+            start:0,      // 酒店数据里的分页数据，分页时使用
+            city: "",     // 城市id
+            cityname: "", // 城市名字
         }
     },
 
@@ -82,10 +85,10 @@ export default {
           console.log(res);
           this.city = res.data.data[0].id;
           this.scenicList = res.data.data[0].scenics;
-          // this.getHotelData();
+          this.getHotelData();
         });
       }
-       this.loadPage()
+      //  this.loadPage()
     },
 
     watch:{
@@ -98,7 +101,7 @@ export default {
         }).then((res) => {
           this.city = res.data.data[0].id;
           this.scenicList = res.data.data[0].scenics;
-          // this.getHotelData();
+          this.getHotelData();
         });
       },
     },
@@ -106,18 +109,45 @@ export default {
     methods:{
 
       // 数据加载 发送请求 获取酒店详情数据
-      loadPage () {
-          this.$axios({
-            url:'/hotels',
-            params:{
-              city:'197',
-              _limit:'10',
-              _start:'0'
+      // loadPage () {
+      //     this.$axios({
+      //       url:'/hotels',
+      //       params:{
+      //         city:'197',
+      //         _limit:'10',
+      //         _start:'0'
+      //       }
+      //     }).then(res => {
+      //       console.log(res)
+      //       this.hotelList = res.data.data
+      //     })
+      // },
+
+      // 获取酒店数据
+      getHotelData() {
+        let urlStr = "?";
+        urlStr += "city=" + this.city + "&";
+        urlStr += "_start=" + this.start + "&";
+        urlStr += "_limit=" + this.pageSize + "&";
+        Object.keys(this.$route.query).forEach((v, i) => {
+          if (v != "cityName") {
+            if (Array.isArray(this.$route.query[v])) {
+              this.$route.query[v].forEach((item, index) => {
+                urlStr += v + "_in=" + item + "&";
+              });
+            } else if (this.$route.query[v] != "") {
+              urlStr += v + "=" + this.$route.query[v] + "&";
             }
-          }).then(res => {
-            console.log(res)
-            this.hotelList = res.data.data
-          })
+          }
+        });
+        console.log(urlStr);
+        this.$axios({
+          url: "/hotels" + urlStr,
+        }).then((res) => {
+          console.log(res);
+          this.hotelList = res.data.data;
+          this.totalPage = res.data.total;
+        });
       },
 
 
