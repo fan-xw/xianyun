@@ -16,7 +16,7 @@
 
           <!-- 酒店位置组件 -->
           <!-- 通过父传子，把城市区域数据传递给子组件 -->
-          <HotelLocation :scenicData="scenicList"/>
+          <HotelLocation :scenicData="scenicList" :hotelList="hotelList"/>
       
           <!-- 筛选酒店组件 -->
           <HotelFilter />
