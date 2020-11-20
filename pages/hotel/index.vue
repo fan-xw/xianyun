@@ -58,7 +58,10 @@ import HotelFilter from '@/components/hotel/HotelFilter'
 import HotelList from '@/components/hotel/HotelList'
 export default {
   components:{
-    SearchForm,HotelFilter,HotelList,HotelLocation
+    SearchForm,   // 酒店搜索框组件
+    HotelFilter,  // 酒店过滤器组件
+    HotelList,    // 酒店列表页组件
+    HotelLocation // 酒店位置和景点组件
   },
 
    data(){
