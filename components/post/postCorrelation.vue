@@ -5,7 +5,7 @@
       class="postList same_strategy"
       v-for="(item, index) in correlation"
       :key="index"
-      @click="postList"
+      @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
     >
       <div class="strategy_post1">
         <div class="post1_content">
@@ -35,17 +35,7 @@ export default {
       correlation: [],
     };
   },
-  methods: {
-    postList(id) {
-      console.log(this.correlation.length.id);
-      this.$router.push({
-        path: "/post/postDetail",
-        query: {
-          id: this.correlation[2].id,
-        },
-      });
-    },
-  },
+
   filters: {
     formatDate(time) {
       //   time = time * 1000;
