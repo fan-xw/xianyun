@@ -9,7 +9,7 @@
         <el-row type="flex" class="option-row">
           <el-col :span="3">区域：</el-col>
           <el-col :span="21">
-            <div :class="{ 'scenics-box': upArrow }">
+            <div :class="{ 'scenics-box': arrowMark }">
 
               <!-- 遍历拿过来的数据 -->
               <span class="location-budget"
@@ -22,8 +22,8 @@
               <i
                 class="el-icon-d-arrow-left"
                 :class="{
-                  'scenics-arrow-down': upArrow,
-                  'scenics-arrow-up': !upArrow,
+                  'scenics-arrow-down': arrowMark,
+                  'scenics-arrow-up': !arrowMark,
                 }"
                 @click="showOrHide">
               </i>
@@ -94,6 +94,18 @@
             </el-row>
           </el-col>
         </el-row>
+
+        <el-row type="flex" class="option-row">
+            <el-col :span="3">
+                攻略:
+            </el-col>
+            <el-col :span="21">
+                广州塔是广州的地标，塔高600米，为国内第一高塔，可以俯瞰广州全景。
+                其头尾相当，腰身玲珑细长，又有“小蛮腰”之称，到晚上会亮灯，即使不游塔，也可来此拍摄外观。
+                包括摩天轮、珠江摄影观景平台、蜘蛛侠栈道等景点，大部分以观景摄影为主。
+                一般4点半-5点可以到达电视塔顶，观看日落及夜景。
+            </el-col>
+        </el-row>
       </el-row>
     </el-col>
 
@@ -101,7 +113,7 @@
     <el-col :span="10" style="padding-left: 5px; padding-right: 5px">
       <div class="map-box" style="width: 420px; height: 260px">
         <div
-          id="map"
+          id="container"
           style="position: relative; background: rgb(252, 249, 242)"></div>
       </div>
     </el-col>
@@ -120,11 +132,64 @@ export default {
           },
         },
     },
-    methods:{
-        showOrHide () {},
-        upArrow () {}
-    }
 
+    data() {
+        return {
+            // 定义一个箭头的初始值
+            arrowMark:true,
+            map:{}  // 地图
+        }        
+    },
+    
+    mounted() {
+        // 地图加载
+        window.onLoad = () => {
+          this.init();
+        };
+        var url =
+            "https://webapi.amap.com/maps?v=1.4.15&key=018322aa6281c56564c9fb050577ad16&callback=onLoad";
+          var jsapi = document.createElement("script");
+          jsapi.charset = "utf-8";
+          jsapi.src = url;
+          document.head.appendChild(jsapi);
+    },
+
+    methods:{
+        // 控制区域数据的数量
+        showOrHide () {
+            this.arrowMark = !this.arrowMark;
+        },
+
+        // 定义一个地图
+        init() {
+            this.map = new AMap.Map("container", {
+              resizeEnable: true,
+              zoom: 11,
+            });
+
+            // 通过判断是否有城市名字，查看是否需要定位
+            if (!this.$route.query.cityName) {
+              AMap.plugin("AMap.CitySearch", () => {
+                var citySearch = new AMap.CitySearch();
+                citySearch.getLocalCity((status, result) => {
+                  console.log(status, result);
+                  if (status === "complete" && result.info === "OK") {
+                    // 查询成功，result即为当前所在城市信息
+                    // console.log(result);
+                    this.$alert("定位当前城市:" + result.city, "提示", {
+                      confirmButtonText: "确定",
+                      type: "success",
+                    });
+                    this.$router.replace({
+                      path: "/hotel",
+                      query: { cityName: result.city },
+                    });
+                  }
+                });
+              });
+            }
+        }
+    }
 }
 </script>
 
@@ -185,7 +250,7 @@ export default {
 .map-box {
   position: relative;
 
-  #map {
+  #container {
     width: 100%;
     height: 100%;
   }
