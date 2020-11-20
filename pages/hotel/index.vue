@@ -88,7 +88,6 @@ export default {
           this.getHotelData();
         });
       }
-      //  this.loadPage()
     },
 
     watch:{
@@ -107,21 +106,6 @@ export default {
     },
     
     methods:{
-
-      // 数据加载 发送请求 获取酒店详情数据
-      // loadPage () {
-      //     this.$axios({
-      //       url:'/hotels',
-      //       params:{
-      //         city:'197',
-      //         _limit:'10',
-      //         _start:'0'
-      //       }
-      //     }).then(res => {
-      //       console.log(res)
-      //       this.hotelList = res.data.data
-      //     })
-      // },
 
       // 获取酒店数据
       getHotelData() {
@@ -153,7 +137,11 @@ export default {
 
       // 分页
       handleCurrentChange (val) {
-        console.log(val);
+        console.log(`当前页:${val}`);
+        this.pageIndex = val
+        this.start = (this.pageIndex - 1) * this.pageSize;
+        // 重新加载酒店数据
+        this.getHotelData();
       }
     }
 }
