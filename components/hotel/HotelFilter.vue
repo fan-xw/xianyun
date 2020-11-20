@@ -238,10 +238,28 @@ export default {
     },
 
     // 酒店类型
-    getHotelType() {},
+    getHotelType() {
+      if (this.form.hoteltype.length == 0) {
+        return "不限";
+      } else if (this.form.hoteltype.length == 1) {
+        let res ;
+        this.optionsList.types.forEach((v,i) => {
+          if (v.id == this.form.hoteltype[0]) {
+            res = v.name;
+          }
+        })
+        return res 
+      } else {
+        return '已选' + this.form.hoteltype.length + '项'
+      }
+    },
 
     // 酒店设施
-    getHotelAsset() {},
+    getHotelAsset() {
+      if (this.form.hotelasset.length == 0) {
+        return "不限";
+      }
+    },
 
     // 酒店品牌
     getHotelBrand() {}
@@ -267,7 +285,15 @@ export default {
     },
 
     // 处理酒店类型数据
-    handleTypes () {},
+    handleTypes (item) {
+      if (this.form.hoteltype.indexOf(item.id) != -1) {
+        let index = this.form.hoteltype.indexOf(item.id);
+        this.form.hoteltype.splice(index,1);
+      } else {
+        this.form.hoteltype.push(item.id)
+      }
+      this.searchHotel();
+    },
 
     // 处理酒店设施数据
     handleAssets () {},
