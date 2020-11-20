@@ -44,17 +44,10 @@ export default {
 
    data(){
         return{
-            isload:true,
             // 定义一个空数组来接受 酒店详情数据
             hotelList:[],
             scenicList: [], // 景点数据
         }
-    },
-    created(){
-        // this.openFullScreen1()
-        setTimeout(() => {
-          this.open1()
-        }, 2000);
     },
 
     mounted() {
@@ -81,7 +74,6 @@ export default {
           url: "/cities",
           params: { name: this.$route.query.cityName },
         }).then((res) => {
-          console.log(res);
           this.city = res.data.data[0].id;
           this.scenicList = res.data.data[0].scenics;
           // this.getHotelData();
@@ -90,15 +82,6 @@ export default {
     },
     
     methods:{
-      // 页面一进来，就开始定位,提示
-      open1() {
-        this.$notify({
-          title: '城市',
-          message: '定位当前城市:广州市',
-          type: 'success',
-          position:'top-left'
-        });
-      },
 
       // 数据加载 发送请求 获取酒店详情数据
       loadPage () {

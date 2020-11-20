@@ -137,6 +137,7 @@ export default {
         return {
             // 定义一个箭头的初始值
             arrowMark:true,
+            map:{}  // 地图
         }        
     },
     
@@ -161,10 +162,32 @@ export default {
 
         // 定义一个地图
         init() {
-          this.map = new AMap.Map("container", {
-            resizeEnable: true,
-            zoom: 11,
-          });
+            this.map = new AMap.Map("container", {
+              resizeEnable: true,
+              zoom: 11,
+            });
+
+            // 通过判断是否有城市名字，查看是否需要定位
+            if (!this.$route.query.cityName) {
+              AMap.plugin("AMap.CitySearch", () => {
+                var citySearch = new AMap.CitySearch();
+                citySearch.getLocalCity((status, result) => {
+                  console.log(status, result);
+                  if (status === "complete" && result.info === "OK") {
+                    // 查询成功，result即为当前所在城市信息
+                    // console.log(result);
+                    this.$alert("定位当前城市:" + result.city, "提示", {
+                      confirmButtonText: "确定",
+                      type: "success",
+                    });
+                    this.$router.replace({
+                      path: "/hotel",
+                      query: { cityName: result.city },
+                    });
+                  }
+                });
+              });
+            }
         }
     }
 }
