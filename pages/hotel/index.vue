@@ -15,7 +15,8 @@
           <SearchForm/>
 
           <!-- 酒店位置组件 -->
-          <HotelLocation/>
+          <!-- 通过父传子，把城市区域数据传递给子组件 -->
+          <HotelLocation :scenicData="scenicList"/>
       
           <!-- 筛选酒店组件 -->
           <HotelFilter />
@@ -43,10 +44,10 @@ export default {
 
    data(){
         return{
-            locationList:[],
             isload:true,
             // 定义一个空数组来接受 酒店详情数据
             hotelList:[],
+            scenicList: [], // 景点数据
         }
     },
     created(){
@@ -57,7 +58,35 @@ export default {
     },
 
     mounted() {
+      // 如果有城市名字就发起请求获取城市id和城市景点
+      if (this.$route.query.cityName) {
+        this.$axios({
+          url: "/cities",
+          params: { name: this.$route.query.cityName },
+        }).then((res) => {
+          console.log(res);
+          this.city = res.data.data[0].id;
+          this.scenicList = res.data.data[0].scenics;
+          // this.getHotelData();
+        });
+      }
        this.loadPage()
+    },
+
+    watch:{
+      // 监听路由变化，获取城市id和城市景点
+      $route() {
+        console.log(this.$route.query);
+        this.$axios({
+          url: "/cities",
+          params: { name: this.$route.query.cityName },
+        }).then((res) => {
+          console.log(res);
+          this.city = res.data.data[0].id;
+          this.scenicList = res.data.data[0].scenics;
+          // this.getHotelData();
+        });
+      },
     },
     
     methods:{

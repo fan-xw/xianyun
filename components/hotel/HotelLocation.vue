@@ -9,7 +9,7 @@
         <el-row type="flex" class="option-row">
           <el-col :span="3">区域：</el-col>
           <el-col :span="21">
-            <div :class="{ 'scenics-box': upArrow }">
+            <div :class="{ 'scenics-box': arrowMark }">
 
               <!-- 遍历拿过来的数据 -->
               <span class="location-budget"
@@ -22,8 +22,8 @@
               <i
                 class="el-icon-d-arrow-left"
                 :class="{
-                  'scenics-arrow-down': upArrow,
-                  'scenics-arrow-up': !upArrow,
+                  'scenics-arrow-down': arrowMark,
+                  'scenics-arrow-up': !arrowMark,
                 }"
                 @click="showOrHide">
               </i>
@@ -94,6 +94,18 @@
             </el-row>
           </el-col>
         </el-row>
+
+        <el-row type="flex" class="option-row">
+            <el-col :span="3">
+                攻略:
+            </el-col>
+            <el-col :span="21">
+                广州塔是广州的地标，塔高600米，为国内第一高塔，可以俯瞰广州全景。
+                其头尾相当，腰身玲珑细长，又有“小蛮腰”之称，到晚上会亮灯，即使不游塔，也可来此拍摄外观。
+                包括摩天轮、珠江摄影观景平台、蜘蛛侠栈道等景点，大部分以观景摄影为主。
+                一般4点半-5点可以到达电视塔顶，观看日落及夜景。
+            </el-col>
+        </el-row>
       </el-row>
     </el-col>
 
@@ -120,9 +132,18 @@ export default {
           },
         },
     },
+
+    data() {
+        return {
+            // 定义一个箭头的初始值
+            arrowMark:true,
+        }        
+    },
     methods:{
-        showOrHide () {},
-        upArrow () {}
+        // 控制区域数据的数量
+        showOrHide () {
+            this.arrowMark = !this.arrowMark;
+        },
     }
 
 }
