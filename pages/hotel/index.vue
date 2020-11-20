@@ -21,9 +21,28 @@
           <!-- 筛选酒店组件 -->
           <HotelFilter />
       
-          <!-- 酒店列表组件 -->
-          <!-- 父传子 -->
-          <HotelList :hotelList="hotelList"/>
+          <div class="hotelList">
+              <div v-if="hotelList.length != 0">
+                  <!-- 酒店列表组件 -->
+                  <!-- 父传子 -->
+                  <HotelList :hotelList="hotelList"/>
+
+                  <!-- 分页 -->
+                  <div class="pagination">
+                    <el-pagination
+                      layout="prev, pager, next"
+                      :total="totalPage"
+                      :page-size="pageSize"
+                      :current-page="pageIndex"
+                      @current-change="handleCurrentChange">
+                    </el-pagination>
+                  </div>
+              </div>
+
+              <div class="noHotel" v-if="hotelList.length == 0">
+                暂无符合条件的酒店
+              </div>
+          </div>
 
         </section>
 </template>
@@ -47,6 +66,9 @@ export default {
             // 定义一个空数组来接受 酒店详情数据
             hotelList:[],
             scenicList: [], // 景点数据
+            totalPage: 0, // 记录总页数
+            pageIndex: 1, // 当前页面
+            pageSize: 10, // 当前页显示的总数据
         }
     },
 
@@ -99,6 +121,10 @@ export default {
       },
 
 
+      // 分页
+      handleCurrentChange (val) {
+        console.log(val);
+      }
     }
 }
 
@@ -108,15 +134,23 @@ export default {
 .container {
   width: 1000px;
   margin: 0 auto;
-    .pagechange{
-    padding-top: 20px;
-    display: flex;
-    justify-content: right;
-    }
 
   .breadcrumb {
     overflow: hidden;
     padding: 20px 0;
+  }
+
+  .hotelList {
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 0 40px;
+    }
+    .noHotel {
+      text-align: center;
+      height: 300px;
+      margin-top: 20px;
+    }
   }
 }
 </style>

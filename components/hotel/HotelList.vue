@@ -44,22 +44,6 @@
         
     </el-col>
 </el-row>
-          <h4 class='disappointed' 
-              v-if='hotelList.length===0'>
-              暂无符合条件的酒店
-          </h4>
-      
-          <!-- 分页组件 -->
-          <!-- current-page	当前页数，支持 .sync 修饰符	number
-               page-size 每页显示条目个数，支持 .sync 修饰符
-               current-change currentPage 改变时会触发	当前页 -->
-            <div class="pagechange">
-            <el-pagination 
-                layout="prev, pager, next" 
-                :total="50" 
-                :current-page.sync="currentPage">
-            </el-pagination>
-            </div>
 </div>
 </template>
 <script>
@@ -68,7 +52,6 @@ export default {
     data(){
         return{
             value:0,
-            currentPage:1,
         }
     },
     
@@ -82,19 +65,6 @@ export default {
  
     },
 
-    watch:{
-        // 每次路由更新需要默认回到第一页
-        '$route'() {
-            this.currentPage = 1
-        },
-       // 当页码变化时传递给父组件更新数据
-        currentPage(val) {
-            console.log(val);
-            // 分页时将页码传递给父组件
-            this.$emit('sendPage',(val-1) * 5)
-        }
-
-    },
     
         
 }
