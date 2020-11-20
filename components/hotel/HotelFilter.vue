@@ -237,7 +237,7 @@ export default {
       }
     },
 
-    // 酒店类型
+    // 酒店类型下拉数据处理 
     getHotelType() {
       if (this.form.hoteltype.length == 0) {
         return "不限";
@@ -254,7 +254,7 @@ export default {
       }
     },
 
-    // 酒店设施
+    // 酒店设施下拉数据处理 
     getHotelAsset() {
       if (this.form.hotelasset.length == 0) {
         return "不限";
@@ -271,7 +271,7 @@ export default {
       }
     },
 
-    // 酒店品牌
+    // 酒店品牌下拉数据处理 
     getHotelBrand() {
       if (this.form.hotelbrand.length == 0) {
         return "不限";
@@ -342,7 +342,22 @@ export default {
     },
 
     // 处理撤销条件功能
-    handleCancel () {},
+    handleCancel () {
+      // 1.定义数据为空就可以了
+      this.form = {
+        price_lt: 4000,
+        hotellevel: [], 
+        hoteltype: [],  
+        hotelasset: [],  
+        hotelbrand: [],  
+      };
+
+      // 2.让路由重定向
+      this.$router.replace({
+        path: "/hotel",
+        query: { cityName: this.$route.query.cityName },
+      })
+    },
 
     // 路由重定向
     searchHotel() {
