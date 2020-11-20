@@ -32,6 +32,7 @@
             class="filter-dropdown"
             placement="bottom-start"
             @command="handleLevels">
+
             <span class="el-dropdown-link">
               <span class="dropdown-link-text">{{ getHotelLevel }}</span>
               <i class="el-icon-arrow-down el-icon--right"></i>
@@ -216,91 +217,39 @@ export default {
     });
   },
 
+  // 计算属性
+  computed:{
+    // 酒店等级  
+    getHotelLevel() {},
+
+    // 酒店类型
+    getHotelType() {},
+
+    // 酒店设施
+    getHotelAsset() {},
+
+    // 酒店品牌
+    getHotelBrand() {}
+  },
+
   methods: {
+    // 处理酒店价格数据
+    handlePrice () {},  
 
-    handleCommand(command) {
-      const { index, num } = command;
-      this.hotelItem[index].list[num].isshow = !this.hotelItem[index].list[num].isshow;
-      this.hotelItem = [...this.hotelItem];
-      if (index === 0) {
-        if (this.form.hotellevel.indexOf(num + 1) == -1) {
-          this.form.hotellevel.push(num + 1);
-        } else {
-          this.form.hotellevel.splice(
-            this.form.hotellevel.indexOf(num + 1),
-            1
-          );
-        }
-      }
-      if (index === 1) {
-        if (this.form.hoteltype.indexOf(num + 1) == -1) {
-          this.form.hoteltype.push(num + 1);
-        } else {
-          this.form.hoteltype.splice(
-            this.form.hoteltype.indexOf(num + 1),
-            1
-          );
-        }
-      }
-      if (index === 2) {
-        if (this.form.hotelasset.indexOf(num + 1) == -1) {
-          this.form.hotelasset.push(num + 1);
-        } else {
-          this.form.hotelasset.splice(
-            this.form.hotelasset.indexOf(num + 1),
-            1
-          );
-        }
-      }
-      if (index === 3) {
-        if (this.form.hotelbrand.indexOf(num + 1) == -1) {
-          this.form.hotelbrand.push(num + 1);
-        } else {
-          this.form.hotelbrand.splice(
-            this.form.hotelbrand.indexOf(num + 1),
-            1
-          );
-        }
-      }
+    // 处理酒店等级数据
+    handleLevels () {},
 
-      this.countitem(index);
-    },
-    countitem(index) {
-      const list = this.hotelItem[index].list.filter((value) => {
-        return value.isshow == true;
-      });
+    // 处理酒店类型数据
+    handleTypes () {},
 
-      if (list.length == 0) {
-        this.hotelItem[index].state = "不限";
-      } else if (list.length == 1) {
-        this.hotelItem[index].state = list[0].name;
-      } else {
-        this.hotelItem[index].state = `已选${list.length}项`;
-      }
-    },
+    // 处理酒店设施数据
+    handleAssets () {},
 
-    // 进度条
-    handlePrice(value) {
-      this.form.price_lt = value;
-    },
+    // 处理酒店品牌数据
+    handleBrands () {},
 
-    // 撤销条件操作
-    handlecancel() {
-      (this.form.price_lt = 4000),
-        (this.form.hotellevel = []),
-        (this.form.hoteltype = []),
-        (this.form.hotelasset = []),
-        (this.form.hotelbrand = []);
-      this.$emit("filter", this.form);
-      this.hotelItem.forEach((value) => {
-        value.state = "不限";
-        value.list.forEach((item) => {
-          item.isshow = false;
-        });
-      });
-    },
-
-
+    // 处理撤销条件功能
+    handleCancel () {},
   },
 };
 </script>
