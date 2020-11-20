@@ -1,9 +1,4 @@
 <template>
-    <!-- <div class='container'
-              v-loading.fullscreen.lock="fullscreenLoading"
-              element-loading-text="拼命加载中"
-              element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(0, 0, 0, 0.8)">  -->
         <section class="container">
       
           <!-- 酒店筛选组件 -->
@@ -16,7 +11,6 @@
           <HotelList :hotels="hotels" />
 
         </section>
-    <!-- </div> -->
 </template>
 
 <script>
