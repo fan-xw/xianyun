@@ -202,6 +202,7 @@ export default {
       url: "/hotels/options",
     }).then((res) => {
     this.optionsList = res.data.data;
+    console.log(this.optionsList);
       // 把路由数据读取到页面
       Object.keys(this.$route.query).forEach((v, i) => {
         if (v != "cityName") {
@@ -218,9 +219,23 @@ export default {
   },
 
   // 计算属性
-  computed:{
-    // 酒店等级  
-    getHotelLevel() {},
+  computed: {
+    // 住宿等级下拉数据处理  
+    getHotelLevel() {
+      if (this.form.hotellevel.length == 0) {
+        return "不限";
+      } else if (this.form.hotellevel.length == 1) {
+        let res;
+        this.optionsList.levels.forEach((value,index) => {
+          if (value.id == this.form.hotellevel[0]) {
+            res = value.name;
+          }
+        })
+        return res 
+      } else {
+        return '已选' + this.form.hotellevel.length + '项'
+      }
+    },
 
     // 酒店类型
     getHotelType() {},
@@ -234,10 +249,22 @@ export default {
 
   methods: {
     // 处理酒店价格数据
-    handlePrice () {},  
+    handlePrice (item) {
+      this.form.price_lt = item;
+      this.searchHotel();
+    },  
 
     // 处理酒店等级数据
-    handleLevels () {},
+    handleLevels (item) {
+      // indexOf()的意思：查找一个字符串中，第一次出现指定字符串的位置。
+      if (this.form.hotellevel.indexOf(item.id) != -1) {
+        let index = this.form.hotellevel.indexOf(item.id);
+        this.form.hotellevel.splice(index, 1);
+      } else {
+        this.form.hotellevel.push(item.id);
+      }
+      this.searchHotel();
+    },
 
     // 处理酒店类型数据
     handleTypes () {},
@@ -250,6 +277,15 @@ export default {
 
     // 处理撤销条件功能
     handleCancel () {},
+
+    // 路由重定向
+    searchHotel() {
+      this.$router.replace({
+        path: "/hotel",
+        query: { ...this.$route.query, ...this.form },
+      });
+    },
+
   },
 };
 </script>
