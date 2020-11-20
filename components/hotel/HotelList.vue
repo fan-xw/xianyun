@@ -1,6 +1,6 @@
 <template>
 <div>
-<el-row class='infobox' v-for="(item,index) in hotels"
+<el-row class='infobox' v-for="(item,index) in hotelList"
                         :key="index">
     <el-col :span=8 @click.native='$router.push(`/hotel/details?id=${item.id}`)'>
         <img :src="item.photos" alt="">
@@ -45,7 +45,7 @@
     </el-col>
 </el-row>
           <h4 class='disappointed' 
-              v-if='hotels.length===0'>
+              v-if='hotelList.length===0'>
               暂无符合条件的酒店
           </h4>
       
@@ -64,7 +64,7 @@
 </template>
 <script>
 export default {
-    props:['hotels'],
+    props:['hotelList'],
     data(){
         return{
             value:0,
