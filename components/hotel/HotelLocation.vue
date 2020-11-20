@@ -10,8 +10,12 @@
           <el-col :span="3">区域：</el-col>
           <el-col :span="21">
             <div :class="{ 'scenics-box': upArrow }">
-              <span class="location-budget">
-                哈哈哈
+
+              <!-- 遍历拿过来的数据 -->
+              <span class="location-budget"
+                    v-for="(item,index) in scenicData"
+                    :key="index">
+                {{item.name}}
               </span>
             </div>
             <span class="scenics-arrow">
@@ -23,7 +27,7 @@
                 }"
                 @click="showOrHide">
               </i>
-              等29个区域
+              等{{scenicData.length}}个区域
             </span>
           </el-col>
         </el-row>
@@ -33,8 +37,7 @@
             <el-tooltip
               content="等级均价由平日价格计算得出，节假日价格会有上浮。"
               placement="top-start"
-              class="question-mark"
-            >
+              class="question-mark">
               <sup>?</sup>
             </el-tooltip>
             :
@@ -107,7 +110,16 @@
 
 <script>
 export default {
-
+    // 接受父组件传递过来的数据
+    props:{
+        // 城市景区数据
+        scenicData: {
+          type: Array,
+          default: () => {
+            return [];
+          },
+        },
+    },
     methods:{
         showOrHide () {},
         upArrow () {}
