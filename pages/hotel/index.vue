@@ -1,5 +1,15 @@
 <template>
         <section class="container">
+
+          <!-- 面包屑导航 -->
+          <div class="breadcrumb">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item>酒店</el-breadcrumb-item>
+              <el-breadcrumb-item
+                >{{ $route.query.cityName }}酒店预订</el-breadcrumb-item
+              >
+            </el-breadcrumb>
+          </div>
       
           <!-- 酒店筛选组件 -->
           <SearchForm/>
@@ -87,10 +97,9 @@ export default {
     justify-content: right;
     }
 
-    .disappointed{
-        text-align: center;
-        padding-top: 20px;
-        margin-top: 10px;
-    }
+  .breadcrumb {
+    overflow: hidden;
+    padding: 20px 0;
+  }
 }
 </style>
