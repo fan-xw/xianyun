@@ -275,7 +275,17 @@ export default {
     getHotelBrand() {
       if (this.form.hotelbrand.length == 0) {
         return "不限";
-      } 
+      } else if (this.form.hotelbrand.length == 1) {
+        let res ;
+        this.optionsList.brands.forEach((v,i) => {
+          if (v.id == this.form.hotelbrand[0]) {
+            res = v.name
+          }
+        })
+        return res
+      } else {
+        return '已选' + this.form.hotelbrand.length + '项'
+      }
     }
   },
 
@@ -321,7 +331,15 @@ export default {
     },
 
     // 处理酒店品牌数据
-    handleBrands () {},
+    handleBrands (item) {
+      if (this.form.hotelbrand.indexOf(item.id) != -1) {
+        let index = this.form.hotelbrand.indexOf(item.id);
+        this.form.hotelbrand.splice(index,1);
+      } else {
+        this.form.hotelbrand.push(item.id)
+      }
+      this.searchHotel();
+    },
 
     // 处理撤销条件功能
     handleCancel () {},
