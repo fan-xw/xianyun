@@ -2,15 +2,25 @@
   <div class="recommended">
     <div v-for="(item, index) in articeList" :key="index">
       <!-- 多张图片显示 -->
-      <div class="post-item" v-if="item.images.length == 3">
+      <div
+        class="post-item"
+        v-if="item.images.length == 3"
+        @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+      >
         <!-- 标题 -->
-        <h4 class="post-title">
+        <h4
+          class="post-title"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
           <a href="#"> {{ item.title }}</a>
         </h4>
         <!-- 内容 -->
         <p class="post-desc">{{ item.summary }}</p>
         <!-- 图片 -->
-        <div class="post-img">
+        <div
+          class="post-img"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
           <a href="#">
             <img :src="item.images[0]" alt="" />
           </a>
@@ -49,16 +59,26 @@
         </div>
       </div>
       <!-- 单张图片显示 左右结果 -->
-      <div class="post-item2" v-if="item.images.length == 1">
+      <div
+        class="post-item2"
+        v-if="item.images.length == 1"
+        @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+      >
         <!-- 图片 -左-->
-        <div class="post-cover">
+        <div
+          class="post-cover"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
           <a href="#">
             <img :src="item.images[0]" alt="" />
           </a>
         </div>
         <!-- 内容-右 -->
         <!-- 标题 -->
-        <div class="post-content">
+        <div
+          class="post-content"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
           <h4 class="post-title">
             <a href="#">{{ item.title }}</a>
           </h4>
@@ -96,7 +116,10 @@
       <div class="post-item3" v-if="item.images.length == 0">
         <!-- 内容 -->
         <!-- 标题 -->
-        <div class="post-content">
+        <div
+          class="post-content"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
           <h4 class="post-title">
             <a href="#">{{ item.title }}</a>
           </h4>
@@ -131,21 +154,6 @@
         </div>
       </div>
     </div>
-    <!-- 分页 -->
-    <div class="paging">
-      <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="pagesizes"
-          :page-size="pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="48"
-        >
-        </el-pagination>
-      </div>
-    </div>
   </div>
   <!-- item.images[0] -->
   <!-- v-if="item.images.length == 0" -->
@@ -154,7 +162,6 @@
 
 <script>
 export default {
-<<<<<<< HEAD
   created() {
     //文章列表渲染
     this.$axios({
@@ -162,39 +169,19 @@ export default {
     }).then(res => {
       console.log(res);
       this.articeList = res.data.data
-      // console.log(this.articeList);
-      // this.total = res.data.total
+
     }
     )
   },
   data() {
     return {
       articeList: [],
-      currentPage: 3,
-      pagesize: 3,
-      pagesizes: [3, 5, 10, 15],
-      // total: 48,
+
+
     }
   },
-  methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    }
-  }
+
 }
-=======
-  mounted() {
-    this.$axios({
-      url: "/posts/recommend",
-    }).then((res) => {
-      console.log(res.data);
-    });
-  },
-};
->>>>>>> 64e716d8d3b566aef69a1363597796bce3de2574
 </script>
 
 
