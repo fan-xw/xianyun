@@ -12,32 +12,30 @@
               <el-breadcrumb-item>攻略详情</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
+          <div v-for="(item, index) in postList" :key="index">
+            <div class="postTitle">
+              <h1>{{ item.title }}</h1>
+            </div>
+            <!-- 发布攻略时间 -->
+            <div class="postTime">
+              <el-row :gutter="20">
+                <el-col :span="20" :offset="13"
+                  ><div class="grid-content bg-purple">
+                    <span>攻略：{{ item.updated_at | formatDate }} </span>
+                    <span>阅读：{{ item.watch }}</span>
+                  </div></el-col
+                >
+              </el-row>
+            </div>
+            <!-- 攻略内容 -->
+            <div class="postContent">
+              <p v-html="item.content">
+                {{ item.content }}
+              </p>
+            </div>
+          </div>
           <!-- 攻略标题 -->
-          <div class="postTitle">
-            <h1>远东行：用好奇心打量这座城 —— 最值得收藏的海参崴出行攻略</h1>
-          </div>
-          <!-- 发布攻略时间 -->
-          <div class="postTime">
-            <el-row :gutter="20">
-              <el-col :span="20" :offset="13"
-                ><div class="grid-content bg-purple">
-                  <span>攻略：2019-05-22 12:59 </span>
-                  <span>阅读：2079</span>
-                </div></el-col
-              >
-            </el-row>
-          </div>
-          <!-- 攻略内容 -->
-          <div class="postContent">
-            <p>
-              想象一下一个距离 北京 只有2.5小时飞行距离的城市：身处 亚洲
-              却能感受到十足的欧陆风情——欧式建筑和街道，金发碧眼的路人，正宗的西餐外加只有国内一半售价的帝王蟹可以敞开吃——更难能可贵的是，这里对国人（实质）免签，有直飞航班，低廉的物价，且尚未有太多的游客涉足还保留着原汁原味的传统风情！
-            </p>
-            <img
-              src="https://p3-q.mafengwo.net/s13/M00/41/C4/wKgEaVyaOs2AA9IKAAj8Lg2YzaU64.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90"
-              alt=""
-            />
-          </div>
+
           <!-- 评论回复模块 -->
           <postComment /></div
       ></el-col>
@@ -52,11 +50,37 @@
 <script>
 import postComment from "@/components/post/postComment.vue";
 import postCorrelation from "@/components/post/postCorrelation";
+//引入时间戳转换文件
+import { formatDate } from "@/utils/date.js";
 
 export default {
+  data() {
+    return {
+      postList: [],
+    };
+  },
+
   components: {
     postComment,
     postCorrelation,
+  },
+  mounted(id) {
+    this.$axios({
+      url: "/posts",
+      params: this.$route.query,
+    }).then((res) => {
+      console.log(res.data.data);
+      this.postList = res.data.data;
+    });
+  },
+  // 转换时间戳
+  filters: {
+    formatDate(time) {
+      //   time = time * 1000;
+      let date = new Date(time);
+
+      return formatDate(date, "yyyy-MM-dd hh:mm");
+    },
   },
 };
 </script>
@@ -78,12 +102,13 @@ export default {
       color: #999;
     }
   }
-  .postContent {
+  /deep/.postContent {
+    z-index: 9999;
     font-size: 16px;
     padding: 20px 0;
+
     img {
-      padding: 20px 0;
-      width: 100%;
+      max-width: 700px;
     }
   }
 }

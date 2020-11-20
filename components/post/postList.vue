@@ -165,23 +165,18 @@ export default {
   created() {
     //文章列表渲染
     this.$axios({
-      url: '/posts',
-    }).then(res => {
+      url: "/posts",
+    }).then((res) => {
       console.log(res);
-      this.articeList = res.data.data
-
-    }
-    )
+      this.articeList = res.data.data;
+    });
   },
   data() {
     return {
       articeList: [],
-
-
-    }
+    };
   },
-
-}
+};
 </script>
 
 
