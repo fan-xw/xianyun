@@ -5,10 +5,11 @@
           <SearchForm/>
       
           <!-- 筛选酒店组件 -->
-          <HotelFilter @sendHotels="sendHotels"/>
+          <HotelFilter />
       
           <!-- 酒店列表组件 -->
-          <HotelList :hotels="hotels" />
+          <!-- 父传子 -->
+          <HotelList :hotelList="hotelList"/>
 
         </section>
 </template>
@@ -27,9 +28,10 @@ export default {
 
    data(){
         return{
-            hotels:[],
             locationList:[],
             isload:true,
+            // 定义一个空数组来接受 酒店详情数据
+            hotelList:[],
         }
     },
     created(){
@@ -37,6 +39,10 @@ export default {
         setTimeout(() => {
           this.open1()
         }, 2000);
+    },
+
+    mounted() {
+       this.loadPage()
     },
     
     methods:{
@@ -50,10 +56,20 @@ export default {
         });
       },
 
-      sendHotels (hotels) {
-        this.hotels = hotels
+      // 数据加载 发送请求 获取酒店详情数据
+      loadPage () {
+          this.$axios({
+            url:'/hotels',
+            params:{
+              city:'197',
+              _limit:'10',
+              _start:'0'
+            }
+          }).then(res => {
+            console.log(res)
+            this.hotelList = res.data.data
+          })
       },
-
 
 
     }
