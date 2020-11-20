@@ -8,8 +8,9 @@
             <span class="scope">0-4000</span>
           </span>
           <el-slider
-            v-model="value"
-            :format-tooltip="formatTooltip"
+            v-model="form.price_lt"
+            :step="10"
+            :max="4000"
             @change="valuechange"
           ></el-slider>
         </div>
@@ -59,7 +60,6 @@
 export default {
   data() {
     return {
-      value: 100,
       assetsList: [],
       brandsList: [],
       levelsList: [],
@@ -94,14 +94,10 @@ export default {
   },
 
   methods: {
-    formatTooltip(val) {
-      return val * 40;
-    },
 
     handleCommand(command) {
       const { index, num } = command;
-      this.hotelItem[index].list[num].isshow = !this.hotelItem[index].list[num]
-        .isshow;
+      this.hotelItem[index].list[num].isshow = !this.hotelItem[index].list[num].isshow;
       this.hotelItem = [...this.hotelItem];
       if (index === 0) {
         if (this.form.hotellevel_in.indexOf(num + 1) == -1) {
@@ -163,9 +159,7 @@ export default {
 
     // 进度条
     valuechange(value) {
-      this.form.price_lt = value * 40;
-      console.log(value);
-      this.$emit("filter", this.form);
+      this.form.price_lt = value;
     },
 
     // 撤销条件操作
