@@ -113,7 +113,7 @@
     <el-col :span="10" style="padding-left: 5px; padding-right: 5px">
       <div class="map-box" style="width: 420px; height: 260px">
         <div
-          id="map"
+          id="container"
           style="position: relative; background: rgb(252, 249, 242)"></div>
       </div>
     </el-col>
@@ -139,13 +139,34 @@ export default {
             arrowMark:true,
         }        
     },
+    
+    mounted() {
+        // 地图加载
+        window.onLoad = () => {
+          this.init();
+        };
+        var url =
+            "https://webapi.amap.com/maps?v=1.4.15&key=018322aa6281c56564c9fb050577ad16&callback=onLoad";
+          var jsapi = document.createElement("script");
+          jsapi.charset = "utf-8";
+          jsapi.src = url;
+          document.head.appendChild(jsapi);
+    },
+
     methods:{
         // 控制区域数据的数量
         showOrHide () {
             this.arrowMark = !this.arrowMark;
         },
-    }
 
+        // 定义一个地图
+        init() {
+          this.map = new AMap.Map("container", {
+            resizeEnable: true,
+            zoom: 11,
+          });
+        }
+    }
 }
 </script>
 
@@ -206,7 +227,7 @@ export default {
 .map-box {
   position: relative;
 
-  #map {
+  #container {
     width: 100%;
     height: 100%;
   }
