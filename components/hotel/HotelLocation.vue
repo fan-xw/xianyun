@@ -145,7 +145,8 @@ export default {
         return {
             // 定义一个箭头的初始值
             arrowMark:true,
-            map:{}  // 地图
+            map:{},  // 地图
+            markerList:[]
         }        
     },
     
@@ -209,16 +210,23 @@ export default {
             console.log(this.hotelList);
 
           if (this.hotelList.length != 0) {
+            // 随机地图的中心点
             this.map.setCenter([
               this.hotelList[0].location.longitude,
               this.hotelList[0].location.latitude,
             ]);
-          // 清除地图覆盖物
-          this.map.clearMap();
-          let markerList = [];
-          
-            // 添加点标记
-            this.hotelList.forEach((v, i) => {
+            // 清除地图覆盖物
+            this.map.clearMap();
+            // 定义一个空数组
+            let markerList = [];
+            
+              // 添加点标记   
+              /*
+                高德地图的js中有部分代码是异步执行的，就导致可能js还没有加载完,自己打代码就执行，
+                这种情况下，要保证地图的js 加载顺序在最前面，并且支持返回callback的方式
+                就是在外层 添加 window.init = function(){}
+              */ 
+              this.hotelList.forEach((v, i) => {
                 // 创建一个 Marker 实例：
                 var marker = new AMap.Marker({
                     content: `<span class="marker">${i + 1}</span>`,
@@ -231,12 +239,12 @@ export default {
                     // 提示    
                     title: v.name,
                 });
-
+                // 把 添加的点标记 添加到 定义的 markerList 数组里面
                 markerList.push(marker)
             });
-            // 添加到已有的地图实例中去
-            this.map.add(markerList)
-          }
+              // 添加到已有的地图实例中去
+              this.map.add(markerList)
+            }
 
         },
     }
