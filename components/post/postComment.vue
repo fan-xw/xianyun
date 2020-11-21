@@ -41,9 +41,12 @@
           <el-row :gutter="24" type="flex">
             <el-upload
               :action="this.$axios.defaults.baseURL + '/upload'"
+              name="files"
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              :on-success="picsURL"
+              :file-list="img"
             >
               <i class="el-icon-plus"></i>
             </el-upload>
@@ -150,6 +153,10 @@ export default {
       return formatDate(date, "yyyy-MM-dd hh:mm");
     },
   },
+  created() {
+    // 获取评论
+    this.reply();
+  },
   mounted() {
     this.reply();
     // this.$axios({
@@ -212,17 +219,38 @@ export default {
         this.$message.warning("请输入评论内容或者图片");
         return;
       }
+      console.log("test");
+
       //data 是下面发送请求需要的参数，用一个对象打包参数
       let data = {
         content: this.textarea,
         post: this.$route.query.id,
         pics: this.pics,
       };
+      console.log(data);
       // 判断 reply.follow 有数据,就将回复id的参数 follow 添加到 data 对象里面
-      if (this.$store.state.user.reply.follow) {
-        date.follow = this.$$store.state.user.reply.follow;
-      }
+      // if (this.$store.state.user.reply.follow) {
+      //   date.follow = this.$$store.state.user.reply.follow;
+      // }
       console.log("评论内容：", data);
+      this.$axios({
+        method: "post",
+        url: "/comments",
+        data,
+        headers: {
+          Authorization: "Bearer " + this.$store.state.userstore.userInfo.token,
+        },
+      }).then((res) => {
+        console.log(res);
+        this.$store.commit("user/clearReply");
+        this.textarea = "";
+        this.pics = [];
+        this.img = [];
+        this.reply();
+        if (res.status == 200) {
+          this.$message.success("提交成功");
+        }
+      });
     },
     //点击分享提示未开通分享功能
     open3() {
@@ -234,12 +262,20 @@ export default {
         2000
       );
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    // 饿了么组件属性 on-success 文件上传成功时的钩子触发的函数，获取 pics 数据
+    picsURL(response, file, fileList) {
+      console.log(response);
+      this.pics.push(response[0]);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.pics = fileList.map((item) => {
+        return item.response[0];
+      });
     },
   },
 };
