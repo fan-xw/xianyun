@@ -100,8 +100,12 @@ export default {
       return arr.join("-");
     },
   },
+  mounted() {
+    this.showDraft();
+  },
 
   methods: {
+    handleCity() {},
     imgUpload(file, Editor, cursorLocation, resetUploader) {
       // 1.上传图片
       let formData = new FormData();
@@ -229,6 +233,7 @@ export default {
         });
         return;
       }
+
       // 判断当前草稿箱长度是否超过10 超过了就提醒用户
       if (this.draftItem.length >= 10) {
         this.$message({
@@ -237,8 +242,10 @@ export default {
         });
         return;
       }
+
       // 1.看看本地草稿中有没有有就从本地取
       let draftList = JSON.parse(localStorage.getItem("draftList")) || [];
+
       // 2.遍历本地的草稿，看看是否保存的标题在本地草稿中存在
       if (JSON.parse(localStorage.getItem("draftList"))) {
         JSON.parse(localStorage.getItem("draftList")).forEach((item, index) => {
@@ -291,8 +298,6 @@ export default {
         })
         .catch(() => {});
     },
-
-    handleCity() {},
   },
 };
 </script>

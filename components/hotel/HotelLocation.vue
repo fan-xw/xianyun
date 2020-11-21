@@ -113,7 +113,7 @@
     <el-col :span="10" style="padding-left: 5px; padding-right: 5px">
       <div class="map-box" style="width: 420px; height: 260px">
         <div
-          id="container"
+          id="mapBox"
           style="position: relative; background: rgb(252, 249, 242)"></div>
       </div>
     </el-col>
@@ -126,6 +126,14 @@ export default {
     props:{
         // 城市景区数据
         scenicData: {
+          type: Array,
+          default: () => {
+            return [];
+          },
+        },
+
+        // 酒店详情数据
+        hotelList: {
           type: Array,
           default: () => {
             return [];
@@ -162,9 +170,10 @@ export default {
 
         // 定义一个地图
         init() {
-            this.map = new AMap.Map("container", {
-              resizeEnable: true,
-              zoom: 11,
+            this.map = new AMap.Map("mapBox", {
+              resizeEnable: true,   // 定位
+              zoom: 11,             // 级别
+              viewMode:"3D",        // 3D
             });
 
             // 通过判断是否有城市名字，查看是否需要定位
@@ -174,6 +183,7 @@ export default {
                 citySearch.getLocalCity((status, result) => {
                   console.log(status, result);
                   if (status === "complete" && result.info === "OK") {
+
                     // 查询成功，result即为当前所在城市信息
                     // console.log(result);
                     this.$alert("定位当前城市:" + result.city, "提示", {
@@ -189,7 +199,48 @@ export default {
               });
             }
         }
+    },
+
+    watch: {
+        // 监听酒店详情数据的变化，去更改地图定位信息
+        hotelList() {
+            // 调用地图
+            this.init();
+            console.log(this.hotelList);
+
+          if (this.hotelList.length != 0) {
+            this.map.setCenter([
+              this.hotelList[0].location.longitude,
+              this.hotelList[0].location.latitude,
+            ]);
+          // 清除地图覆盖物
+          this.map.clearMap();
+          let markerList = [];
+          
+            // 添加点标记
+            this.hotelList.forEach((v, i) => {
+                // 创建一个 Marker 实例：
+                var marker = new AMap.Marker({
+                    content: `<span class="marker">${i + 1}</span>`,
+                    // 位置坐标
+                    // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                    position: new AMap.LngLat(
+                      v.location.longitude,
+                      v.location.latitude
+                    ), 
+                    // 提示    
+                    title: v.name,
+                });
+
+                markerList.push(marker)
+            });
+            // 添加到已有的地图实例中去
+            this.map.add(markerList)
+          }
+
+        },
     }
+
 }
 </script>
 
@@ -250,7 +301,7 @@ export default {
 .map-box {
   position: relative;
 
-  #container {
+  #mapBox {
     width: 100%;
     height: 100%;
   }
