@@ -40,7 +40,7 @@
         <div class="picture">
           <el-row :gutter="24" type="flex">
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="this.$axios.defaults.baseURL + '/upload'"
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
@@ -60,7 +60,7 @@
       </div>
 
       <!-- 递归组件模块 -->
-      <div class="recursion" v-for="(item, index) in commentsList" :key="index">
+      <div class="recursion" v-for="(item, index) in commentList" :key="index">
         <el-row :gutter="30" type="flex">
           <el-col :span="20"
             ><div class="grid-content bg-purple">
@@ -108,11 +108,11 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
+      :current-page="pageIndex"
+      :page-sizes="[2, 5, 10, 20]"
+      :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
+      :total="pageList.total"
     >
     </el-pagination>
   </div>
@@ -130,13 +130,15 @@ export default {
       textarea: "",
       pics: [],
       img: [],
-      currentPage1: 5,
-      currentPage2: 5,
-      currentPage3: 5,
-      currentPage4: 4,
-      commentsList: [],
+      commentList: [],
       dialogImageUrl: "",
       dialogVisible: false,
+      pageList: {}, //翻页数据
+      currentPage: 1,
+      //默认每页显示2条
+      pageSize: 2,
+      //当前页码的下标
+      pageIndex: 1,
     };
   },
   // 转换时间戳
@@ -149,19 +151,44 @@ export default {
     },
   },
   mounted() {
-    this.$axios({
-      url: "/posts/comments",
-      params: {
-        _limit: 10,
-      },
-    }).then((res) => {
-      console.log(res.data.data);
-      this.commentsList = res.data.data;
-    });
+    this.reply();
+    // this.$axios({
+    //   url: "/posts/comments",
+    //   params: {
+    //     _limit: 10,
+    //   },
+    // }).then((res) => {
+    //   console.log(res.data.data);
+    //   this.commentsList = res.data.data;
+    // });
   },
   methods: {
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    // 封装获取评论函数
+    reply() {
+      this.$axios({
+        url: "/posts/comments",
+        params: {
+          post: this.$route.query.id,
+          _limit: this.pageSize,
+          _start: (this.pageIndex - 1) * this.pageSize,
+        },
+      }).then((res) => {
+        console.log("这里是评论", res.data);
+        this.pageList = res.data;
+        this.commentList = res.data.data;
+      });
+    },
+    handleSizeChange(newPageSize) {
+      this.pageSize = newPageSize;
+      console.log("1", this.pageSize);
+      this.pageIndex = 1;
+      this.reply();
+    },
+    handleCurrentChange(newPageIndex) {
+      this.pageIndex = newPageIndex;
+      console.log("2");
+      this.reply();
+    },
     //封装获取评论函数
 
     //点击评论文章，清除回复id
@@ -185,6 +212,17 @@ export default {
         this.$message.warning("请输入评论内容或者图片");
         return;
       }
+      //data 是下面发送请求需要的参数，用一个对象打包参数
+      let data = {
+        content: this.textarea,
+        post: this.$route.query.id,
+        pics: this.pics,
+      };
+      // 判断 reply.follow 有数据,就将回复id的参数 follow 添加到 data 对象里面
+      if (this.$store.state.user.reply.follow) {
+        date.follow = this.$$store.state.user.reply.follow;
+      }
+      console.log("评论内容：", data);
     },
     //点击分享提示未开通分享功能
     open3() {
