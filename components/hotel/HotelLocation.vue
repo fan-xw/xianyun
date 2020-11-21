@@ -113,7 +113,7 @@
     <el-col :span="10" style="padding-left: 5px; padding-right: 5px">
       <div class="map-box" style="width: 420px; height: 260px">
         <div
-          id="container"
+          id="mapBox"
           style="position: relative; background: rgb(252, 249, 242)"></div>
       </div>
     </el-col>
@@ -170,9 +170,10 @@ export default {
 
         // 定义一个地图
         init() {
-            this.map = new AMap.Map("container", {
-              resizeEnable: true,
-              zoom: 11,
+            this.map = new AMap.Map("mapBox", {
+              resizeEnable: true,   // 定位
+              zoom: 11,             // 级别
+              viewMode:"3D",        // 3D
             });
 
             // 通过判断是否有城市名字，查看是否需要定位
@@ -182,6 +183,7 @@ export default {
                 citySearch.getLocalCity((status, result) => {
                   console.log(status, result);
                   if (status === "complete" && result.info === "OK") {
+
                     // 查询成功，result即为当前所在城市信息
                     // console.log(result);
                     this.$alert("定位当前城市:" + result.city, "提示", {
@@ -205,16 +207,16 @@ export default {
             // 调用地图
             this.init();
             console.log(this.hotelList);
-            if (this.hotelList.length != 0) {
-              this.map.setCenter([
-                this.hotelList[0].location.longitude,
-                this.hotelList[0].location.latitude,
-              ]);
 
-            // 清除地图覆盖物
-            this.map.clearMap();
-            let markerList = [];
-            
+          if (this.hotelList.length != 0) {
+            this.map.setCenter([
+              this.hotelList[0].location.longitude,
+              this.hotelList[0].location.latitude,
+            ]);
+          // 清除地图覆盖物
+          this.map.clearMap();
+          let markerList = [];
+          
             // 添加点标记
             this.hotelList.forEach((v, i) => {
                 // 创建一个 Marker 实例：
@@ -230,49 +232,12 @@ export default {
                     title: v.name,
                 });
 
-          // 移进点标记打开信息窗口
-    //       marker.on("mouseover", () => {
-    //         // 创建 infoWindow 实例
-    //         let infoWindow = new AMap.InfoWindow({
-    //           position: new AMap.LngLat(
-    //             v.location.longitude,
-    //             v.location.latitude
-    //           ), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-    //           content: `<span style="font-size: 12px;color: #333">${v.name}</span>`, //传入 dom 对象，或者 html 字符串
-    //           offset: new AMap.Pixel(0, -35),
-    //         });
+                markerList.push(marker)
+            });
+            // 添加到已有的地图实例中去
+            this.map.add(markerList)
+          }
 
-    //         // 打开信息窗体
-    //         infoWindow.open(this.map);
-    //       });
-    //       // 移出点标记关闭信息窗口
-    //       marker.on("mouseout", () => {
-    //         this.map.clearInfoWindow();
-    //       });
-    //       markerList.push(marker);
-    //     });
-    //     this.map.add(markerList);
-    //   } else {
-    //     // console.log(this.$route.query.cityName);
-    //     // 正向获取地理编码
-    //     AMap.plugin("AMap.Geocoder", () => {
-    //       var geocoder = new AMap.Geocoder({
-    //         // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-    //         city: this.$route.query.cityName,
-    //       });
-
-    //       geocoder.getLocation(this.$route.query.cityName, (status, result) => {
-    //         if (status === "complete" && result.info === "OK") {
-    //           // result中对应详细地理坐标信息
-    //           console.log(result);
-    //           this.map.setCenter([
-    //             result.geocodes[0].location.lng,
-    //             result.geocodes[0].location.lat,
-    //           ]);
-    //         }
-    //       });
-        });
-      }
         },
     }
 
@@ -336,7 +301,7 @@ export default {
 .map-box {
   position: relative;
 
-  #container {
+  #mapBox {
     width: 100%;
     height: 100%;
   }
