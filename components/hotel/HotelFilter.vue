@@ -423,6 +423,8 @@ export default {
   }
 }
 .filter-view-menu-box {
+  text-align: center;
+  padding: 0 15px;
   max-height: 230px;
   overflow: auto;
 
@@ -447,4 +449,10 @@ export default {
   }
 }
 
+// 处理 选择器的下箭头的对齐方式
+.el-dropdown-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
