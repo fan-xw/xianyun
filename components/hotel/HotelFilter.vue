@@ -231,6 +231,7 @@ export default {
             res = value.name;
           }
         })
+        // console.log(res);  3星
         return res 
       } else {
         return '已选' + this.form.hotellevel.length + '项'
