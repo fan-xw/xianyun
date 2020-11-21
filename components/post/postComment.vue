@@ -90,9 +90,15 @@
         </el-row>
         <p style="font-size: 16px; margin: 10px 50px">{{ item.content }}</p>
         <!-- 评论图片模块 -->
-        <div class="comment_picture">
+        <div class="comment_picture" v-if="item.pics.length > 0">
           <div class="demo-image__preview">
-            <el-image style="width: 100px; height: 100px" :src="item.ipcs">
+            <el-image
+              style="width: 100px; height: 100px"
+              v-for="(pics, index) in item.pics"
+              :key="index"
+              :src="$axios.defaults.baseURL + pics.url"
+              :preview-src-list="srcList"
+            >
             </el-image>
           </div>
         </div>
@@ -142,6 +148,7 @@ export default {
       pageSize: 2,
       //当前页码的下标
       pageIndex: 1,
+      srcList: [],
     };
   },
   // 转换时间戳
@@ -153,6 +160,7 @@ export default {
       return formatDate(date, "yyyy-MM-dd hh:mm");
     },
   },
+
   created() {
     // 获取评论
     this.reply();
