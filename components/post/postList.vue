@@ -1,78 +1,391 @@
 <template>
-  <div>
-    <div class="post">
-      <h4>塞班贵？一定是你的打开方式不对！6000块玩转塞班</h4>
-      <p>
-        大家对塞班岛总存在着这样的误解，知道它是美属地盘，就理所当然地觉得这里的花费一定很高，花费高有高的玩法，那如果只有6000块的预算呢？要怎么玩？关于旅行这件事，我们要让钱花得更有道理，收下这份攻略，带你6000块花式玩转塞班。图：塞班岛。
-        by第5季旅游一、怎样用6000块玩转塞班？大多数出境游客人不做预算或最
-      </p>
-      <img
-        src="https://n3-q.mafengwo.net/s10/M00/E8/E4/wKgBZ1octoCABhgLAAafahORRLs91.jpeg?imageView2%2F2%2Fw%2F1360%2Fq%2F90"
-        alt=""
-      />
-
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="8"
-          ><div class="grid-content bg-purple">
-            <span style="font-size: 12px"
-              ><i class="el-icon-location-outline"></i>北京 by</span
-            >
-
-            <img
-              src="http://157.122.54.189:9095/assets/images/avatar.jpg"
-              alt=""
-              style="width: 12px; height: 12px"
-            />
-            <span style="font-size: 12px; color: rgb(143, 194, 47)">
-              地球发动机
-            </span>
-            <i class="el-icon-view" style="font-size: 12px">1111</i>
-          </div>
-        </el-col>
-        <el-col :span="6"
-          ><div
-            class="grid-content bg-purple-light"
-            style="padding-left: 5px; font-size: 20px; color: rgb(143, 194, 47)"
-          >
-            <span>80</span> 赞
-          </div></el-col
+  <div class="recommended">
+    <div v-for="(item, index) in articeList" :key="index">
+      <!-- 多张图片显示 -->
+      <div
+        class="post-item"
+        v-if="item.images.length == 3"
+        @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+      >
+        <!-- 标题 -->
+        <h4
+          class="post-title"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
         >
-      </el-row>
+          <a href="#"> {{ item.title }}</a>
+        </h4>
+        <!-- 内容 -->
+        <p class="post-desc">{{ item.summary }}</p>
+        <!-- 图片 -->
+        <div
+          class="post-img"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
+          <a href="#">
+            <img :src="item.images[0]" alt="" />
+          </a>
+          <a href="#">
+            <img :src="item.images[1]" alt="" />
+          </a>
+          <a href="#">
+            <img :src="item.images[2]" alt="" />
+          </a>
+        </div>
+        <!-- 底部信息 -->
+        <div class="post-info">
+          <div class="post-info-left">
+            <span>
+              <i class="el-icon-location-outline"></i>
+              {{ item.cityName }}
+            </span>
+            <div class="post-user">
+              by
+              <a href="#">
+                <img
+                  :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                  alt=""
+                />
+              </a>
+              <a href="#">{{ item.account.nickname }}</a>
+            </div>
+            <span>
+              <i class="el-icon-view"></i>
+              {{ item.watch }}
+            </span>
+          </div>
+          <div class="post-info-right">
+            <span>{{ item.like }}赞</span>
+          </div>
+        </div>
+      </div>
+      <!-- 单张图片显示 左右结果 -->
+      <div
+        class="post-item2"
+        v-if="item.images.length == 1"
+        @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+      >
+        <!-- 图片 -左-->
+        <div
+          class="post-cover"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
+          <a href="#">
+            <img :src="item.images[0]" alt="" />
+          </a>
+        </div>
+        <!-- 内容-右 -->
+        <!-- 标题 -->
+        <div
+          class="post-content"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
+          <h4 class="post-title">
+            <a href="#">{{ item.title }}</a>
+          </h4>
+          <!-- 内容 -->
+          <p class="post-desc">{{ item.summary }}</p>
+          <!-- 底部信息 -->
+          <div class="post-info">
+            <div class="post-info-left">
+              <span>
+                <i class="el-icon-location-outline"></i>
+                {{ item.cityName }}
+              </span>
+              <div class="post-user">
+                by
+                <a href="#">
+                  <img
+                    :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                    alt=""
+                  />
+                </a>
+                <a href="#">{{ item.account.nickname }}</a>
+              </div>
+              <span>
+                <i class="el-icon-view"></i>
+                {{ item.watch }}
+              </span>
+            </div>
+            <div class="post-info-right">
+              <span>{{ item.like }}赞</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 没有图片只有详情 -->
+      <div class="post-item3" v-if="item.images.length == 0">
+        <!-- 内容 -->
+        <!-- 标题 -->
+        <div
+          class="post-content"
+          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        >
+          <h4 class="post-title">
+            <a href="#">{{ item.title }}</a>
+          </h4>
+          <!-- 内容 -->
+          <p class="post-desc">{{ item.summary }}</p>
+          <!-- 底部信息 -->
+          <div class="post-info">
+            <div class="post-info-left">
+              <span>
+                <i class="el-icon-location-outline"></i>
+                {{ item.cityName }}
+              </span>
+              <div class="post-user">
+                by
+                <a href="#">
+                  <img
+                    :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                    alt=""
+                  />
+                </a>
+                <a href="#">{{ item.account.nickname }}</a>
+              </div>
+              <span>
+                <i class="el-icon-view"></i>
+                {{ item.watch }}
+              </span>
+            </div>
+            <div class="post-info-right">
+              <span>{{ item.like }}赞</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <hr />
   </div>
+  <!-- item.images[0] -->
+  <!-- v-if="item.images.length == 0" -->
 </template>
+
 
 <script>
 export default {
-  mounted() {
+  created() {
+    //文章列表渲染
     this.$axios({
-      url: "/posts/recommend",
+      url: "/posts",
     }).then((res) => {
-      console.log(res.data);
+      console.log(res);
+      this.articeList = res.data.data;
     });
+  },
+  data() {
+    return {
+      articeList: [],
+    };
   },
 };
 </script>
 
-<style lang="less" scoped>
-.post {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  h4 {
-    font-size: 24px;
-  }
-  p {
+
+<style lang='less' scoped>
+// 多张图片样式
+.post-item {
+  width: 700px;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+  .post-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 15px;
+    font-weight: 400;
     font-size: 18px;
-    color: #ccc;
-    font-weight: 400px;
+    a:hover {
+      color: #ffa500;
+    }
   }
-  img {
+  .post-desc {
+    margin-bottom: 15px;
+    line-height: 1.5;
+    font-size: 14px;
+    height: 63px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box; //对象作为弹性伸缩盒子模型显示
+    -webkit-box-orient: vertical; //设置伸缩盒子对象的子元素的排列方式
+    -webkit-line-clamp: 3; //设置 块元素包含的文本行数
+  }
+  .post-img {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    img {
+      width: 220px;
+      height: 150px;
+    }
+  }
+  .post-info {
+    display: flex;
+    justify-content: space-between;
+    .post-info-left {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: #999;
+      .post-user {
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        img {
+          display: block;
+          width: 16px;
+          height: 16px;
+          border-radius: 100px;
+          margin: 5px;
+        }
+        a {
+          color: orange;
+        }
+      }
+    }
+    .post-info-right {
+      color: orange;
+    }
+  }
+}
+// 一张图片样式
+.post-item2 {
+  width: 700px;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+  .post-cover {
     width: 220px;
     height: 150px;
+    overflow: hidden;
+    margin-right: 10px;
+    img {
+      // width: 100%;
+      width: 220px;
+      height: 150px;
+    }
   }
-  .row-bg {
-    width: 100%;
+  .post-content {
+    width: 470px;
+    flex: 1;
+    .post-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 15px;
+      font-weight: 400;
+      font-size: 18px;
+      a:hover {
+        color: #ffa500;
+      }
+    }
+    .post-desc {
+      margin-bottom: 15px;
+      line-height: 1.5;
+      font-size: 14px;
+      height: 63px;
+      color: #7f667f;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box; //对象作为弹性伸缩盒子模型显示
+      -webkit-box-orient: vertical; //设置伸缩盒子对象的子元素的排列方式
+      -webkit-line-clamp: 3; //设置 块元素包含的文本行数
+    }
+    .post-info {
+      display: flex;
+      justify-content: space-between;
+      .post-info-left {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: #999;
+        .post-user {
+          margin: 0 10px;
+          display: flex;
+          align-items: center;
+          box-sizing: border-box;
+          img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 100px;
+            margin: 5px;
+          }
+          a {
+            color: orange;
+          }
+        }
+      }
+      .post-info-right {
+        color: orange;
+      }
+    }
+  }
+}
+.post-item3 {
+  width: 700px;
+  padding: 20px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+
+  .post-content {
+    flex: 1;
+    .post-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 15px;
+      font-weight: 400;
+      font-size: 18px;
+      a:hover {
+        color: #ffa500;
+      }
+    }
+    .post-desc {
+      margin-bottom: 15px;
+      line-height: 1.5;
+      font-size: 14px;
+      height: 63px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box; //对象作为弹性伸缩盒子模型显示
+      -webkit-box-orient: vertical; //设置伸缩盒子对象的子元素的排列方式
+      -webkit-line-clamp: 3; //设置 块元素包含的文本行数
+    }
+    .post-info {
+      display: flex;
+      justify-content: space-between;
+      .post-info-left {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: #999;
+        .post-user {
+          margin: 0 10px;
+          display: flex;
+          align-items: center;
+          box-sizing: border-box;
+          img {
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 100px;
+            margin: 5px;
+          }
+          a {
+            color: orange;
+          }
+        }
+      }
+      .post-info-right {
+        color: orange;
+      }
+    }
   }
 }
 </style>

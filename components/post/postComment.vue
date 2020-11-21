@@ -60,7 +60,7 @@
         </el-row>
       </div>
       <!-- 递归组件模块 -->
-      <div class="recursion">
+      <div class="recursion" v-for="(item, index) in commentsList" :key="index">
         <el-row :gutter="30" type="flex">
           <el-col :span="20"
             ><div class="grid-content bg-purple">
@@ -68,29 +68,28 @@
                 <ul>
                   <li>
                     <img
-                      src="http://157.122.54.189:9095/assets/images/avatar.jpg"
+                      :src="
+                        $axios.defaults.baseURL + item.account.defaultAvatar
+                      "
                       alt=""
                       style="width: 12px"
                     />
                   </li>
-                  <li>管理员</li>
-                  <li>2020-11-19 9:09</li>
+                  <li>{{ item.account.nickname }}</li>
+                  <li>{{ item.updated_at | formatDate }}</li>
                 </ul>
               </div>
             </div>
           </el-col>
           <el-col :span="6" :offset="10"
-            ><div class="grid-content bg-purple">11</div></el-col
+            ><div class="grid-content bg-purple">{{ item.level }}</div></el-col
           >
         </el-row>
-        <p style="font-size: 16px; margin: 10px 50px">1111</p>
+        <p style="font-size: 16px; margin: 10px 50px">{{ item.content }}</p>
         <!-- 评论图片模块 -->
         <div class="comment_picture">
           <div class="demo-image__preview">
-            <el-image
-              style="width: 100px; height: 100px"
-              src="http://157.122.54.189:9095/uploads/0f1dd49ebfc04cb48bd56710ef3f4fa3.jpg"
-            >
+            <el-image style="width: 100px; height: 100px" :src="item.ipcs">
             </el-image>
           </div>
         </div>
@@ -102,6 +101,7 @@
             >
           </el-row>
         </div>
+        <commentsTime v-if="item.parent" :parent="item.parent" />
       </div>
     </div>
     <!-- 分页 -->
@@ -119,7 +119,12 @@
 </template>
 
 <script>
+import { formatDate } from "@/utils/date.js";
+import commentsTime from "@/components/post/commentsTime.vue";
 export default {
+  components: {
+    commentsTime,
+  },
   data() {
     return {
       textarea: "",
@@ -127,7 +132,28 @@ export default {
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
+      commentsList: [],
     };
+  },
+  // 转换时间戳
+  filters: {
+    formatDate(time) {
+      //   time = time * 1000;
+      let date = new Date(time);
+
+      return formatDate(date, "yyyy-MM-dd hh:mm");
+    },
+  },
+  mounted() {
+    this.$axios({
+      url: "/posts/comments",
+      params: {
+        _limit: 10,
+      },
+    }).then((res) => {
+      console.log(res.data.data);
+      this.commentsList = res.data.data;
+    });
   },
   methods: {
     handleSizeChange(val) {
@@ -189,6 +215,7 @@ export default {
       width: 100px;
       height: 100px;
       border: 2px dotted #ccc;
+      margin-left: 20px;
     }
   }
 }

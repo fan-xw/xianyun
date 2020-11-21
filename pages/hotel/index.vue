@@ -1,69 +1,151 @@
 <template>
-    <!-- <div class='container'
-              v-loading.fullscreen.lock="fullscreenLoading"
-              element-loading-text="拼命加载中"
-              element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(0, 0, 0, 0.8)">  -->
         <section class="container">
+
+          <!-- 面包屑导航 -->
+          <div class="breadcrumb">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item>酒店</el-breadcrumb-item>
+              <el-breadcrumb-item
+                >{{ $route.query.cityName }}酒店预订</el-breadcrumb-item
+              >
+            </el-breadcrumb>
+          </div>
       
           <!-- 酒店筛选组件 -->
           <SearchForm/>
+
+          <!-- 酒店位置组件 -->
+          <!-- 通过父传子，把城市区域数据传递给子组件 -->
+          <HotelLocation :scenicData="scenicList" :hotelList="hotelList"/>
       
           <!-- 筛选酒店组件 -->
-          <HotelFilter @sendHotels="sendHotels"/>
+          <HotelFilter />
       
-          <!-- 酒店列表组件 -->
-          <HotelList :hotels="hotels" />
+          <div class="hotelList">
+              <div v-if="hotelList.length != 0">
+                  <!-- 酒店列表组件 -->
+                  <!-- 父传子 -->
+                  <HotelList :hotelList="hotelList"/>
+
+                  <!-- 分页 -->
+                  <div class="pagination">
+                    <el-pagination
+                      layout="prev, pager, next"
+                      :total="totalPage"
+                      :page-size="pageSize"
+                      :current-page="pageIndex"
+                      @current-change="handleCurrentChange">
+                    </el-pagination>
+                  </div>
+              </div>
+
+              <div class="noHotel" v-if="hotelList.length == 0">
+                暂无符合条件的酒店
+              </div>
+          </div>
 
         </section>
-    <!-- </div> -->
 </template>
 
 <script>
 // 1.引入酒店价钱筛选组件
 import SearchForm from '@/components/hotel/SearchForm'
+// 2.引入酒店位置组件
+import HotelLocation from '@/components/hotel/HotelLocation'
 // 2.引入筛选酒店过滤器
 import HotelFilter from '@/components/hotel/HotelFilter'
 // 3.引入酒店列表页组件
 import HotelList from '@/components/hotel/HotelList'
 export default {
   components:{
-    SearchForm,HotelFilter,HotelList
+    SearchForm,   // 酒店搜索框组件
+    HotelFilter,  // 酒店过滤器组件
+    HotelList,    // 酒店列表页组件
+    HotelLocation // 酒店位置和景点组件
   },
 
    data(){
         return{
-            hotels:[],
-            locationList:[],
-            isload:true,
+            // 定义一个空数组来接受 酒店详情数据
+            hotelList:[],
+            scenicList: [], // 景点数据
+            totalPage: 0, // 记录总页数
+            pageIndex: 1, // 当前页面
+            pageSize: 10, // 当前页显示的总数据
+            start:0,      // 酒店数据里的分页数据，分页时使用
+            city: "",     // 城市id
+            cityname: "", // 城市名字
         }
     },
-    created(){
-        // this.openFullScreen1()
-        setTimeout(() => {
-          this.open1()
-        }, 2000);
+
+    mounted() {
+      // 如果有城市名字就发起请求获取城市id和城市景点
+      if (this.$route.query.cityName) {
+        this.$axios({
+          url: "/cities",
+          params: { name: this.$route.query.cityName },
+        }).then((res) => {
+          console.log(res);
+          this.city = res.data.data[0].id;
+          this.scenicList = res.data.data[0].scenics;
+          this.getHotelData();
+        });
+      }
+    },
+
+    watch:{
+      // 监听路由变化，获取城市id和城市景点
+      $route() {
+        console.log(this.$route.query);
+        this.$axios({
+          url: "/cities",
+          params: { name: this.$route.query.cityName },
+        }).then((res) => {
+          this.city = res.data.data[0].id;
+          this.scenicList = res.data.data[0].scenics;
+          this.getHotelData();
+        });
+      },
     },
     
     methods:{
-      // 页面一进来，就开始定位,提示
-      open1() {
-        this.$notify({
-          title: '城市',
-          message: '定位当前城市:广州市',
-          type: 'success',
-          position:'top-left'
+
+      // 获取酒店数据
+      getHotelData() {
+        let urlStr = "?";
+        urlStr += "city=" + this.city + "&";
+        urlStr += "_start=" + this.start + "&";
+        urlStr += "_limit=" + this.pageSize + "&";
+        Object.keys(this.$route.query).forEach((v, i) => {
+          if (v != "cityName") {
+            if (Array.isArray(this.$route.query[v])) {
+              this.$route.query[v].forEach((item, index) => {
+                urlStr += v + "_in=" + item + "&";
+              });
+            } else if (this.$route.query[v] != "") {
+              urlStr += v + "=" + this.$route.query[v] + "&";
+            }
+          }
+        });
+        console.log(urlStr);
+        this.$axios({
+          url: "/hotels" + urlStr,
+        }).then((res) => {
+          console.log(res);
+          this.hotelList = res.data.data;
+          this.totalPage = res.data.total;
         });
       },
 
-      sendHotels (hotels) {
-        this.hotels = hotels
-      },
 
       // 分页
-      currentChange () {},
-
-
+      handleCurrentChange (val) {
+        console.log(`当前页:${val}`);
+        this.pageIndex = val
+        this.start = (this.pageIndex - 1) * this.pageSize;
+        // 重新加载酒店数据
+        this.getHotelData();
+      }
     }
 }
 
@@ -73,16 +155,23 @@ export default {
 .container {
   width: 1000px;
   margin: 0 auto;
-    .pagechange{
-    padding-top: 20px;
-    display: flex;
-    justify-content: right;
-    }
 
-    .disappointed{
-        text-align: center;
-        padding-top: 20px;
-        margin-top: 10px;
+  .breadcrumb {
+    overflow: hidden;
+    padding: 20px 0;
+  }
+
+  .hotelList {
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px 0 40px;
     }
+    .noHotel {
+      text-align: center;
+      height: 300px;
+      margin-top: 20px;
+    }
+  }
 }
 </style>

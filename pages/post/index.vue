@@ -3,7 +3,9 @@
     <el-row>
       <el-col :span="8">
         <div class="grid-content bg-purple">
+          <!-- 左边导航栏 -->
           <SideNacigation />
+          <!-- 左边推荐城市 -->
           <div class="city">
             <h4>推荐城市</h4>
             <hr />
@@ -17,7 +19,9 @@
       ></el-col>
       <el-col :span="16">
         <div class="grid-content bg-purple-light">
+          <!-- 搜索框 -->
           <SearchFrame />
+          <!-- 推荐攻略 -->
           <div class="strategy">
             <h2 class="strategy_left">推荐攻略</h2>
             <el-row>
@@ -29,7 +33,23 @@
               >
             </el-row>
           </div>
+          <!-- 文章列表 -->
           <PostList />
+          <!-- 分页 -->
+          <div class="paging">
+            <div class="block">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="pagesizes"
+                :page-size="pagesize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="48"
+              >
+              </el-pagination>
+            </div>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -54,18 +74,20 @@ export default {
   },
   data() {
     return {
-      postData: [],
+      currentPage: 3,
+      pagesize: 3,
+      pagesizes: [3, 5, 10, 15],
     };
   },
-  mounted() {
-    //文章详情
-    this.$axios({
-      url: "/posts",
-    }).then((res) => {
-      console.log(res.data.data);
-      this.postData = res.data.data;
-    });
+  methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
   },
+  computed: {},
 };
 </script>
 
