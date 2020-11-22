@@ -222,11 +222,14 @@ export default {
   computed: {
     // 住宿等级下拉数据处理  
     getHotelLevel() {
+      // console.log(this.form.hotellevel[0]);  选择的项
+      // 1.如果数组长度等于0 就显示 "不限" 的字样在DOM中
       if (this.form.hotellevel.length == 0) {
         return "不限";
       } else if (this.form.hotellevel.length == 1) {
         let res;
         this.optionsList.levels.forEach((value,index) => {
+          // 2.判断选择的类型与拿到的数据的类型是否相等，如果相等就把值赋到页面中去
           if (value.id == this.form.hotellevel[0]) {
             res = value.name;
           }
@@ -234,6 +237,7 @@ export default {
         // console.log(res);  3星
         return res 
       } else {
+        // 3.出去等于0和等于1的两种情况 如果选择大于 1 就把这个数组的长度返回到DOM中去
         return '已选' + this.form.hotellevel.length + '项'
       }
     },
