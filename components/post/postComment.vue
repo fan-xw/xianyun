@@ -217,14 +217,15 @@ export default {
 
     //点击评论文章，清除回复id
     clickOutline() {
-      this.closeReply();
+      this.$message(
+        {
+          message: "暂时还没有开通评论",
+          type: "warning",
+        },
+        2000
+      );
     },
-    //清理回复评论数据
-    closeReply() {
-      this.$store.commit("user/closeReply");
-      //就让输入框高亮，输入框绑定 ref='input'属性拿到输入框
-      this.$refs.input.focus();
-    },
+
     submitReply() {
       //判断搜索为空或有空格时
       if (
