@@ -253,7 +253,7 @@ export default {
                       v.location.latitude
                     ), 
                     // 提示    
-                    title: v.name,
+                    // title: v.name,
                 });
                 // 移进点标记打开信息窗口
                 marker.on("mouseover", () => {
