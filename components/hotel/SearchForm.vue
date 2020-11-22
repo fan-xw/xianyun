@@ -193,7 +193,7 @@ export default {
       this.$router.replace({
         path: "/hotel",
         query: { ...this.$route.query, ...myform },
-      });
+      }).catch((err)=>{})
     },
   },
 
