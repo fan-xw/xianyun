@@ -255,6 +255,25 @@ export default {
                     // 提示    
                     title: v.name,
                 });
+                // 移进点标记打开信息窗口
+                marker.on("mouseover", () => {
+                  // 创建 infoWindow 实例
+                  let infoWindow = new AMap.InfoWindow({
+                    position: new AMap.LngLat(
+                      v.location.longitude,
+                      v.location.latitude
+                    ), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                    content: `<span style="font-size: 12px;color: #333">${v.name}</span>`, //传入 dom 对象，或者 html 字符串
+                    offset: new AMap.Pixel(0, -35),
+                  });
+      
+                  // 打开信息窗体
+                  infoWindow.open(this.map);
+                });
+                // 移出点标记关闭信息窗口
+                marker.on("mouseout", () => {
+                  this.map.clearInfoWindow();
+                });
                 // 把 添加的点标记 添加到 定义的 markerList 数组里面
                 markerList.push(marker)
             });
