@@ -98,16 +98,17 @@ export default {
       this.$nextTick(() => {
         //this.$nextTick强行执行一次
         window.onLoad = () => {
-          // 创建一个实例
+          // 1.创建一个实例
           var map = new AMap.Map("container", {
             zoom: 50,
             // 中心点是每次获取酒店列表的location
             center: [this.hotelList1.longitude, this.hotelList1.latitude],
           });
-          // 因为想要再其他地方调用map，所以要把map存进去data里面，这样子全局就可以调用了
+          // 2.因为想要再其他地方调用map，所以要把map存进去data里面，这样子全局就可以调用了
           this.map = map;
+          // 3.AMap.PlaceSearch: 地点搜索服务插件，提供某一特定地区的位置查询服务
           AMap.service(["AMap.PlaceSearch"], () => {
-            //构造地点查询类
+            //4.构造地点查询类
             var placeSearch = new AMap.PlaceSearch({
               type: "风景", // 兴趣点类别
               pageSize: 20, // 单页显示结果条数
@@ -118,7 +119,7 @@ export default {
             });
             // 和全局调用map同理
             this.placeSearch = placeSearch;
-            // 调用函数
+            // 5.调用函数
             this.logActive();
           });
         };
@@ -138,21 +139,25 @@ export default {
     },
     // 设置地图中心点/级别
     rimenter(item) {
-      // console.log("这里是item", item);
+      // console.log(item);
       this.map.setCenter([item.position[0], item.position[1]]); //设置地图中心点
     },
     logActive() {
-      var cpoint = [this.hotelList1.longitude, this.hotelList1.latitude]; //中心点坐 标
-      this.placeSearch.searchNearBy("", cpoint, 2000, (status, result) => {
+      var centerPoint = [this.hotelList1.longitude, this.hotelList1.latitude]; //中心点坐 标
+      // console.log(centerPoint);   城市的中心坐标点
+      // 根据POIID查询POI详细信息 根据传入的Bounds信息进行范围搜索
+      // 根据中心点经纬度和半径进行周边搜索
+      this.placeSearch.searchNearBy("", centerPoint, 2000, (status, result) => {
         // 直接调用高德的方法，result返回一个结果
         // console.log(result);
-        // console.log(result.poiList.pois);
+        // console.log(result.poiList.pois);     //  返回的是一个 装有风景的数组
         //  遍历出我想要的东西，return出去
         this.hotelList = result.poiList.pois.map((hotel) => {
+          // 创建标记点实例
           var marker = new AMap.Marker({
-            title: hotel.name,
-            position: [hotel.location.R, hotel.location.Q],
-            distance: hotel.distance,
+            title: hotel.name,                               // 提示信息
+            position: [hotel.location.R, hotel.location.Q],  // 位置
+            distance: hotel.distance,                        // 距离
           });
           return {
             title: hotel.name,
@@ -160,7 +165,6 @@ export default {
             distance: hotel.distance,
           };
         });
-        // console.log("这里是hotelList", this.hotelList);
       });
     },
   },
