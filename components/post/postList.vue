@@ -1,34 +1,35 @@
 <template>
+  <!-- 旅游攻略文章列表渲染 -->
   <div class="recommended">
-    <div v-for="(item, index) in articeList" :key="index">
+    <div>
       <!-- 多张图片显示 -->
       <div
         class="post-item"
-        v-if="item.images.length == 3"
-        @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        v-if="data.images.length >= 3"
+        @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
       >
         <!-- 标题 -->
         <h4
           class="post-title"
-          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+          @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
         >
-          <a href="#"> {{ item.title }}</a>
+          <a href="#"> {{ data.title }}</a>
         </h4>
         <!-- 内容 -->
-        <p class="post-desc">{{ item.summary }}</p>
+        <p class="post-desc">{{ data.summary }}</p>
         <!-- 图片 -->
         <div
           class="post-img"
-          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+          @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
         >
           <a href="#">
-            <img :src="item.images[0]" alt="" />
+            <img :src="data.images[0]" alt="" />
           </a>
           <a href="#">
-            <img :src="item.images[1]" alt="" />
+            <img :src="data.images[1]" alt="" />
           </a>
           <a href="#">
-            <img :src="item.images[2]" alt="" />
+            <img :src="data.images[2]" alt="" />
           </a>
         </div>
         <!-- 底部信息 -->
@@ -36,150 +37,149 @@
           <div class="post-info-left">
             <span>
               <i class="el-icon-location-outline"></i>
-              {{ item.cityName }}
+              {{ data.cityName }}
             </span>
             <div class="post-user">
               by
               <a href="#">
                 <img
-                  :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                  :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                   alt=""
                 />
               </a>
-              <a href="#">{{ item.account.nickname }}</a>
+              <a href="#">{{ data.account.nickname }}</a>
             </div>
             <span>
               <i class="el-icon-view"></i>
-              {{ item.watch }}
+              {{ data.watch }}
             </span>
           </div>
           <div class="post-info-right">
-            <span>{{ item.like }}赞</span>
+            <span>{{ data.like == null ? '0' : data.like }}赞</span>
           </div>
         </div>
       </div>
       <!-- 单张图片显示 左右结果 -->
       <div
         class="post-item2"
-        v-if="item.images.length == 1"
-        @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+        v-if="data.images.length == 1 || data.images.length == 2"
+        @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
       >
         <!-- 图片 -左-->
         <div
           class="post-cover"
-          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+          @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
         >
           <a href="#">
-            <img :src="item.images[0]" alt="" />
+            <img :src="data.images[0]" alt="" />
           </a>
         </div>
         <!-- 内容-右 -->
         <!-- 标题 -->
         <div
           class="post-content"
-          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+          @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
         >
           <h4 class="post-title">
-            <a href="#">{{ item.title }}</a>
+            <a href="#">{{ data.title }}</a>
           </h4>
           <!-- 内容 -->
-          <p class="post-desc">{{ item.summary }}</p>
+          <p class="post-desc">{{ data.summary }}</p>
           <!-- 底部信息 -->
           <div class="post-info">
             <div class="post-info-left">
               <span>
                 <i class="el-icon-location-outline"></i>
-                {{ item.cityName }}
+                {{ data.cityName }}
               </span>
               <div class="post-user">
                 by
                 <a href="#">
                   <img
-                    :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                    :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                     alt=""
                   />
                 </a>
-                <a href="#">{{ item.account.nickname }}</a>
+                <a href="#">{{ data.account.nickname }}</a>
               </div>
               <span>
                 <i class="el-icon-view"></i>
-                {{ item.watch }}
+                {{ data.watch }}
               </span>
             </div>
             <div class="post-info-right">
-              <span>{{ item.like }}赞</span>
+              <span>{{ data.like == null ? '0' : data.like }}赞</span>
             </div>
           </div>
         </div>
       </div>
       <!-- 没有图片只有详情 -->
-      <div class="post-item3" v-if="item.images.length == 0">
+      <div class="post-item3" v-if="data.images.length < 1">
         <!-- 内容 -->
         <!-- 标题 -->
         <div
           class="post-content"
-          @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
+          @click="$router.push({ path: `/post/postDetail?id=${data.id}` })"
         >
           <h4 class="post-title">
-            <a href="#">{{ item.title }}</a>
+            <a href="#">{{ data.title }}</a>
           </h4>
           <!-- 内容 -->
-          <p class="post-desc">{{ item.summary }}</p>
+          <p class="post-desc">{{ data.summary }}</p>
           <!-- 底部信息 -->
           <div class="post-info">
             <div class="post-info-left">
               <span>
                 <i class="el-icon-location-outline"></i>
-                {{ item.cityName }}
+                {{ data.cityName }}
               </span>
               <div class="post-user">
                 by
                 <a href="#">
                   <img
-                    :src="$axios.defaults.baseURL + item.account.defaultAvatar"
+                    :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                     alt=""
                   />
                 </a>
-                <a href="#">{{ item.account.nickname }}</a>
+                <a href="#">{{ data.account.nickname }}</a>
               </div>
               <span>
                 <i class="el-icon-view"></i>
-                {{ item.watch }}
+                {{ data.watch }}
               </span>
             </div>
             <div class="post-info-right">
-              <span>{{ item.like }}赞</span>
+              <span>{{ data.like == null ? '0' : data.like }}赞</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- item.images[0] -->
-  <!-- v-if="item.images.length == 0" -->
+  <!-- data.images[0] -->
+  <!-- v-if="data.images.length == 0" -->
 </template>
 
 
 <script>
+import { log } from 'util'
 export default {
-  created() {
-    //文章列表渲染
-    this.$axios({
-      url: '/posts',
-    }).then(res => {
-      console.log(res);
-      this.articeList = res.data.data
-
+  //接收父组件传递过来的数据data,子组件接收渲染
+  props: {
+    data: {
+      type: Object,
+      default: {}
     }
-    )
   },
   data() {
-    return {
-      articeList: [],
 
+    return {
 
     }
   },
+  mounted() {
+    // console.log(this.data);
+  }
 
 }
 </script>
