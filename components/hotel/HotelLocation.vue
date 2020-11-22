@@ -111,7 +111,7 @@
 
     <!-- 右侧地图部分 -->
     <el-col :span="10" style="padding-left: 5px; padding-right: 5px">
-      <div class="map-box" style="width: 420px; height: 260px">
+      <div id="map-box" style="width: 420px; height: 260px">
         <div
           id="mapBox"
           style="position: relative; background: rgb(252, 249, 242)"></div>
@@ -121,6 +121,7 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui';
 export default {
     // 接受父组件传递过来的数据
     props:{
@@ -161,9 +162,24 @@ export default {
           jsapi.charset = "utf-8";
           jsapi.src = url;
           document.head.appendChild(jsapi);
+
+        // 调用加在事件
+        this.getData()
     },
 
     methods:{
+         getData() {
+           const loading = this.$loading ({
+             lock:true,                                 // lock 的修饰符--默认是false 
+             text:'Loading',                            // 显示在加载图标下方的加载方案
+             spinner:'el-icon-loading',                 // 自定义加载图标类名 
+             background:'rgba(0,0,0,0.7)',              // 遮罩层颜色
+             target: document.querySelector('#mapBox')  // loading覆盖的dom元素节点
+           });
+           setTimeout(()=>{
+             loading.close()                            // 成功回调函数停止加载
+           },2000)
+         },
         // 控制区域数据的数量
         showOrHide () {
             this.arrowMark = !this.arrowMark;
@@ -306,7 +322,7 @@ export default {
     }
   }
 }
-.map-box {
+#map-box {
   position: relative;
 
   #mapBox {
