@@ -1,12 +1,11 @@
 <template>
   <div class="post_strategy">
     <div class="strategy_title">相关攻略</div>
-    <div
+    <a
       class="postList same_strategy"
       v-for="(item, index) in correlation"
       :key="index"
-      @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
-    >
+      :href="'/post/postDetail?id='+ item.id">
       <div class="strategy_post1">
         <div class="post1_content">
           <div class="post_img">
@@ -22,7 +21,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </a>
   </div>
 </template>
 
