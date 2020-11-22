@@ -150,6 +150,7 @@ export default {
         // console.log(2);
       }
     },
+<<<<<<< HEAD
     // 改变一页显示多少条
     handleSizeChange(newSize) {
       this.currentPage = 1;
@@ -166,6 +167,13 @@ export default {
   },
 
 
+=======
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+  },
+  computed: {},
+>>>>>>> 6f9e9e0bbb62af7310ed94125535f609c8ee1b5e
 };
 </script>
 

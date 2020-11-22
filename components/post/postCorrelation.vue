@@ -5,6 +5,7 @@
       class="postList same_strategy"
       v-for="(item, index) in correlation"
       :key="index"
+      @click="$router.push({ path: `/post/postDetail?id=${item.id}` })"
     >
       <div class="strategy_post1">
         <div class="post1_content">
@@ -57,6 +58,7 @@ export default {
 
 <style lang="less" scoped>
 .post_strategy {
+  margin-left: 40px;
   .strategy_title {
     margin-top: 20px;
     font-size: 18px;

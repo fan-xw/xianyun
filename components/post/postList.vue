@@ -164,6 +164,7 @@
 <script>
 import { log } from 'util'
 export default {
+<<<<<<< HEAD
   //接收父组件传递过来的数据data,子组件接收渲染
   props: {
     data: {
@@ -182,6 +183,23 @@ export default {
   }
 
 }
+=======
+  created() {
+    //文章列表渲染
+    this.$axios({
+      url: "/posts",
+    }).then((res) => {
+      console.log(res);
+      this.articeList = res.data.data;
+    });
+  },
+  data() {
+    return {
+      articeList: [],
+    };
+  },
+};
+>>>>>>> 6f9e9e0bbb62af7310ed94125535f609c8ee1b5e
 </script>
 
 

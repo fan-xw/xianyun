@@ -1,402 +1,232 @@
 <template>
-  <div class="searchForm">
-    <div class="hotel">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
-            <el-breadcrumb-item>{{form.cityName}}酒店预订</el-breadcrumb-item>
-        </el-breadcrumb>
-    </div>
-
-    <el-row>
-      <el-col :span="5">
-        <el-autocomplete
-          v-model="form.cityName"
-          :fetch-suggestions="loadCityList"
-          placeholder="切换城市"
-          @select="handleSelect">
-        </el-autocomplete>
-      </el-col>
-
-      <el-col :span="8">
-        <el-date-picker
-          v-model="value1"
-          type="daterange"
-          range-separator="-"
-          unlink-panels
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions">
-        </el-date-picker>
-      </el-col>
-
-      <el-col :span="5">
-        <el-popover placement="bottom-start" width="300" v-model="visible">
+  <el-form :inline="true" :model="form">
+    <el-form-item>
+      <el-autocomplete
+        placeholder="切换城市"
+        v-model="form.cityName"
+        :fetch-suggestions="querySearch"
+        :trigger-on-focus="false"
+        @select="handleCity"
+      ></el-autocomplete>
+    </el-form-item>
+    <el-form-item>
+      <el-date-picker
+        v-model="time"
+        type="daterange"
+        range-separator="-"
+        start-placeholder="入住日期"
+        end-placeholder="离店日期"
+        :picker-options="pickerOptions"
+        value-format="yyyy-MM-dd"
+      >
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item>
+      <span>
+        <el-popover
+          placement="bottom-start"
+          width="300"
+          trigger="click"
+          :visible-arrow="false"
+          v-model="visible"
+        >
+          <el-row
+            type="flex"
+            align="middle"
+            style="margin-left: -5px; margin-right: -5px"
+          >
+            <el-col :span="8" style="padding-left: 5px; padding-right: 5px">
+              每间
+            </el-col>
+            <el-col :span="8" style="padding-left: 5px; padding-right: 5px">
+              <el-select
+                v-model="adult"
+                placeholder="请选择"
+                size="mini"
+                @change="handleAdult"
+              >
+                <el-option
+                  v-for="(item, index) in adultData"
+                  :key="index"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="8" style="padding-left: 5px; padding-right: 5px">
+              <el-select
+                v-model="child"
+                placeholder="请选择"
+                size="mini"
+                @change="handleChild"
+              >
+                <el-option
+                  v-for="(item, index) in childData"
+                  :key="index"
+                  :label="item"
+                  :value="item"
+                >
+                </el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row type="flex" justify="end" class="btn-col">
+            <el-button type="primary" size="mini" @click="setPerson"
+              >确定</el-button
+            >
+          </el-row>
           <el-input
             placeholder="人数未定"
-            suffix-icon="el-icon-user"
+            suffix-icon="iconfont iconuser"
+            v-model="showPerson"
             slot="reference"
-            v-model="person">
+            :readonly="true"
+          >
           </el-input>
-
-          <!-- 筛选人数 -->
-          <div class="man">
-            <span class="every">每间</span>
-            <el-select
-              v-model="adult"
-              slot="prepend"
-              placeholder="2 成人"
-              size="mini"
-              class="selectbox">
-              <el-option
-                v-for="(item,index) in personList"
-                :key="index"
-                :label="`${item} 成人`"
-                :value="item">
-              </el-option>
-            </el-select>
-
-            <el-select
-              v-model="children"
-              slot="prepend"
-              placeholder="0 儿童"
-              size="mini"
-              class="selectbox">
-              <el-option
-                v-for="(item,index) in personList"
-                :key="index"
-                :label="`${item} 儿童`"
-                :value="item">
-              </el-option>
-            </el-select>
-
-            <div class="line"></div>
-            <div class="botton" @click="sure">
-              <el-button type="primary" size="mini">确定</el-button>
-            </div>
-          </div>
-          
-
         </el-popover>
-      </el-col>
-      <el-button type="primary" @click="sendInfo">查看价格</el-button>
-    </el-row>
-
-    <el-row>
-      <el-col :span="14">
-        <el-row type="flex">
-          <span class="title">区域:</span>
-          <div class="box-r-f1">
-            <el-col :class='{area:!isShowPlace}'>
-              <span class="place" 
-                    v-for="(item,index) in scenics"
-                    :key="index">
-                    {{item.name}}
-              </span>
-            </el-col>
-            <div @click="showPlace">
-              <!-- 动态赋值可以通过v-bind:属性值 来实现属性值的动态绑定,绑定内联样式 -->
-              <span class="ifontcont" 
-                    :class="{
-                        'el-icon-arrow-down':!isShowPlace,
-                        'el-icon-arrow-up':isShowPlace
-                    }">
-              </span>
-              等{{scenics.length}}个区域
-            </div>
-          </div>
-        </el-row>
-        
-        <el-row type="flex">
-          <span class="title">均价
-            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="top-start">
-                  <span class="el-icon-question"></span>:
-            </el-tooltip>
-          </span>
-          <div class="box-r-f1">
-            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="bottom">
-              <el-col :span="6">
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span>¥332</span>
-              </el-col>
-            </el-tooltip>
-
-            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="bottom">
-              <el-col :span="7">
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span>¥521</span>
-              </el-col>
-            </el-tooltip>
-
-            <el-tooltip class="item" effect="dark" content="等级均价由平日计算得出,节假日价格会有所上浮" placement="bottom">
-              <el-col :span="8">
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span class="iconfont iconhuangguan"></span>
-                <span>¥768</span>
-              </el-col>
-            </el-tooltip>
-          </div>
-        </el-row>
-          <!-- 攻略部分 -->
-          <div class="strategy">
-            <el-row>
-              <el-col :span="4" class="gonglvu">攻略：</el-col>
-              <el-col
-                :span="20"
-                class="sketch">
-                人生就像一场旅行，不必在乎目的地，在乎的是沿途的风景以及看风景的心情，让心灵去旅行! 这里有热情似火的温泉，还有冷酷无情的天然滑雪场，
-                让你体验冷热交替的极致享受！还想什么，赶紧拿起手机，叫上亲朋好友订购吧！
-              </el-col>
-            </el-row>
-          </div>
-      </el-col>
-      <el-col :span="10">
-        <div id="container">
-        </div>
-      </el-col>
-    </el-row>
-  </div>
+      </span>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit">查看价格</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
 export default {
-    data () {
-        return {
-          name:'广州市',
-          value1: '',
-          person:'',
-          personList:[0,1,2,3,4,5,6],
-          adult:'2成人',
-          children:' 0 儿童',
-          // 地图点坐标
-          positionList:[
-                {x:113.331085,y:23.112187 },
-                {x:113.33352,y:23.113201},
-                {x:113.328992,y:23.117464},
-                {x:113.324357,y:23.1163},
-                {x:113.298378,y:23.122283}],
-          // 绑定时间 
-          pickerOptions: {
-            disabledDate: this.disabledDate,
-          },
-          // 定义一个风景区的空数组,展示在酒店的搜索的区域位置
-          scenics:[],
-          isShowPlace:false,
-          form:{
-            cityName:''
-          },
-          visible:false
-        }
-    },
-
-    // mounted钩子函数-- 实现页面一进来就加载地图
-    mounted () {
-      const positionList = this.positionList
-
-      window.onLoad  = function(){
-            var map = new AMap.Map('container',{
-              zoom:12,
-              center:[positionList[0].x,positionList[0].y]
-            });
-
-            const markerList= positionList.map((item)=>{
-                return   new AMap.Marker({
-                    position: new AMap.LngLat(item.x,item.y),   
-                    title: '广州塔'
-                })
-            })
-            //添加到地图
-            map.add(markerList);
-      }
-      var url = 'https://webapi.amap.com/maps?v=1.4.15&key=您申请的key值&callback=onLoad';
-      var jsapi = document.createElement('script');
-      jsapi.charset = 'utf-8';
-      jsapi.src = url;
-      document.head.appendChild(jsapi);
-    }, 
-
-    /*
-    created ：处于loading结束后，还做一些初始化，实现函数自执行
-    (data数据已经初始化，但是DOM结构渲染完成，组件没有加载)
-    */
-    created () {
-      this.sendInfo()
-    },
-
-    // 监听路由变化
-    watch:{
-      $route() {
-        this.city = this.$route.query.cityName
-        this.sendInfo(this.city)
-      }
-    },
-
-    methods:{
-      // 禁止选择今天以前的时间
-      disabledDate(time) {
-        return time.getTime() < Date.now() - 8.64e7;
-      },
-
-      // 查找城市
-      sendInfo () {
-         this.$axios({
-           url:'/cities',
-           params:{
-             name:this.form.cityName
-           }
-         }).then(res => {
-           console.log(res);
-           this.scenics = res.data.data[0].scenics
-         })
-      },
-
-        // 切换城市
-        handleSelect (item) {
-           this.city = item.name
-          //  切换城市，重新加载路由
-           this.$router.push({path:`/hotel?cityName=${this.city}`})
+  data() {
+    return {
+      // 设置只能选择当前日期及之后的日期
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7; //如果没有后面的-8.64e7就是不可以选择今天的
         },
+      },
+      form: {
+        cityName: "", // 城市名称
+        enterTime: "", // 进入时间
+        leftTime: "", // 离开时间
+      },
+      time: [], // 日期选择器绑定数据
+      showPerson: "", // 人数绑定数据
+      adult: "2成人", // 成人选择器绑定数据
+      adultData: [1, 2, 3, 4, 5, 6, 7], // 成人选择器选项
+      child: "0儿童", // 儿童选择器绑定数据
+      childData: [0, 1, 2, 3, 4], // 儿童选择器选项
+      visible: false,
+    };
+  },
+  methods: {
+    // 处理成人数据
+    handleAdult(item) {
+      this.adult = item + "成人";
+    },
+    // 处理儿童数据
+    handleChild(item) {
+      this.child = item + "儿童";
+    },
+    // 设置人数框显示数据
+    setPerson() {
+      if (this.child != "0儿童") {
+        this.showPerson = this.adult + "" + this.child;
+      } else {
+        this.showPerson = this.adult;
+      }
+      this.visible = false;
+    },
+    // 查看价格
+    onSubmit() {
+      console.log(this.form);
+      this.searchHotel();
+    },
+    // 输入匹配建议
+    querySearch(value, cb) {
+      this.getCities(value, cb);
+    },
+    // 选中匹配建议
+    handleCity(item) {
+      this.city = item.city;
+      this.form.cityName = item.value;
+      this.$router.replace({
+        path: "/hotel",
+        query: { cityName: item.value },
+      });
+    },
 
-        // 获取远程城市数据
-        loadCityList (res,showList) {
-          if (!res) {
-            showList ([
-              {
-                value:'请输入城市名字'
-              }
-            ]);
-            return
+    // 查找城市,获取城市的远程数据
+    getCities(item, cb) {
+      this.$axios({
+        url: "/cities",
+        params: { name: item },
+      }).then((res) => {
+        console.log(res);
+        let list = res.data.data.map((v, i) => {
+          return {
+            value: v.name,
+            city: v.id,
           };
-          // 发送请求，获取远程数据
-          this.$axios({
-            url:'airs/city',
-            params:{
-              name:this.form.cityName
-            }
-          }).then(res => {
-            if (res) {
-              let cityList = res.data.data.filter((v) => {
-                return v.sort;
-              }).map((v) => {
-                return {
-                  ...v,
-                  value:v.name
-                }
-              });
-              showList(cityList)
-            }
-          })
-        },
+        });
+        if (cb) {
+          if (list.length == 0) {
+            cb([{ value: "没有查找到相应的城市" }]);
+            return;
+          }
+          cb(list);
+        }
+      });
+    },
 
-        // 确定按钮
-        sure() {
-          this.visible = !this.visible;
-          this.person = `${this.adult}成人 ${this.children}儿童`;
-        },
+    // 添加路由跳转
+    searchHotel() {
+      if (this.time.length != 0) {
+        this.form.enterTime = this.time[0];
+        this.form.leftTime = this.time[1];
+      }
+      let myform = {};
+      Object.keys(this.form).forEach((v, i) => {
+        if (this.form[v] != "") {
+          myform[v] = this.form[v];
+        }
+      });
+      console.log(myform);
+      this.$router.replace({
+        path: "/hotel",
+        query: { ...this.$route.query, ...myform },
+      })
+    },
+  },
 
-        // 风景区下拉
-        showPlace () {
-            this.isShowPlace=!this.isShowPlace
-        },
-
-        isload () {}
+  mounted() {
+    // 读取数据到页面
+    if (this.$route.query.cityName) {
+      this.form.cityName = this.$route.query.cityName;
     }
+    if (this.$route.query.enterTime && this.$route.query.leftTime) {
+      console.log(1);
+      this.time.push(this.$route.query.enterTime);
+      this.time.push(this.$route.query.leftTime);
+    }
+  },
+  watch: {
+    //  监听路由变化，读取数据到页面
+    $route() {
+      if (this.$route.query.cityName) {
+        this.form.cityName = this.$route.query.cityName;
+      }
+      if (this.$route.query.enterTime && this.$route.query.leftTime) {
+        this.time.push(this.$route.query.enterTime);
+        this.time.push(this.$route.query.leftTime);
+      }
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.searchForm {
-  .hotel {
-    padding: 20px 0;
-    font-size: 16px;
-    color: #000;
-  }
-
-  /deep/.el-input__inner {
-    width: 100%;
-  }
-  .area {
-    height: 48px;
-    overflow: hidden;
-  }
-  .title {
-    width: 70px;
-  }
-  .place {
-    padding-right: 10px;
-    font-size: 14px;
-    color: #666666;
-  }
-  .el-icon-question {
-    font-size: 16px;
-    color: #cccccc;
-  }
-  .box-r-f1 {
-    flex: 1;
-  }
-  .iconhuangguan {
-    color: #ff9900;
-  }
-
-  // 地图样式
-  #container {
-    width: 100%;
-    height: 300px;
-  }
-}
-
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-.el-col {
-  border-radius: 4px;
-  padding-right: 12px;
-}
-.man {
-  height: 90px;
-  .selectbox {
-    width: 100px;
-  }
-  .line {
-    width: 100%;
-    height: 1px;
-    border-top: 1px solid #dddddd;
-
-    margin-top: 20px;
-  }
-  .every {
-    display: inline-block;
-    width: 80px;
-  }
-  .botton {
-    padding: 15px;
-    text-align: right;
-  }
-}
-
-.el-icon-arrow-down {
-  color: #ff9900;
-}
-.el-icon-arrow-up {
-  color: #ff9900;
-}
-
-.strategy {
+.btn-col {
   margin-top: 20px;
-  padding-bottom: 5px;
-
-  .gonglvu {
-    margin-right: -30px;
-  }
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
 }
 </style>
