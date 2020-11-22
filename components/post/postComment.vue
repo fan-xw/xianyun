@@ -27,7 +27,15 @@
     </div>
     <!-- 评论模块 -->
     <div class="postComment">
-      <span>评论</span>
+      <div class="pinglun">评论</div>
+      <el-collapse-transition>
+        <div v-show="!show3">
+          <div class="transition-box">
+            @
+            <i>X</i>
+          </div>
+        </div>
+      </el-collapse-transition>
       <div>
         <el-input
           type="textarea"
@@ -97,7 +105,6 @@
               v-for="(pics, index) in item.pics"
               :key="index"
               :src="$axios.defaults.baseURL + pics.url"
-              :preview-src-list="srcList"
             >
             </el-image>
           </div>
@@ -106,7 +113,9 @@
         <div class="reply">
           <el-row :gutter="20">
             <el-col :span="6" :offset="22"
-              ><div class="grid-content bg-purple">回复</div></el-col
+              ><div class="grid-content bg-purple">
+                <div @click="show3 = !show3" style="cursor: pointer">回复</div>
+              </div></el-col
             >
           </el-row>
         </div>
@@ -148,7 +157,7 @@ export default {
       pageSize: 2,
       //当前页码的下标
       pageIndex: 1,
-      srcList: [],
+      show3: true,
     };
   },
   // 转换时间戳
@@ -236,6 +245,9 @@ export default {
         pics: this.pics,
       };
       console.log(data);
+      // if (this.$store.state.user.reply.follow) {
+      //   data.follow = this.$store.state.user.reply.follow;
+      // }
       // 判断 reply.follow 有数据,就将回复id的参数 follow 添加到 data 对象里面
       // if (this.$store.state.user.reply.follow) {
       //   date.follow = this.$$store.state.user.reply.follow;
@@ -301,7 +313,16 @@ export default {
   }
   .postComment {
     font-size: 18px;
-
+    .transition-box {
+      background-color: #e4e4e4;
+      font-size: 12px;
+      display: inline-block;
+      width: 150px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-bottom: 10px;
+    }
     span {
       display: block;
       margin-bottom: 20px;
